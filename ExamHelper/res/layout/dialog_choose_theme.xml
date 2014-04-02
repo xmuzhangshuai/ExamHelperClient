@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="200dp"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:scrollbars="none" >
+
+    <TextView
+        android:id="@+id/skinTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="46.0dip"
+        android:background="@color/button_unselected"
+        android:padding="12.0dip"
+        android:text="@string/themeSwitch"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/white" />
+
+    <ListView
+        android:id="@+id/dialong_choose_theme_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:listSelector="@drawable/selector_list"
+        android:scrollbarSize="10.0dip"
+        android:scrollbarThumbVertical="@drawable/scrollbar_handle_vertical"
+        android:visibility="visible" >
+    </ListView>
+
+</LinearLayout>

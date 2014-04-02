@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:text="输入笔记内容：" />
+
+    <EditText
+        android:id="@+id/editText_mynote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_bg"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:padding="3dp"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/btn_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#D9D9D9"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:paddingRight="10dp"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/edit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="18dp"
+            android:drawableTop="@drawable/selector_icon_edit"
+            android:text="编辑"
+            android:textColor="#76797C"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/selector_icon_delete"
+            android:text="删除"
+            android:textColor="#76797C"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/selector_orange_btn"
+        android:text="添加"
+        android:textColor="@color/white"
+        android:textSize="14sp" >
+    </Button>
+
+    <Button
+        android:id="@+id/submit_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/selector_orange_btn"
+        android:text="确定修改"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/everyone_note" >
+    </ImageView>
+
+    <ListView
+        android:id="@+id/everyone_note_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@drawable/reader_item_divider"
+        android:listSelector="@android:color/transparent" />
+
+</LinearLayout>

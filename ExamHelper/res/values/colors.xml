@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="system_bule">#0099CC</color> <!-- 系统的蓝色格调 -->
+    <color name="holo_blue">#33B5E5</color>
+    <color name="semi_holo_blue">#5033B5E5</color>
+    <color name="subtext_color">#8E8E8E</color> <!-- 子标题颜色 -->
+
+
+    <!-- 以下是主页面个功能块颜色，lightview*为常态颜色，darkview*为按下时颜色 -->
+    <color name="darkview1">#FF33B5E5</color>
+    <color name="lightview1">#e233B5E5</color>
+    <color name="darkview2">#FFAA66CC</color>
+    <color name="lightview2">#e2AA66CC</color>
+    <color name="darkview3">#FF99CC00</color>
+    <color name="lightview3">#e299CC00</color>
+    <color name="darkview4">#FFFFBB33</color>
+    <color name="lightview4">#e2FFBB33</color>
+    <color name="darkview5">#FFFF4444</color>
+    <color name="lightview5">#e2FF4444</color>
+    <color name="darkview6">#FF0099CC</color>
+    <color name="lightview6">#e20099CC</color>
+    <color name="darkview7">#FF33B5E5</color>
+    <color name="lightview7">#e233B5E5</color>
+    <color name="darkview8">#FFAA66CC</color>
+    <color name="lightview8">#e2AA66CC</color>
+    <color name="darkview9">#FF99CC00</color>
+    <color name="lightview9">#e299CC00</color>
+    <color name="darkview10">#FFFFBB33</color>
+    <color name="lightview10">#e2FFBB33</color>
+    <color name="darkview11">#FFFF4444</color>
+    <color name="lightview11">#e2FF4444</color>
+    <color name="darkview12">#FF0099CC</color>
+    <color name="lightview12">#e20099CC</color>
+    <color name="darkview13">#FF33B5E5</color>
+    <color name="lightview13">#e233B5E5</color>
+    <color name="darkview14">#FFAA66CC</color>
+    <color name="lightview14">#e2AA66CC</color>
+    <color name="darkview15">#FF99CC00</color>
+    <color name="lightview15">#e299CC00</color>
+    <color name="darkview16">#FFFFBB33</color>
+    <color name="lightview16">#e2FFBB33</color>
+    <color name="text_shadow_color">#66000000</color>
+
+    <!-- 以下是个人中心页面个功能块颜色 -->
+    <color name="Ucenter_Item_ENGName_Textcolor">#30B452CD</color> <!-- 英文名字颜色 -->
+
+
+    <!-- 以下是主题颜色 -->
+    <color name="Ucenter_theme1">#c0EE9A49</color>
+    <color name="Ucenter_theme2">#FF7F50</color>
+    <color name="Ucenter_theme3">#E000C5CD</color>
+    <color name="Ucenter_theme4">#AEEEEE</color>
+    <color name="Ucenter_theme5">#00EEEE</color>
+
+    <!-- 分类练习列表中的color -->
+    <color name="listItem_transparency">#00000000</color>
+    <color name="listItem_title_bg">#1C86EE</color>
+    <color name="listItem_end_color">#A0cfef83</color>
+    <color name="listItem_black">#464646</color>
+    <color name="grey">#8A8A8A </color>
+    <color name="color_hei">#ff000000</color>
+    <color name="color_hei_8">#00000000</color>
+    <color name="button_unselected">#ff54acea</color>
+    <color name="transparent">@color/color_hei_8</color>
+    <color name="white">#ffffffff</color>
+    <color name="black">@color/color_hei</color>
+    <color name="semi_transparent">#7f000000</color>
+    <color name="sc_transparent_background">@color/color_hei_8</color>
+    <color name="red">#ffff0000</color>
+
+    <!-- 单选题页面 -->
+    <color name="rightcolor">#00CD00</color>
+    <color name="wrongcolor">#EE00EE</color>
+    <color name="darktext">#ff3a5fcd</color>
+
+    <!-- 添加笔记页面 -->
+    <color name="textview_bg">#666666</color>
+    
+    <!-- 其他 -->
+    <color name="color_dark_grey">#ff808080</color>
+    <color name="btn_dark_grey">#10808080</color>
+    <color name="default_text_black">#ff000000</color>
+    <color name="default_text_white">#ffffffff</color>
+    <color name="default_text_gray">#ff888888</color>
+    <color name="default_text_deep_gray">#ff333333</color>
+    <color name="default_text_night">#ff366ba6</color>
+    <color name="text_browse_list_answer">#ff008000</color>
+    <color name="text_error">#ff888888</color>
+    <color name="list_bg">#00000000</color>
+    <color name="list_divider">#ffe2eaef</color>
+    <color name="list_divider_halfTransparent">#30bbbbbb</color>
+    <color name="username">#ffffffff</color>
+    <color name="nav_name">#ffffffff</color>
+    <color name="nav_subname">#ffffffff</color>
+    <color name="login_bg">#ff509cd8</color>
+    <color name="login_dark_grey">#20808080</color>
+    <color name="login_black">#aa000000</color>
+    <color name="gray">#ff888888</color>
+    <color name="umenu_login">#40bbbbbb</color>
+    <color name="umenu_login_pre">#903ab1ff</color>
+    <color name="sex_true">#ff008ed6</color>
+    <color name="sex_false">#ff666666</color>
+    <color name="btn_effect">#60888888</color>
+    <color name="bg_center_home">#ffc0c0c0</color>
+    <color name="my_all_note_bg_pre">#50dadada</color>
+    <color name="my_all_note_bg">#ffe2e2e2</color>
+
+</resources>

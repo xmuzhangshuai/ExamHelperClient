@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#e233B5E5" >
+
+    <ImageView
+        android:id="@+id/block_imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/function_default" />
+
+    <TextView
+        android:id="@+id/block_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="@string/blockTextView_default"
+        android:textColor="#fff"
+        android:textSize="@dimen/centerFragment_block_textsize" />
+
+</FrameLayout>

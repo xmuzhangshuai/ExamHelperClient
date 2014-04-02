@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:layout="@layout/pref_category"
+        android:title="科目设置" >
+        <Preference
+            android:key="pref_course_switch"
+            android:layout="@layout/pref_list_item_top"
+            android:summary="点击进行科目切换"
+            android:title="科目切换"
+            android:widgetLayout="@layout/pref_widget_more" />
+        <Preference
+            android:key="pref_library_mangage"
+            android:layout="@layout/pref_list_item_bot"
+            android:summary="点击进行题库管理"
+            android:title="题库管理"
+            android:widgetLayout="@layout/pref_widget_more" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout="@layout/pref_category"
+        android:title="系统设置" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_if_light_on"
+            android:layout="@layout/pref_list_item_top"
+            android:summaryOff="当前状态：关闭"
+            android:summaryOn="当前状态：开启"
+            android:title="屏幕常亮"
+            android:widgetLayout="@layout/pref_widget_checkbox" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_night_model"
+            android:layout="@layout/pref_list_item_mid"
+            android:summaryOff="当前状态：白天"
+            android:summaryOn="当前状态：夜间"
+            android:title="夜间模式"
+            android:widgetLayout="@layout/pref_widget_checkbox" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_check_now"
+            android:layout="@layout/pref_list_item_mid"
+            android:summaryOff="当前状态：否"
+            android:summaryOn="当前状态：是"
+            android:title="是否立即检查答案"
+            android:widgetLayout="@layout/pref_widget_checkbox" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_vibrate_after"
+            android:layout="@layout/pref_list_item_mid"
+            android:summaryOff="当前状态：否"
+            android:summaryOn="当前状态：是"
+            android:title="答错题后震动"
+            android:widgetLayout="@layout/pref_widget_checkbox" />
+
+        <ListPreference
+            android:defaultValue="middle"
+            android:dialogTitle="选择字体"
+            android:entries="@array/pref_textsize_entries"
+            android:entryValues="@array/pref_textsize_values"
+            android:key="pref_switch_fontsize"
+            android:layout="@layout/pref_list_item_mid"
+            android:summary="设置字体大小"
+            android:title="字体大小"
+            android:widgetLayout="@layout/pref_widget_more" />
+
+        <Preference
+            android:key="pref_setting_default"
+            android:layout="@layout/pref_list_item_bot"
+            android:summary="点击恢复默认"
+            android:title="恢复默认"
+            android:widgetLayout="@layout/pref_widget_more" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout="@layout/pref_category"
+        android:title="其他" >
+        <Preference
+            android:key="pref_advice_feedback"
+            android:layout="@layout/pref_list_item_top"
+            android:title="意见反馈"
+            android:widgetLayout="@layout/pref_widget_more" />
+        <Preference
+            android:key="pref_check_update"
+            android:layout="@layout/pref_list_item_mid"
+            android:title="检查更新"
+            android:widgetLayout="@layout/pref_widget_more" />
+        <Preference
+            android:key="pref_about_software"
+            android:layout="@layout/pref_list_item_mid"
+            android:title="关于软件"
+            android:widgetLayout="@layout/pref_widget_more" />
+        <Preference
+            android:key="pref_comment"
+            android:layout="@layout/pref_list_recommend"
+            android:title="精彩推荐"
+            android:widgetLayout="@layout/pref_widget_more" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

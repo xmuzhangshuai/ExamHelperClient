@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp" >
+
+    <!-- 题号 -->
+
+    <TextView
+        android:id="@+id/display_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/subtext_color"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/display_content_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="30dp"
+        android:layout_toRightOf="@+id/display_num"
+        android:orientation="vertical" >
+
+        <!-- 题干 -->
+
+        <TextView
+            android:id="@+id/display_stem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+
+        <!-- 答案 -->
+
+        <TextView
+            android:id="@+id/display_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/rightcolor"
+            android:textSize="12sp" />
+
+        <!-- 备注 -->
+
+        <TextView
+            android:id="@+id/display_remark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/wrongcolor"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/checked_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="2dp"
+        android:button="@drawable/selector_display_item_checkbox"
+        android:enabled="false"
+        android:focusable="false" />
+
+</RelativeLayout>

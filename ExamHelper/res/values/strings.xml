@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">考试助手</string>
+    <string name="version_info">考试助手客户端\n\nVersion 1.0.0</string>
+
+    <!-- 主页面 -->
+    <string name="f_name1">继续上次</string>
+    <string name="f_name2">分类练习</string>
+    <string name="f_name3">随机练习</string>
+    <string name="f_name4">模拟考场</string>
+    <string name="f_name5">错题重放</string>
+    <string name="f_name6">我的收藏</string>
+    <string name="f_name7">我的笔记</string>
+    <string name="f_name8">学习记录</string>
+    <string name="f_name9">试题排行</string>
+    <string name="f_name10">考试指南</string>
+    <string name="f_name11">题库搜索</string>
+    <string name="f_name12">统计分析</string>
+    <string name="f_name13">我的答疑</string>
+    <string name="f_name14">答疑广场</string>
+    <string name="blockTextView_default">新增</string> <!-- 主页面功能模块默认名称，在没有指定名称的情况下显示 -->
+
+
+    <!-- 个人中心 -->
+    <string name="themeSwitch">切换主题</string> <!-- 更换主题dialog标题 -->
+    <string name="username">张帅</string>
+    <string name="email">1207509737@qq.com</string>
+
+    <!-- 以下是sharedPreference的名称 -->
+    <string name="preference_user_center">com.bishe.examhelper.PREFERENCE_USER_CENTER</string> <!-- 个人中心的preference -->
+    <!-- 以下是sharedPreference键的名称 -->
+    <string name="user_center_theme_key">com.bishe.examhelper.USER_CENTER_THEME_KEY</string> <!-- 个人中心的preference -->
+    <string name="user_center_themecolor_key">com.bishe.examhelper.USER_CENTER_THEMECOLOR_KEY</string> <!-- 个人中心的preference -->
+
+
+    <!-- Menu -->
+    <string name="delete_all">全部删除</string>
+    <string name="settingnames">设置</string>
+    <string name="hand_in">交卷</string>
+    <string name="preview">预览</string>
+    <string name="last_question">上一题</string>
+    <string name="next_question">下一题</string>
+
+    <!-- JszzyViewPager效果名称 -->
+    <string-array name="jazzy_effects">
+        <item>Standard</item>
+        <item>Tablet</item>
+        <item>CubeIn</item>
+        <item>CubeOut</item>
+        <item>FlipVertical</item>
+        <item>FlipHorizontal</item>
+        <item>Stack</item>
+        <item>ZoomIn</item>
+        <item>ZoomOut</item>
+        <item>RotateUp</item>
+        <item>RotateDown</item>
+        <item>Accordion</item>
+    </string-array>
+
+</resources>

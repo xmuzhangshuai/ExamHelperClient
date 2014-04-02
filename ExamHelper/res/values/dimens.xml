@@ -1,0 +1,15 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="centerFragment_block_margin">10dp</dimen><!-- 主页面块边缘大小 -->
+    <dimen name="centerFragment_block_textsize">16sp</dimen><!-- 主页面块内字体大小 -->
+    <dimen name="blockheight">100dp</dimen>
+    
+    <dimen name="Ucenter_Item_margin">8dp</dimen>
+    <dimen name="Ucenter_Item_height">100dp</dimen>
+    <dimen name="Ucenter_Item_ItemName_dim">55dp</dimen>
+    <dimen name="Ucenter_Item_ItemName_TextSize">22sp</dimen>
+    <dimen name="Ucenter_Item_content_TextSize">15sp</dimen>
+</resources>

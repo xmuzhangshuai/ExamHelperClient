@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bishe.examhelper"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
+
+    <!-- ###################声明SDK使用的相关权限###################### -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 检测网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取mac地址作为用户的备用唯一标识 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 获取用户手机的IMEI，用来唯一的标识用户。 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 缓存资源优先存入SDcard -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 允许应用程序联网，以便向我们的服务器端发送数据。 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 用于评论模块分享位置信息 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 用于评论模块分享位置信息 -->
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:targetPackage="com.bishe.examhelper" >
+    </instrumentation>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <uses-library android:name="android.test.runner" />
+
+        <activity
+            android:name="com.bishe.examhelper.ui.GuideActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 主页面MainActivity -->
+        <activity android:name="com.bishe.examhelper.ui.MainActivity" />
+
+        <!-- 分类练习SortPracticeActivity -->
+        <activity android:name="com.bishe.examhelper.ui.SortPracticeActivity" />
+
+        <!-- 分类练习可展开列表ExpandableListActivity -->
+        <activity android:name="com.bishe.examhelper.ui.ExpandableListActivity" />
+
+        <!-- 题目页面ExerciseActivity -->
+        <activity android:name="com.bishe.examhelper.ui.ExerciseActivity" />
+
+        <!-- 首次使用向导GuidePagerActivity -->
+        <activity android:name="com.bishe.examhelper.ui.GuidePagerActivity" />
+
+        <!-- 试卷列表ListActivity -->
+        <activity android:name="com.bishe.examhelper.ui.ListActivity" />
+
+        <!-- 试卷ExamActivity -->
+        <activity android:name="com.bishe.examhelper.ui.ExamActivity" />
+
+        <!-- 测试TestActivity -->
+        <activity android:name="com.bishe.examhelper.test.TestActivity" />
+
+        <!-- 错题重放MyErrorActivity -->
+        <activity android:name="com.bishe.examhelper.ui.MyErrorActivity" />
+
+        <!-- 我的收藏MyCollectionActivity -->
+        <activity android:name="com.bishe.examhelper.ui.MyCollectionActivity" />
+
+        <!-- 题目展示QuestionsDisplayActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.QuestionsDisplayActivity"
+            android:uiOptions="splitActionBarWhenNarrow" />
+
+        <!-- 随机练习RandomExerciseActivity -->
+        <activity android:name="com.bishe.examhelper.ui.RandomExerciseActivity" />
+
+        <!-- 设置SettingActivity -->
+        <activity android:name="com.bishe.examhelper.ui.SettingActivity" />
+
+        <!-- 模拟考试MockExamActivity -->
+        <activity android:name="com.bishe.examhelper.ui.MockExamActivity" />
+
+        <!-- 模拟考试开始页面MockExamGuideActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.MockExamGuideActivity"
+            android:uiOptions="splitActionBarWhenNarrow" />
+
+        <!-- 模拟考试题目预览页面MockExamPreviewActivity -->
+        <activity android:name="com.bishe.examhelper.ui.MockExamPreviewActivity" />
+
+        <!-- 模拟考试答题情况展示MockExamResultActivity -->
+        <activity android:name="com.bishe.examhelper.ui.MockExamResultActivity" />
+
+        <!-- 添加笔记AddNoteActivity -->
+        <activity android:name="com.bishe.examhelper.ui.AddNoteActivity" />
+
+        <!-- 我的笔记MyNoteActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.MyNoteActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
+        <!-- 学习记录StudyRecordActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.StudyRecordActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
+        <!-- 统计分析StatisticActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.StatisticActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
+        <!-- 默认DefaultActivity -->
+        <activity android:name="com.bishe.examhelper.ui.DefaultActivity" />
+
+        <!-- 登陆LoginActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.LoginActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
+        <!-- 考试指南ExamGuideActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.ExamGuideActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
+        <!-- 精彩推荐AdCommentActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.AdCommentActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
+        <!-- ###################注册SDK使用的Activity###################### -->
+        <!-- 分享编辑页 -->
+        <activity
+            android:name="com.umeng.socialize.view.ShareActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:theme="@style/Theme.UMDialog"
+            android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+
+        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID -->
+                <data android:scheme="tencent100424468" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.tencent.plus.ImageActivity" />
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+
+        <!-- 用户反馈模块 -->
+        <activity android:name="com.umeng.fb.ConversationActivity" />
+        <activity android:name="com.umeng.fb.ContactActivity" />
+
+        <!-- ###################添加UmengAppkey###################### -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5338ea7b56240b05920f9713" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Android market" />
+        <!-- 声明SDK用到的下载服务 -->
+        <service
+            android:name="com.umeng.common.net.DownloadingService"
+            android:exported="true"
+            android:process=":DownloadingService" >
+        </service>
+    </application>
+
+</manifest>
