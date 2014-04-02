@@ -42,7 +42,7 @@ public class GuideActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 		// 发送策略定义了用户由统计分析SDK产生的数据发送回友盟服务器的频率。
 		MobclickAgent.updateOnlineConfig(this);
 
