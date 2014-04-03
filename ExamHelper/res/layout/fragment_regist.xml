@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/login_bg"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="20.0dip"
+        android:background="@drawable/shape_bg"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50.0dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="1px"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:drawableLeft="@drawable/login_user_account_ico"
+                android:gravity="right"
+                android:paddingLeft="5.0dip"
+                android:text="邮箱:"
+                android:textColor="@android:color/black"
+                android:textSize="16.0sp" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="1px"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="15.0dip"
+                android:layout_weight="8"
+                android:background="@android:color/white"
+                android:hint="请输入注册邮箱"
+                android:inputType="textEmailAddress"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:paddingLeft="10.0dip"
+                android:textColor="#ff545454"
+                android:textSize="16.0sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1.0px"
+            android:background="@drawable/shape_line" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50.0dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="1px"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:drawableLeft="@drawable/login_password_ico"
+                android:gravity="right"
+                android:paddingLeft="5.0dip"
+                android:text="密码:"
+                android:textColor="@android:color/black"
+                android:textSize="16.0sp" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="1px"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="15.0dip"
+                android:layout_weight="8"
+                android:background="@android:color/white"
+                android:hint="请输入密码"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:paddingLeft="10.0dip"
+                android:textColor="#ff545454"
+                android:textSize="16.0sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1.0px"
+            android:background="@drawable/shape_line" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50.0dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="1px"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:drawableLeft="@drawable/phone"
+                android:gravity="right"
+                android:paddingLeft="5.0dip"
+                android:text="手机:"
+                android:textColor="@android:color/black"
+                android:textSize="16.0sp" />
+
+            <EditText
+                android:id="@+id/phone"
+                android:layout_width="1px"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="15.0dip"
+                android:layout_weight="8"
+                android:background="@android:color/white"
+                android:hint="请输入手机号"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:paddingLeft="10.0dip"
+                android:textColor="#ff545454"
+                android:textSize="16.0sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginTop="10.0dip"
+        android:gravity="left"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_tip"
+            android:textColor="@color/button_unselected"
+            android:textSize="14.0sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginRight="20.0dip"
+        android:layout_marginTop="20.0dip"
+        android:background="@drawable/chat_send_button_bg"
+        android:paddingTop="5.0dip"
+        android:text="注 册"
+        android:textColor="#ff000000"
+        android:textSize="18.0sp" />
+    <!-- Login progress -->
+
+    <LinearLayout
+        android:id="@+id/login_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/login_status_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/login_progress_register"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

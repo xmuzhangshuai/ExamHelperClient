@@ -55,16 +55,16 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 	}
 
 	@Override
-	protected void onRestart() {
-		// TODO Auto-generated method stub
-		super.onRestart();
-	}
-
-	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
 	}
 
 	@Override
@@ -87,9 +87,12 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		ActionBar actionBar = super.getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+
+		// actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.title_bar));
 		actionBar.setStackedBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_stacked_bg));
-		actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+		// actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+		actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.title_bar));
 		return actionBar;
 	}
 

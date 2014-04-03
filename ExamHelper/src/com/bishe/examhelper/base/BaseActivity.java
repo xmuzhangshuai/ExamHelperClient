@@ -91,9 +91,11 @@ public abstract class BaseActivity extends Activity {
 		// TODO Auto-generated method stub
 		ActionBar actionBar = super.getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+		// actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.title_bar));
 		actionBar.setStackedBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_stacked_bg));
-		actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+		// actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+		actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.title_bar));
 		return actionBar;
 	}
 

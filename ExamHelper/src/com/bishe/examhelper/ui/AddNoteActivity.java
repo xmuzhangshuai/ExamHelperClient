@@ -19,7 +19,6 @@ import com.bishe.examhelper.dbService.NoteService;
 import com.bishe.examhelper.entities.Note;
 import com.bishe.examhelper.entities.Question;
 import com.bishe.examhelper.utils.DateTimeTools;
-import com.umeng.analytics.MobclickAgent;
 
 /**   
 *    

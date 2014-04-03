@@ -54,32 +54,6 @@ public class AdCommentActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		getActionBar().setTitle("精彩推荐");
 
-		// 赋值preloadDataService,添加newTips 回调
-		// preloadDataService = new ExchangeDataService();
-		// preloadDataService.preloadData(this, new NTipsChangedListener() {
-		// @Override
-		// public void onChanged(int flag) {
-		// if (flag == -1) {
-		// // 没有new广告
-		//
-		// newTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-		// } else if (flag > 1) {
-		// // 第一页new广告数量
-		// newTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-		// R.drawable.btn_my_comment_new2, 0);
-		// } else if (flag == 0) {
-		// // 第一页全部为new 广告
-		// newTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-		// R.drawable.btn_my_comment_new2, 0);
-		// }
-		// };
-		// }, ExchangeConstants.type_container);
-		//
-		// ExchangeDataService exchangeDataService = preloadDataService != null
-		// ? preloadDataService
-		// : new ExchangeDataService("");
-		// ExchangeViewManager exchangeViewManager = new
-		// ExchangeViewManager(this, exchangeDataService);
 		ExchangeViewManager exchangeViewManager = new ExchangeViewManager(this, new ExchangeDataService());
 		exchangeViewManager.addView(fatherLayout, listView);
 	}

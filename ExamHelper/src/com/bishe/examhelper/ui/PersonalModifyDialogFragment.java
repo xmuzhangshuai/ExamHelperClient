@@ -71,7 +71,6 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				modifyUser();
-				Toast.makeText(getActivity(), "修改成功！", 1).show();
 			}
 		}).setNegativeButton("取消", new OnClickListener() {
 			@Override
@@ -149,18 +148,24 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 	 */
 	public void modifyUser() {
 		User user = getUserFromDb();
-		user.setAge(userAge.getValue());
-		user.setNickname(userNickName.getText().toString());
-		user.setRealname(userRealname.getText().toString());
-		user.setProfession(userProfession.getText().toString());
-		user.setUser_state(userState.getText().toString());
-		if (userGenderMan.isChecked()) {
-			user.setGender("男");
-		} else {
-			user.setGender("女");
+		if (user != null) {
+			user.setAge(userAge.getValue());
+			user.setNickname(userNickName.getText().toString());
+			user.setRealname(userRealname.getText().toString());
+			user.setProfession(userProfession.getText().toString());
+			user.setUser_state(userState.getText().toString());
+			if (userGenderMan.isChecked()) {
+				user.setGender("男");
+			} else {
+				user.setGender("女");
+			}
+			UserService userService = UserService.getInstance(getActivity());
+			userService.updateUser(user);
+			userChangedListener.onUserInfoChanged(user);
+			Toast.makeText(getActivity(), "修改成功！", 1).show();
+		}else {
+			Toast.makeText(getActivity(), "请先登录！", 1).show();
 		}
-		UserService userService = UserService.getInstance(getActivity());
-		userService.updateUser(user);
-		userChangedListener.onUserInfoChanged(user);
+
 	}
 }

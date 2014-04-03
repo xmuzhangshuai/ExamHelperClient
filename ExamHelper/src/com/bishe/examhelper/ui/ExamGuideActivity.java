@@ -28,7 +28,6 @@ import com.bishe.examhelper.base.BaseFragmentActivity;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.test.ExamGuide;
 import com.bishe.examhelper.test.ExamGuideType;
-import com.bishe.examhelper.utils.CommonTools;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.NetworkUtils;

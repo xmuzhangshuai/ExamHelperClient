@@ -1,5 +1,7 @@
 package com.bishe.examhelper.utils;
 
+import com.umeng.common.net.t;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

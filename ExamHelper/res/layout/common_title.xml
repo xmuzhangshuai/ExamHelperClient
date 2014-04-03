@@ -9,7 +9,7 @@
         android:id="@+id/commenTitleBG"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/title_bg_repeat" />
+        android:background="@drawable/title_bar" />
 
     <TextView
         android:id="@+id/titleName"

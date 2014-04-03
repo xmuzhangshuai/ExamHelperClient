@@ -9,12 +9,15 @@ import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -55,6 +58,8 @@ public class LoginFragment extends BaseV4Fragment {
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
 	private View rootView;
+	private Button registerButton;// ×¢²á
+	private Button loginButton;// µÇÂ½
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +79,9 @@ public class LoginFragment extends BaseV4Fragment {
 		mLoginFormView = rootView.findViewById(R.id.login_form);
 		mLoginStatusView = rootView.findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) rootView.findViewById(R.id.login_status_message);
+		loginButton = (Button) rootView.findViewById(R.id.sign_in_button);
+		registerButton = (Button) rootView.findViewById(R.id.register_button);
+
 	}
 
 	@Override
@@ -94,10 +102,27 @@ public class LoginFragment extends BaseV4Fragment {
 			}
 		});
 
-		rootView.findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+		// µÇÂ½
+		loginButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				attemptLogin();
+			}
+		});
+
+		// ×¢²á
+		registerButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				RegisterFragment registerFragment = new RegisterFragment();
+				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+				// ÉèÖÃÇÐ»»Ð§¹û
+				fragmentTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out,
+						R.anim.push_right_in, R.anim.push_right_out);
+				fragmentTransaction.replace(R.id.container, registerFragment);
+				fragmentTransaction.addToBackStack(null);
+				fragmentTransaction.commit();
 			}
 		});
 	}

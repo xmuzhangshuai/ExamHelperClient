@@ -89,7 +89,6 @@
                         android:id="@+id/pCenter_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/username"
                         android:textColor="#FFFFFF"
                         android:textSize="22sp" />
 
@@ -100,10 +99,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="@string/email"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/sign_out"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="注销"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout

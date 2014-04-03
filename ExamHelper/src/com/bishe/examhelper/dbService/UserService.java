@@ -61,4 +61,11 @@ public class UserService {
 	public void updateUser(User user) {
 		userDao.update(user);
 	}
+	
+	/**
+	 * 删除用户信息
+	 */
+	public void deleteUser(){
+		userDao.deleteAll();
+	}
 }
