@@ -210,7 +210,7 @@ public class RegisterFragment extends BaseV4Fragment {
 				// Simulate network access.
 				UserService userService = UserService.getInstance(getActivity());
 				User user = new User(null, mEmail, mPassword, null, null, null, mPhone, null, null, null, null, 0,
-						null, null);
+						null, null, true);
 				userService.saveUser(user);
 			} catch (Exception e) {
 				Log.e("×¢²á", "×¢²áÊ§°Ü£¡");

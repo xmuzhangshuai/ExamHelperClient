@@ -37,6 +37,7 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Integral = new Property(11, Integer.class, "integral", false, "INTEGRAL");
         public final static Property Avatar = new Property(12, byte[].class, "avatar", false, "AVATAR");
         public final static Property Small_avatar = new Property(13, byte[].class, "small_avatar", false, "SMALL_AVATAR");
+        public final static Property Current = new Property(14, Boolean.class, "current", false, "CURRENT");
     };
 
     private DaoSession daoSession;
@@ -68,7 +69,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 "'AREA' TEXT," + // 10: area
                 "'INTEGRAL' INTEGER," + // 11: integral
                 "'AVATAR' BLOB," + // 12: avatar
-                "'SMALL_AVATAR' BLOB);"); // 13: small_avatar
+                "'SMALL_AVATAR' BLOB," + // 13: small_avatar
+                "'CURRENT' INTEGER);"); // 14: current
     }
 
     /** Drops the underlying database table. */
@@ -143,6 +145,11 @@ public class UserDao extends AbstractDao<User, Long> {
         if (small_avatar != null) {
             stmt.bindBlob(14, small_avatar);
         }
+ 
+        Boolean current = entity.getCurrent();
+        if (current != null) {
+            stmt.bindLong(15, current ? 1l: 0l);
+        }
     }
 
     @Override
@@ -174,7 +181,8 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // area
             cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11), // integral
             cursor.isNull(offset + 12) ? null : cursor.getBlob(offset + 12), // avatar
-            cursor.isNull(offset + 13) ? null : cursor.getBlob(offset + 13) // small_avatar
+            cursor.isNull(offset + 13) ? null : cursor.getBlob(offset + 13), // small_avatar
+            cursor.isNull(offset + 14) ? null : cursor.getShort(offset + 14) != 0 // current
         );
         return entity;
     }
@@ -196,6 +204,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setIntegral(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
         entity.setAvatar(cursor.isNull(offset + 12) ? null : cursor.getBlob(offset + 12));
         entity.setSmall_avatar(cursor.isNull(offset + 13) ? null : cursor.getBlob(offset + 13));
+        entity.setCurrent(cursor.isNull(offset + 14) ? null : cursor.getShort(offset + 14) != 0);
      }
     
     /** @inheritdoc */

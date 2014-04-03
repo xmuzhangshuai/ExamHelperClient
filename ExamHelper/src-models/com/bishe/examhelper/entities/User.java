@@ -37,6 +37,7 @@ public class User implements java.io.Serializable {
     private Integer integral;
     private byte[] avatar;
     private byte[] small_avatar;
+    private Boolean current;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -61,7 +62,7 @@ public class User implements java.io.Serializable {
         this.id = id;
     }
 
-    public User(Long id, String mail, String password, String nickname, String realname, Integer age, String phone, String gender, String user_state, String profession, String area, Integer integral, byte[] avatar, byte[] small_avatar) {
+    public User(Long id, String mail, String password, String nickname, String realname, Integer age, String phone, String gender, String user_state, String profession, String area, Integer integral, byte[] avatar, byte[] small_avatar, Boolean current) {
         this.id = id;
         this.mail = mail;
         this.password = password;
@@ -76,6 +77,7 @@ public class User implements java.io.Serializable {
         this.integral = integral;
         this.avatar = avatar;
         this.small_avatar = small_avatar;
+        this.current = current;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -198,6 +200,14 @@ public class User implements java.io.Serializable {
 
     public void setSmall_avatar(byte[] small_avatar) {
         this.small_avatar = small_avatar;
+    }
+
+    public Boolean getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Boolean current) {
+        this.current = current;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

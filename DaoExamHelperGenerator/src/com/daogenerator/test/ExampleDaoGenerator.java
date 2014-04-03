@@ -21,6 +21,7 @@ public class ExampleDaoGenerator {
 		schema.enableKeepSectionsByDefault();
 		addQuestions(schema);
 		new DaoGenerator().generateAll(schema, "../ExamHelper/src-models");
+		// new DaoGenerator().generateAll(schema, "../SqliteTest/src-models");
 	}
 
 	private static void addQuestions(Schema schema) {
@@ -42,7 +43,7 @@ public class ExampleDaoGenerator {
 		userEntity.addIntProperty("integral");// 积分
 		userEntity.addByteArrayProperty("avatar");// 用户头像
 		userEntity.addByteArrayProperty("small_avatar");// 用户小头像
-		userEntity.addBooleanProperty("current");//是否为当前用户
+		userEntity.addBooleanProperty("current");// 是否为当前用户
 		/*** 用户表 ***/
 
 		/*** 科目表 ***/
@@ -211,22 +212,20 @@ public class ExampleDaoGenerator {
 		// 一张试卷对应多个大题
 		ToMany ExamToExamSection = examination.addToMany(examSection, exam_id);
 		ExamToExamSection.setName("examSectionList");
-		
-		
+
 		/*** 试卷题目表 ***/
 		Entity examQuestion = schema.addEntity("ExamQuestion");
 		examQuestion.implementsSerializable();
 		examQuestion.addIdProperty().autoincrement();
-		examQuestion.addIntProperty("question_number").notNull();//题号
-		examQuestion.addLongProperty("question_id").notNull();//题目ID
-		Property examQuestion_examSection_id = examQuestion.addLongProperty("exanSection_id").notNull().getProperty();//大题ＩＤ
+		examQuestion.addIntProperty("question_number").notNull();// 题号
+		examQuestion.addLongProperty("question_id").notNull();// 题目ID
+		Property examQuestion_examSection_id = examQuestion.addLongProperty("exanSection_id").notNull().getProperty();// 大题ＩＤ
 		examQuestion.addToOne(section, examQuestion_examSection_id);
 		/*** 试卷题目表 ***/
-		
-		//一个答题中有多个题目
+
+		// 一个答题中有多个题目
 		ToMany examSectionToQuestion = examSection.addToMany(examQuestion, examQuestion_examSection_id);
 		examSectionToQuestion.setName("examQuestionList");
-		
 
 		/*** 错题表 ***/
 		Entity errorQuestions = schema.addEntity("ErrorQuestions");
@@ -239,7 +238,7 @@ public class ExampleDaoGenerator {
 		errorQuestions.addToOne(userEntity, user_id);
 		Property error_questionType_id = errorQuestions.addLongProperty("questionType_id").notNull().getProperty();// 题型外键
 		errorQuestions.addToOne(questionType, error_questionType_id);
-		Property error_section_id = errorQuestions.addLongProperty("section_id").notNull().getProperty();//章节外键
+		Property error_section_id = errorQuestions.addLongProperty("section_id").notNull().getProperty();// 章节外键
 		errorQuestions.addToOne(section, error_section_id);
 		/*** 错题表 ***/
 
@@ -249,7 +248,7 @@ public class ExampleDaoGenerator {
 		// 一个题型有多个错题
 		ToMany QuestionTypeToErrorQuestions = questionType.addToMany(errorQuestions, error_questionType_id);
 		QuestionTypeToErrorQuestions.setName("errorQuestionsList");
-		//一个章节下有多个错题
+		// 一个章节下有多个错题
 		ToMany SectionToError = section.addToMany(errorQuestions, error_section_id);
 		SectionToError.setName("errorQuestionsList");
 
@@ -263,7 +262,7 @@ public class ExampleDaoGenerator {
 		collection.addToOne(userEntity, collect_user_id);
 		Property collection_questionType_id = collection.addLongProperty("questionType_id").notNull().getProperty();// 题型外键
 		collection.addToOne(questionType, collection_questionType_id);
-		Property collect_section_id = collection.addLongProperty("section_id").notNull().getProperty();//章节外键
+		Property collect_section_id = collection.addLongProperty("section_id").notNull().getProperty();// 章节外键
 		collection.addToOne(section, collect_section_id);
 		/*** 收藏表 ***/
 
@@ -273,7 +272,7 @@ public class ExampleDaoGenerator {
 		// 一个题型有多个收藏题目
 		ToMany QuestionTypeToCollection = questionType.addToMany(collection, collection_questionType_id);
 		QuestionTypeToCollection.setName("collectionQuestionsList");
-		//一个章节有多个收藏题目
+		// 一个章节有多个收藏题目
 		ToMany SectionToCollection = section.addToMany(collection, collect_section_id);
 		SectionToCollection.setName("collectionList");
 
@@ -343,6 +342,9 @@ public class ExampleDaoGenerator {
 		studyRecord.implementsSerializable();
 		studyRecord.addIdProperty().autoincrement();
 		studyRecord.addLongProperty("question_id").notNull();// 题目ID
+		studyRecord.addStringProperty("my_answer");// 我的答案
+		studyRecord.addBooleanProperty("is_right");// 是否正确
+		studyRecord.addDateProperty("record_time");// 学习时间
 		Property studyRecord_user_id = studyRecord.addLongProperty("user_id").notNull().getProperty();// 用户外键
 		studyRecord.addToOne(userEntity, studyRecord_user_id);
 		Property studyRecord_questionType_id = studyRecord.addLongProperty("questionType_id").notNull().getProperty();// 题型外键
@@ -363,7 +365,7 @@ public class ExampleDaoGenerator {
 		groups.addIntProperty("question_num");// 组中题目数量
 		groups.addIntProperty("finished_num");// 已完成数量
 		groups.addIntProperty("error_num");// 出错数量
-		groups.addStringProperty("group_name");//组名
+		groups.addStringProperty("group_name");// 组名
 		Property group_section_id = groups.addLongProperty("section_id").notNull().getProperty();// 章节外键
 		groups.addToOne(section, group_section_id);
 		Property group_questionType_id = groups.addLongProperty("questionType_id").notNull().getProperty();// 题型外键
@@ -382,11 +384,11 @@ public class ExampleDaoGenerator {
 		groupQuestion.implementsSerializable();
 		groupQuestion.addIdProperty().autoincrement();
 		groupQuestion.addLongProperty("question_id").notNull();// 题目ID
-		Property groupQuestion_group_id = groupQuestion.addLongProperty("group_id").notNull().getProperty();//分组外键
+		Property groupQuestion_group_id = groupQuestion.addLongProperty("group_id").notNull().getProperty();// 分组外键
 		groupQuestion.addToOne(groups, groupQuestion_group_id);
 		/*** 题目分组表 ***/
-		
-		//一个分组中有多个题目
+
+		// 一个分组中有多个题目
 		ToMany groupToQuestion = groups.addToMany(groupQuestion, groupQuestion_group_id);
 		groupToQuestion.setName("questionList");
 	}
