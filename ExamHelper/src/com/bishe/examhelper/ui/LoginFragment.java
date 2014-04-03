@@ -20,9 +20,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
+import com.bishe.examhelper.dbService.UserService;
 import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
@@ -87,9 +89,14 @@ public class LoginFragment extends BaseV4Fragment {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		// 获得默认邮箱
-		mEmail = getActivity().getIntent().getStringExtra(EXTRA_EMAIL);
+		User user = UserService.getInstance(getActivity()).getLastUser();
+		if (user != null) {
+			mEmail = user.getMail();// 获得默认邮箱
+			mPassword = user.getPassword();// 获得对应密码
+		}
+
 		mEmailView.setText(mEmail);
+		mPasswordView.setText(mPassword);
 
 		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
@@ -237,15 +244,14 @@ public class LoginFragment extends BaseV4Fragment {
 			// TODO: attempt authentication against a network service.
 
 			try {
-				login();
-				showProgress(true);
+				return login();
+
 			} catch (Exception e) {
 				// return false;
 				e.printStackTrace();
+				return false;
 			}
 
-			// TODO: register the new account here.
-			return true;
 		}
 
 		@Override
@@ -254,6 +260,7 @@ public class LoginFragment extends BaseV4Fragment {
 			showProgress(false);
 
 			if (success) {
+				Toast.makeText(getActivity(), "登录成功！", 2000).show();
 				getActivity().finish();
 			} else {
 				mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -270,17 +277,29 @@ public class LoginFragment extends BaseV4Fragment {
 		/**
 		 *验证登陆
 		 */
-		public void login() {
+		public boolean login() {
+			boolean flag = false;
+			UserService userService = UserService.getInstance(getActivity());
+
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("mail", mEmail);
 			map.put("pass", mPassword);
-			String url = HttpUtil.BASE_URL + "LoginServlet";
+			String url = "LoginServlet";
 			try {
-				User user = FastJsonTool.getObject(HttpUtil.postRequest(url, map), User.class);
+				com.bieshe.examhelper.netdomains.User netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
+						com.bieshe.examhelper.netdomains.User.class);
+
+				if (netUser != null) {
+					User user = userService.NetUserToUser(netUser);
+					userService.saveUser(user);
+					flag = true;
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			return flag;
 		}
 	}
 

@@ -106,12 +106,22 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 			userRealname.setText(user.getRealname());
 			userProfession.setText(user.getProfession());
 			userState.setText(user.getUser_state());
-			userAge.setValue(user.getAge());
-			if (user.getGender().equals("男")) {
-				userGenderMan.setChecked(true);
+			if (user.getAge() != null) {
+				userAge.setValue(user.getAge());
 			} else {
-				userGenderWoman.setChecked(true);
+				userAge.setValue(0);
 			}
+
+			if (user.getGender() != null) {
+				if (user.getGender().equals("男")) {
+
+				} else {
+					userGenderWoman.setChecked(true);
+				}
+			} else {
+				userGenderMan.setChecked(true);
+			}
+
 		} else {
 		}
 	}
@@ -163,7 +173,7 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 			userService.updateUser(user);
 			userChangedListener.onUserInfoChanged(user);
 			Toast.makeText(getActivity(), "修改成功！", 1).show();
-		}else {
+		} else {
 			Toast.makeText(getActivity(), "请先登录！", 1).show();
 		}
 

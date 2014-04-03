@@ -34,7 +34,7 @@
             android:drawableLeft="@drawable/login_user_account_ico"
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
-            android:maxLength="16"
+            android:maxLength="30"
             android:maxLines="1"
             android:paddingLeft="12.0dip"
             android:singleLine="true"

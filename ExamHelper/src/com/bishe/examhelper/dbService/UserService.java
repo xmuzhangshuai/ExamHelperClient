@@ -51,7 +51,28 @@ public class UserService {
 	 * @return
 	 */
 	public User getCurrentUser() {
-		return userDao.loadByRowId(1);
+		List<User> users = userDao.loadAll();
+		if (users != null) {
+			for (int i = 0; i < users.size(); i++) {
+				if (users.get(i).getCurrent()) {
+					return users.get(i);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * 返回最后登录的User
+	 */
+	public User getLastUser() {
+		List<User> users = userDao.loadAll();
+		if (users.size() > 0) {
+			return users.get(users.size() - 1);
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -65,14 +86,50 @@ public class UserService {
 	/**
 	 * 删除用户信息
 	 */
-	public void deleteUser() {
+	public void deleteAllUser() {
 		userDao.deleteAll();
+	}
+
+	/**
+	 * 注销
+	 */
+	public void singOut() {
+		getCurrentUser().setCurrent(false);
 	}
 
 	/**
 	 * 保存用户
 	 */
 	public void saveUser(User user) {
-		userDao.insert(user);
+		userDao.insertOrReplace(user);
+	}
+
+	/**
+	 * 变为当前用户
+	 */
+	public void changeToCurrentUser(User user) {
+		User currentUser = userDao.load(user.getId());
+		currentUser.setCurrent(true);
+	}
+
+	/**
+	 * 从网络传回数据变为本地User
+	 */
+	public User NetUserToUser(com.bieshe.examhelper.netdomains.User netUser) {
+		byte[] avatar = null;
+		byte[] small_avatar = null;
+		if (netUser.getAvatar() != null) {
+			avatar = netUser.getAvatar().getBytes();
+		}
+
+		if (netUser.getSmallAvatar() != null) {
+			small_avatar = netUser.getSmallAvatar().getBytes();
+		}
+		User user = new User((long) netUser.getId(), netUser.getMail(), netUser.getPassword(), netUser.getNickname(),
+				netUser.getRealname(), netUser.getAge(), netUser.getPhone(), netUser.getGender(),
+				netUser.getUserState(), netUser.getProfession(), netUser.getArea(), netUser.getIntegral(), avatar,
+				small_avatar, true);
+
+		return user;
 	}
 }

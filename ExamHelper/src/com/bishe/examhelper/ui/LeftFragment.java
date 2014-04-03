@@ -103,16 +103,38 @@ public class LeftFragment extends BaseV4Fragment {
 		user = getUserFromDb();
 		if (user != null) {
 			byte[] imageByte = user.getSmall_avatar();// 取出图片字节数组
-			Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
-			Bitmap headBitmap = ImageTools.toRoundBitmap(imageBitmap);
-			headImage.setImageBitmap(ImageTools.zoomBitmap(headBitmap, DensityUtil.dip2px(getActivity(), 100),
-					DensityUtil.dip2px(getActivity(), 100)));
-			nickNameTextView.setText(user.getNickname());
-			mailTextView.setText(user.getMail());
+			if (imageByte != null) {
+				Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
+				Bitmap headBitmap = ImageTools.toRoundBitmap(imageBitmap);
+				headImage.setImageBitmap(ImageTools.zoomBitmap(headBitmap, DensityUtil.dip2px(getActivity(), 100),
+						DensityUtil.dip2px(getActivity(), 100)));
+			} else {
+				headImage.setBackgroundResource(R.drawable.photo);
+			}
+
 			login.setVisibility(View.GONE);
 			userView.setVisibility(View.VISIBLE);
-			realNameTextView.setText("姓名：" + user.getRealname());// 真实姓名
-			genderTextView.setText("性别：" + user.getGender());// 性别
+
+			// 昵称
+			nickNameTextView.setText(user.getNickname());
+
+			// 邮箱
+			mailTextView.setText(user.getMail());
+
+			// 真实姓名
+			if (user.getRealname() != null) {
+				realNameTextView.setText("姓名：" + user.getRealname());
+			} else {
+				realNameTextView.setText("姓名：");
+			}
+
+			// 性别
+			if (user.getGender() != null) {
+				genderTextView.setText("性别：" + user.getGender());
+			} else {
+				genderTextView.setText("性别：");
+			}
+
 			phoneTextView.setText("绑定手机：" + user.getPhone());// 手机号码
 			integral.setText("我的积分：" + user.getIntegral());// 积分
 		} else {
@@ -189,9 +211,12 @@ public class LeftFragment extends BaseV4Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				BigHeadImageFragmentDialog bigHeadImageFragmentDialog = new BigHeadImageFragmentDialog();
-				bigHeadImageFragmentDialog.show(getActivity().getFragmentManager(),
-						"com.bieshe.examhelper.bigHeadImageFragmentDialog");
+				if (getUserFromDb().getAvatar() != null) {
+					BigHeadImageFragmentDialog bigHeadImageFragmentDialog = new BigHeadImageFragmentDialog();
+					bigHeadImageFragmentDialog.show(getActivity().getFragmentManager(),
+							"com.bieshe.examhelper.bigHeadImageFragmentDialog");
+				}
+
 			}
 		});
 
@@ -211,8 +236,8 @@ public class LeftFragment extends BaseV4Fragment {
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								UserService userService = UserService.getInstance(getActivity());
-								// 从数据库删除数据
-								userService.deleteUser();
+								// 注销
+								userService.singOut();
 								LeftFragment.this.onResume();
 							}
 						}).setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -232,12 +257,7 @@ public class LeftFragment extends BaseV4Fragment {
 	 * @return
 	 */
 	protected User getUserFromDb() {
-		User user = UserService.getInstance(getActivity()).getCurrentUser();
-		if (user != null) {
-			return user;
-		} else {
-			return null;
-		}
+		return UserService.getInstance(getActivity()).getCurrentUser();
 	}
 
 }

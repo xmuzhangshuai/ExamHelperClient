@@ -41,7 +41,7 @@
                 android:background="@android:color/white"
                 android:hint="请输入注册邮箱"
                 android:inputType="textEmailAddress"
-                android:maxLength="20"
+                android:maxLength="30"
                 android:maxLines="1"
                 android:paddingLeft="10.0dip"
                 android:textColor="#ff545454"
