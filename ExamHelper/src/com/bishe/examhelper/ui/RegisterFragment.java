@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,8 @@ import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
-import com.bishe.examhelper.ui.LoginFragment.UserLoginTask;
-import com.bishe.examhelper.utils.DialogTools;
+import com.bishe.examhelper.dbService.UserService;
+import com.bishe.examhelper.entities.User;
 
 /**   
 *    
@@ -207,8 +208,13 @@ public class RegisterFragment extends BaseV4Fragment {
 			// TODO Auto-generated method stub
 			try {
 				// Simulate network access.
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
+				UserService userService = UserService.getInstance(getActivity());
+				User user = new User(null, mEmail, mPassword, null, null, null, mPhone, null, null, null, null, 0,
+						null, null);
+				userService.saveUser(user);
+			} catch (Exception e) {
+				Log.e("×¢²á", "×¢²áÊ§°Ü£¡");
+				e.printStackTrace();
 				return false;
 			}
 			return true;

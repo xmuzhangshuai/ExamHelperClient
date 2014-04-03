@@ -61,11 +61,18 @@ public class UserService {
 	public void updateUser(User user) {
 		userDao.update(user);
 	}
-	
+
 	/**
 	 * 删除用户信息
 	 */
-	public void deleteUser(){
+	public void deleteUser() {
 		userDao.deleteAll();
+	}
+
+	/**
+	 * 保存用户
+	 */
+	public void saveUser(User user) {
+		userDao.insert(user);
 	}
 }
