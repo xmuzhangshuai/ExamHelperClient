@@ -64,6 +64,7 @@ public final class ImageTools {
 	 * @param bitmap
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public static Drawable bitmapToDrawable(Bitmap bitmap) {
 		return new BitmapDrawable(bitmap);
 	}
@@ -410,7 +411,6 @@ public final class ImageTools {
 			File folder = new File(path);
 			File[] files = folder.listFiles();
 			for (int i = 0; i < files.length; i++) {
-				System.out.println(files[i].getName());
 				if (files[i].getName().equals(fileName)) {
 					files[i].delete();
 				}

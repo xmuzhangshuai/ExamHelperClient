@@ -1,14 +1,25 @@
 package com.bishe.examhelper.ui;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,6 +56,7 @@ public class LeftFragment extends BaseV4Fragment {
 	private ImageButton switchButton;// 切换主题按钮
 	private ImageView headImage;// 头像
 	private Button signOutButton;// 注销按钮
+	private Button changeImageButton;// 更改头像按钮
 
 	private SharedPreferences sharedPreferences;
 
@@ -61,6 +73,12 @@ public class LeftFragment extends BaseV4Fragment {
 	private TextView nickNameTextView;// 昵称
 	private TextView mailTextView;// 邮箱
 	private User user;
+
+	private static final int TAKE_PICTURE = 0;
+	private static final int CHOOSE_PICTURE = 1;
+	private static final int CROP = 2;
+	private static final int CROP_PICTURE = 3;
+	private static final int SCALE = 5;// 照片缩小比例
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -183,6 +201,7 @@ public class LeftFragment extends BaseV4Fragment {
 		phoneTextView = (TextView) rootView.findViewById(R.id.user_phone);// 手机号码
 		integral = (TextView) rootView.findViewById(R.id.user_integral);// 积分
 		signOutButton = (Button) rootView.findViewById(R.id.sign_out);// 注销
+		changeImageButton = (Button) rootView.findViewById(R.id.change_headimage);// 更改头像
 
 	}
 
@@ -250,6 +269,196 @@ public class LeftFragment extends BaseV4Fragment {
 			}
 		});
 
+		// 更改头像按钮
+		changeImageButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				showPicturePicker(getActivity(), true);
+			}
+		});
+
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == getActivity().RESULT_OK) {
+			switch (requestCode) {
+			case TAKE_PICTURE:
+				// 将保存在本地的图片取出并缩小后显示在界面上
+				Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/image.jpg");
+				// 大头像存进数据库
+				saveAvatar(bitmap, false);
+
+				// 裁剪成100*100圆形小图片
+				Bitmap newBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(bitmap,
+						DensityUtil.dip2px(getActivity(), 100), DensityUtil.dip2px(getActivity(), 100)));
+				// 把小头像存进数据库
+				saveAvatar(newBitmap, true);
+
+				// 由于Bitmap内存占用较大，这里需要回收内存，否则会报out of memory异常
+				bitmap.recycle();
+
+				// 将处理过的图片显示在界面上，并保存到本地
+				headImage.setImageBitmap(newBitmap);
+				ImageTools.savePhotoToSDCard(newBitmap, Environment.getExternalStorageDirectory().getAbsolutePath(),
+						String.valueOf(System.currentTimeMillis()));
+
+				break;
+
+			case CHOOSE_PICTURE:
+				ContentResolver resolver = getActivity().getContentResolver();
+				// 照片的原始资源地址
+				Uri originalUri = data.getData();
+				try {
+					// 使用ContentProvider通过URI获取原始图片
+					Bitmap photo = MediaStore.Images.Media.getBitmap(resolver, originalUri);
+					if (photo != null) {
+						// 大头像存进数据库
+						saveAvatar(photo, false);
+
+						// 裁剪成100*100圆形小图片
+						Bitmap smallBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(photo,
+								DensityUtil.dip2px(getActivity(), 100), DensityUtil.dip2px(getActivity(), 100)));
+						// 把小头像存进数据库
+						saveAvatar(smallBitmap, true);
+
+						// 释放原始图片占用的内存，防止out of memory异常发生
+						photo.recycle();
+
+						headImage.setImageBitmap(smallBitmap);
+					}
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				break;
+
+			case CROP:
+				Uri uri = null;
+				if (data != null) {
+					uri = data.getData();
+				} else {
+					String fileName = getActivity().getSharedPreferences("temp", Context.MODE_WORLD_WRITEABLE)
+							.getString("tempName", "");
+					uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName));
+				}
+				cropImage(uri, 500, 500, CROP_PICTURE);
+				break;
+
+			case CROP_PICTURE:
+				Bitmap photo = null;
+				Bitmap smallBitmap = null;
+				Uri photoUri = data.getData();
+				if (photoUri != null) {
+					photo = BitmapFactory.decodeFile(photoUri.getPath());
+				}
+				if (photo == null) {
+					Bundle extra = data.getExtras();
+					if (extra != null) {
+						photo = (Bitmap) extra.get("data");
+						ByteArrayOutputStream stream = new ByteArrayOutputStream();
+						photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+						// 大头像存进数据库
+						saveAvatar(photo, false);
+
+						// 裁剪成100*100圆形小图片
+						smallBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(photo,
+								DensityUtil.dip2px(getActivity(), 100), DensityUtil.dip2px(getActivity(), 100)));
+						// 把小头像存进数据库
+						saveAvatar(smallBitmap, true);
+					}
+				}
+				headImage.setImageBitmap(smallBitmap);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	/**
+	 * 显示对话框，从拍照和相册选择图片来源
+	 * @param context
+	 * @param isCrop
+	 */
+	public void showPicturePicker(Context context, boolean isCrop) {
+		final boolean crop = isCrop;
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("图片来源");
+		builder.setNegativeButton("取消", null);
+		builder.setItems(new String[] { "拍照", "相册" }, new DialogInterface.OnClickListener() {
+			// 类型码
+			int REQUEST_CODE;
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case TAKE_PICTURE:
+					Uri imageUri = null;
+					String fileName = null;
+					Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					if (crop) {
+						REQUEST_CODE = CROP;
+						// 删除上一次截图的临时文件
+						SharedPreferences sharedPreferences = getActivity().getSharedPreferences("temp",
+								Context.MODE_WORLD_WRITEABLE);
+						ImageTools.deletePhotoAtPathAndName(
+								Environment.getExternalStorageDirectory().getAbsolutePath(),
+								sharedPreferences.getString("tempName", ""));
+
+						// 保存本次截图临时文件名字
+						fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
+						Editor editor = sharedPreferences.edit();
+						editor.putString("tempName", fileName);
+						editor.commit();
+					} else {
+						REQUEST_CODE = TAKE_PICTURE;
+						fileName = "image.jpg";
+					}
+					imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName));
+					// 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
+					openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+					startActivityForResult(openCameraIntent, REQUEST_CODE);
+					break;
+
+				case CHOOSE_PICTURE:
+					Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+					if (crop) {
+						REQUEST_CODE = CROP;
+					} else {
+						REQUEST_CODE = CHOOSE_PICTURE;
+					}
+					openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+					startActivityForResult(openAlbumIntent, REQUEST_CODE);
+					break;
+
+				default:
+					break;
+				}
+			}
+		});
+		builder.create().show();
+	}
+
+	// 截取图片
+	public void cropImage(Uri uri, int outputX, int outputY, int requestCode) {
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		intent.putExtra("crop", "true");
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", 1);
+		intent.putExtra("outputX", outputX);
+		intent.putExtra("outputY", outputY);
+		intent.putExtra("outputFormat", "JPEG");
+		intent.putExtra("noFaceDetection", true);
+		intent.putExtra("return-data", true);
+		startActivityForResult(intent, requestCode);
 	}
 
 	/**
@@ -258,6 +467,26 @@ public class LeftFragment extends BaseV4Fragment {
 	 */
 	protected User getUserFromDb() {
 		return UserService.getInstance(getActivity()).getCurrentUser();
+	}
+
+	/**
+	 * 存贮用户头像
+	 * @param bitmap
+	 * @param is_small_avatar是否是小头像
+	 */
+	public void saveAvatar(Bitmap bitmap, boolean is_small_avatar) {
+		UserService userService = UserService.getInstance(getActivity());
+		User user = userService.getCurrentUser();
+		// 如果是小头像
+		if (is_small_avatar && user != null) {
+			user.setSmall_avatar(ImageTools.bitmapToBytes(bitmap));
+		} else if (!is_small_avatar && user != null) {
+			user.setAvatar(ImageTools.bitmapToBytes(bitmap));
+		} else {
+			Log.e("存储头像", "存入本地数据库出错！");
+		}
+
+		userService.updateUser(user);
 	}
 
 }
