@@ -78,7 +78,6 @@ public class LeftFragment extends BaseV4Fragment {
 	private static final int CHOOSE_PICTURE = 1;
 	private static final int CROP = 2;
 	private static final int CROP_PICTURE = 3;
-	private static final int SCALE = 5;// 照片缩小比例
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -287,56 +286,6 @@ public class LeftFragment extends BaseV4Fragment {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == getActivity().RESULT_OK) {
 			switch (requestCode) {
-			case TAKE_PICTURE:
-				// 将保存在本地的图片取出并缩小后显示在界面上
-				Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/image.jpg");
-				// 大头像存进数据库
-				saveAvatar(bitmap, false);
-
-				// 裁剪成100*100圆形小图片
-				Bitmap newBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(bitmap,
-						DensityUtil.dip2px(getActivity(), 100), DensityUtil.dip2px(getActivity(), 100)));
-				// 把小头像存进数据库
-				saveAvatar(newBitmap, true);
-
-				// 由于Bitmap内存占用较大，这里需要回收内存，否则会报out of memory异常
-				bitmap.recycle();
-
-				// 将处理过的图片显示在界面上，并保存到本地
-				headImage.setImageBitmap(newBitmap);
-				ImageTools.savePhotoToSDCard(newBitmap, Environment.getExternalStorageDirectory().getAbsolutePath(),
-						String.valueOf(System.currentTimeMillis()));
-
-				break;
-
-			case CHOOSE_PICTURE:
-				ContentResolver resolver = getActivity().getContentResolver();
-				// 照片的原始资源地址
-				Uri originalUri = data.getData();
-				try {
-					// 使用ContentProvider通过URI获取原始图片
-					Bitmap photo = MediaStore.Images.Media.getBitmap(resolver, originalUri);
-					if (photo != null) {
-						// 大头像存进数据库
-						saveAvatar(photo, false);
-
-						// 裁剪成100*100圆形小图片
-						Bitmap smallBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(photo,
-								DensityUtil.dip2px(getActivity(), 100), DensityUtil.dip2px(getActivity(), 100)));
-						// 把小头像存进数据库
-						saveAvatar(smallBitmap, true);
-
-						// 释放原始图片占用的内存，防止out of memory异常发生
-						photo.recycle();
-
-						headImage.setImageBitmap(smallBitmap);
-					}
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				break;
 
 			case CROP:
 				Uri uri = null;
@@ -368,13 +317,14 @@ public class LeftFragment extends BaseV4Fragment {
 						saveAvatar(photo, false);
 
 						// 裁剪成100*100圆形小图片
-						smallBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(photo,
-								DensityUtil.dip2px(getActivity(), 100), DensityUtil.dip2px(getActivity(), 100)));
+						smallBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(photo, 100, 100));
+
 						// 把小头像存进数据库
 						saveAvatar(smallBitmap, true);
 					}
 				}
 				headImage.setImageBitmap(smallBitmap);
+				UserService.getInstance(getActivity()).updateUserToNet();
 				break;
 			default:
 				break;
@@ -399,11 +349,15 @@ public class LeftFragment extends BaseV4Fragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
+				/**
+				 * 拍照
+				 */
 				case TAKE_PICTURE:
 					Uri imageUri = null;
 					String fileName = null;
 					Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					if (crop) {
+						// 拍照裁剪
 						REQUEST_CODE = CROP;
 						// 删除上一次截图的临时文件
 						SharedPreferences sharedPreferences = getActivity().getSharedPreferences("temp",
@@ -418,6 +372,7 @@ public class LeftFragment extends BaseV4Fragment {
 						editor.putString("tempName", fileName);
 						editor.commit();
 					} else {
+						// 拍照
 						REQUEST_CODE = TAKE_PICTURE;
 						fileName = "image.jpg";
 					}
@@ -427,9 +382,13 @@ public class LeftFragment extends BaseV4Fragment {
 					startActivityForResult(openCameraIntent, REQUEST_CODE);
 					break;
 
+				/**
+				 * 从图片库选择
+				 */
 				case CHOOSE_PICTURE:
 					Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
 					if (crop) {
+						// 图库选择裁剪
 						REQUEST_CODE = CROP;
 					} else {
 						REQUEST_CODE = CHOOSE_PICTURE;

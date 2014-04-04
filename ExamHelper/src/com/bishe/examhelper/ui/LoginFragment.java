@@ -286,8 +286,8 @@ public class LoginFragment extends BaseV4Fragment {
 			map.put("pass", mPassword);
 			String url = "LoginServlet";
 			try {
-				com.bieshe.examhelper.netdomains.User netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
-						com.bieshe.examhelper.netdomains.User.class);
+				com.netdomains.User netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
+						com.netdomains.User.class);
 
 				if (netUser != null) {
 					User user = userService.NetUserToUser(netUser);

@@ -13,6 +13,9 @@ public class TestSqlite extends AndroidTestCase {
 
 	public void privnale() {
 		UserService userService = UserService.getInstance(getContext());
-		userService.deleteAllUser();
+		String avatar = new String(userService.getCurrentUser().getAvatar());
+		System.out.println("长度为：" + avatar.length());
+		System.out.println("小头像"
+				+ new String(UserService.getInstance(getContext()).getCurrentUser().getSmall_avatar()).length());
 	}
 }

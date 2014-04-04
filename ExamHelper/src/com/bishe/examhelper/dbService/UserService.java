@@ -1,14 +1,19 @@
 package com.bishe.examhelper.dbService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.dao.DaoSession;
 import com.bishe.examhelper.dao.UserDao;
 import com.bishe.examhelper.entities.User;
+import com.bishe.examhelper.utils.FastJsonTool;
+import com.bishe.examhelper.utils.HttpUtil;
 
 public class UserService {
 	private static final String TAG = CollectionService.class.getSimpleName();
@@ -115,7 +120,7 @@ public class UserService {
 	/**
 	 * 从网络传回数据变为本地User
 	 */
-	public User NetUserToUser(com.bieshe.examhelper.netdomains.User netUser) {
+	public User NetUserToUser(com.netdomains.User netUser) {
 		byte[] avatar = null;
 		byte[] small_avatar = null;
 		if (netUser.getAvatar() != null) {
@@ -131,5 +136,53 @@ public class UserService {
 				small_avatar, true);
 
 		return user;
+	}
+
+	/**
+	 * 通过多线程把User改变更新到服务器
+	 */
+	public void updateUserToNet() {
+		User user = getCurrentUser();
+		String avatar = null;
+		String small_avatar = null;
+		if (user.getAvatar() != null) {
+			avatar = new String(user.getAvatar());
+
+		}
+
+		if (user.getSmall_avatar() != null) {
+			small_avatar = new String(user.getSmall_avatar());
+		}
+		
+		final com.netdomains.User netUser = new com.netdomains.User(user.getMail(), user.getPassword(),
+				user.getNickname(), user.getRealname(), user.getAge(), user.getPhone(), user.getGender(), avatar,
+				small_avatar, user.getUser_state(), user.getProfession(), user.getArea(), user.getIntegral(), null,
+				null, null, null, null, null);
+		netUser.setId(user.getId().intValue());
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				String url = "ManageUserServlet";
+				Map<String, String> map = new HashMap<String, String>();
+				try {
+					map.put("com.bishe.examhelper.updateuser", FastJsonTool.createJsonString(netUser));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Log.e("fastjson解析", "fastjson解析User出错");
+				}
+				try {
+					String msg = HttpUtil.postRequest(url, map);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Log.e("网络存储", "网络存储用户出错");
+				}
+			}
+		}).start();
+
 	}
 }

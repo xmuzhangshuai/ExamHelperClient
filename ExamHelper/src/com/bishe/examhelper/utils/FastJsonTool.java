@@ -14,6 +14,17 @@ public class FastJsonTool {
 	}
 
 	/**
+	 * 把对象生成Json字符串
+	 * 
+	 * @param object
+	 * @return
+	 */
+	public static String createJsonString(Object object) {
+		String jsonString = JSON.toJSONString(object);
+		return jsonString;
+	}
+
+	/**
 	 * 完成对单个javaBean的解析
 	 * @param jsonString要解析的字符串
 	 * @param cls
