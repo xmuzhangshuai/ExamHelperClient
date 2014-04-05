@@ -1,5 +1,6 @@
 package com.netdomains;
 
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,12 +20,11 @@ public class User implements java.io.Serializable {
 	private Integer age;
 	private String phone;
 	private String gender;
-	private String avatar;
-	private String smallAvatar;
 	private String userState;
 	private String profession;
 	private String area;
 	private Integer integral;
+	private String avatar;
 	private Set collections = new HashSet(0);
 	private Set notes = new HashSet(0);
 	private Set queries = new HashSet(0);
@@ -46,11 +46,10 @@ public class User implements java.io.Serializable {
 
 	/** full constructor */
 	public User(String mail, String password, String nickname, String realname,
-			Integer age, String phone, String gender, String avatar,
-			String smallAvatar, String userState, String profession,
-			String area, Integer integral, Set collections, Set notes,
-			Set queries, Set errorquestionses, Set answerqueries,
-			Set studyrecords) {
+			Integer age, String phone, String gender, String userState,
+			String profession, String area, Integer integral, String avatar,
+			Set collections, Set notes, Set queries, Set errorquestionses,
+			Set answerqueries, Set studyrecords) {
 		this.mail = mail;
 		this.password = password;
 		this.nickname = nickname;
@@ -58,12 +57,11 @@ public class User implements java.io.Serializable {
 		this.age = age;
 		this.phone = phone;
 		this.gender = gender;
-		this.avatar = avatar;
-		this.smallAvatar = smallAvatar;
 		this.userState = userState;
 		this.profession = profession;
 		this.area = area;
 		this.integral = integral;
+		this.avatar = avatar;
 		this.collections = collections;
 		this.notes = notes;
 		this.queries = queries;
@@ -138,22 +136,6 @@ public class User implements java.io.Serializable {
 		this.gender = gender;
 	}
 
-	public String getAvatar() {
-		return this.avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public String getSmallAvatar() {
-		return this.smallAvatar;
-	}
-
-	public void setSmallAvatar(String smallAvatar) {
-		this.smallAvatar = smallAvatar;
-	}
-
 	public String getUserState() {
 		return this.userState;
 	}
@@ -184,6 +166,14 @@ public class User implements java.io.Serializable {
 
 	public void setIntegral(Integer integral) {
 		this.integral = integral;
+	}
+
+	public String getAvatar() {
+		return this.avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public Set getCollections() {

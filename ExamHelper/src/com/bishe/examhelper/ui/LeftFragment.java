@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.ContentResolver;
@@ -30,13 +31,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
 import com.bishe.examhelper.dbService.UserService;
 import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.utils.DensityUtil;
+import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.ImageTools;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
 /**   
 *    
@@ -119,15 +128,15 @@ public class LeftFragment extends BaseV4Fragment {
 		// 如果用户已登录，从数据库中取用户数据
 		user = getUserFromDb();
 		if (user != null) {
-			byte[] imageByte = user.getSmall_avatar();// 取出图片字节数组
-			if (imageByte != null) {
-				Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
-				Bitmap headBitmap = ImageTools.toRoundBitmap(imageBitmap);
-				headImage.setImageBitmap(ImageTools.zoomBitmap(headBitmap, DensityUtil.dip2px(getActivity(), 100),
-						DensityUtil.dip2px(getActivity(), 100)));
-			} else {
-				headImage.setBackgroundResource(R.drawable.photo);
-			}
+//			byte[] imageByte = user.getSmall_avatar();// 取出图片字节数组
+//			if (imageByte != null) {
+//				Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
+//				Bitmap headBitmap = ImageTools.toRoundBitmap(imageBitmap);
+//				headImage.setImageBitmap(ImageTools.zoomBitmap(headBitmap, DensityUtil.dip2px(getActivity(), 100),
+//						DensityUtil.dip2px(getActivity(), 100)));
+//			} else {
+//				headImage.setBackgroundResource(R.drawable.photo);
+//			}
 
 			login.setVisibility(View.GONE);
 			userView.setVisibility(View.VISIBLE);
@@ -274,26 +283,26 @@ public class LeftFragment extends BaseV4Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				showPicturePicker(getActivity(), true);
+				showPicturePicker(getActivity());
 			}
 		});
 
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == getActivity().RESULT_OK) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 
 			case CROP:
 				Uri uri = null;
-				if (data != null) {
-					uri = data.getData();
+				if (intent != null) {
+					uri = intent.getData();
 				} else {
-					String fileName = getActivity().getSharedPreferences("temp", Context.MODE_WORLD_WRITEABLE)
-							.getString("tempName", "");
+					String fileName = getActivity().getSharedPreferences("temp", Context.MODE_PRIVATE).getString(
+							"tempName", "");
 					uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName));
 				}
 				cropImage(uri, 500, 500, CROP_PICTURE);
@@ -302,16 +311,29 @@ public class LeftFragment extends BaseV4Fragment {
 			case CROP_PICTURE:
 				Bitmap photo = null;
 				Bitmap smallBitmap = null;
-				Uri photoUri = data.getData();
+				Uri photoUri = intent.getData();
+
 				if (photoUri != null) {
 					photo = BitmapFactory.decodeFile(photoUri.getPath());
+					// uploadImage(photoUri.getPath());
 				}
 				if (photo == null) {
-					Bundle extra = data.getExtras();
-					if (extra != null) {
-						photo = (Bitmap) extra.get("data");
+					Bundle bundle = intent.getExtras();
+					if (bundle != null) {
+						photo = (Bitmap) bundle.get("data");
 						ByteArrayOutputStream stream = new ByteArrayOutputStream();
-						photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+						photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+						String fileName = "" + getUserFromDb().getId() + "headImage.png";
+						// 删除上次文件
+						ImageTools.deletePhotoAtPathAndName(
+								Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
+						ImageTools.savePhotoToSDCard(photo,
+								Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
+
+						File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
+
+						uploadImage(file.getPath());
 
 						// 大头像存进数据库
 						saveAvatar(photo, false);
@@ -324,7 +346,6 @@ public class LeftFragment extends BaseV4Fragment {
 					}
 				}
 				headImage.setImageBitmap(smallBitmap);
-				UserService.getInstance(getActivity()).updateUserToNet();
 				break;
 			default:
 				break;
@@ -337,8 +358,7 @@ public class LeftFragment extends BaseV4Fragment {
 	 * @param context
 	 * @param isCrop
 	 */
-	public void showPicturePicker(Context context, boolean isCrop) {
-		final boolean crop = isCrop;
+	public void showPicturePicker(Context context) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("图片来源");
 		builder.setNegativeButton("取消", null);
@@ -356,26 +376,20 @@ public class LeftFragment extends BaseV4Fragment {
 					Uri imageUri = null;
 					String fileName = null;
 					Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					if (crop) {
-						// 拍照裁剪
-						REQUEST_CODE = CROP;
-						// 删除上一次截图的临时文件
-						SharedPreferences sharedPreferences = getActivity().getSharedPreferences("temp",
-								Context.MODE_WORLD_WRITEABLE);
-						ImageTools.deletePhotoAtPathAndName(
-								Environment.getExternalStorageDirectory().getAbsolutePath(),
-								sharedPreferences.getString("tempName", ""));
+					// 拍照裁剪
+					REQUEST_CODE = CROP;
+					// 删除上一次截图的临时文件
+					SharedPreferences sharedPreferences = getActivity().getSharedPreferences("temp",
+							Context.MODE_PRIVATE);
+					ImageTools.deletePhotoAtPathAndName(Environment.getExternalStorageDirectory().getAbsolutePath(),
+							sharedPreferences.getString("tempName", ""));
 
-						// 保存本次截图临时文件名字
-						fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
-						Editor editor = sharedPreferences.edit();
-						editor.putString("tempName", fileName);
-						editor.commit();
-					} else {
-						// 拍照
-						REQUEST_CODE = TAKE_PICTURE;
-						fileName = "image.jpg";
-					}
+					// 保存本次截图临时文件名字
+					fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
+					Editor editor = sharedPreferences.edit();
+					editor.putString("tempName", fileName);
+					editor.commit();
+
 					imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName));
 					// 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
 					openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -387,12 +401,10 @@ public class LeftFragment extends BaseV4Fragment {
 				 */
 				case CHOOSE_PICTURE:
 					Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
-					if (crop) {
-						// 图库选择裁剪
-						REQUEST_CODE = CROP;
-					} else {
-						REQUEST_CODE = CHOOSE_PICTURE;
-					}
+
+					// 图库选择裁剪
+					REQUEST_CODE = CROP;
+					// 打开图片库
 					openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
 					startActivityForResult(openAlbumIntent, REQUEST_CODE);
 					break;
@@ -407,6 +419,7 @@ public class LeftFragment extends BaseV4Fragment {
 
 	// 截取图片
 	public void cropImage(Uri uri, int outputX, int outputY, int requestCode) {
+		System.out.println(uri.getPath());
 		Intent intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
 		intent.putExtra("crop", "true");
@@ -437,15 +450,62 @@ public class LeftFragment extends BaseV4Fragment {
 		UserService userService = UserService.getInstance(getActivity());
 		User user = userService.getCurrentUser();
 		// 如果是小头像
-		if (is_small_avatar && user != null) {
-			user.setSmall_avatar(ImageTools.bitmapToBytes(bitmap));
-		} else if (!is_small_avatar && user != null) {
-			user.setAvatar(ImageTools.bitmapToBytes(bitmap));
-		} else {
-			Log.e("存储头像", "存入本地数据库出错！");
-		}
+//		if (is_small_avatar && user != null) {
+//			user.setSmall_avatar(ImageTools.bitmapToBytes(bitmap));
+//		} else if (!is_small_avatar && user != null) {
+//			user.setAvatar(ImageTools.bitmapToBytes(bitmap));
+//		} else {
+//			Log.e("存储头像", "存入本地数据库出错！");
+//		}
 
 		userService.updateUser(user);
+	}
+
+	/**
+	 * 上传头像
+	 */
+	public void uploadImage(String filePath) {
+		String uploadHost = HttpUtil.BASE_URL + "UploadServlet";
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("user_key",
+				String.valueOf(UserService.getInstance(getActivity()).getCurrentUserID().intValue()));
+		params.addBodyParameter(filePath.replace("/", ""), new File(filePath));
+		uploadMethod(params, uploadHost);
+	}
+
+	/**
+	 * 上传文件
+	 * @param params
+	 * @param uploadHost
+	 */
+	public void uploadMethod(final RequestParams params, final String uploadHost) {
+		HttpUtils http = new HttpUtils();
+		http.send(HttpMethod.POST, uploadHost, params, new RequestCallBack<String>() {
+			@Override
+			public void onStart() {
+				Toast.makeText(getActivity(), "开始上传...", 1).show();
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+				if (isUploading) {
+					System.out.println("upload: " + current + "/" + total);
+				} else {
+					System.out.println("reply: " + current + "/" + total);
+				}
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				Toast.makeText(getActivity(), "头像上传成功！", 1).show();
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				System.out.println(error.getExceptionCode() + ":" + msg);
+				Toast.makeText(getActivity(), "头像上传失败！" + msg, 1).show();
+			}
+		});
 	}
 
 }

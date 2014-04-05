@@ -20,7 +20,7 @@ public class MaterialAnalysis extends Question  implements java.io.Serializable 
     private Long id;
     /** Not-null value. */
     private String material;
-    private byte[] material_image;
+    private String material_image;
     private String remark;
     private Boolean flag;
     private long section_id;
@@ -46,7 +46,7 @@ public class MaterialAnalysis extends Question  implements java.io.Serializable 
         this.id = id;
     }
 
-    public MaterialAnalysis(Long id, String material, byte[] material_image, String remark, Boolean flag, long section_id) {
+    public MaterialAnalysis(Long id, String material, String material_image, String remark, Boolean flag, long section_id) {
         this.id = id;
         this.material = material;
         this.material_image = material_image;
@@ -79,11 +79,11 @@ public class MaterialAnalysis extends Question  implements java.io.Serializable 
         this.material = material;
     }
 
-    public byte[] getMaterial_image() {
+    public String getMaterial_image() {
         return material_image;
     }
 
-    public void setMaterial_image(byte[] material_image) {
+    public void setMaterial_image(String material_image) {
         this.material_image = material_image;
     }
 

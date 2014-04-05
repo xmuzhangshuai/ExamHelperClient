@@ -35,8 +35,7 @@ public class User implements java.io.Serializable {
     private String profession;
     private String area;
     private Integer integral;
-    private byte[] avatar;
-    private byte[] small_avatar;
+    private String avatar;
     private Boolean current;
 
     /** Used to resolve relations */
@@ -62,7 +61,7 @@ public class User implements java.io.Serializable {
         this.id = id;
     }
 
-    public User(Long id, String mail, String password, String nickname, String realname, Integer age, String phone, String gender, String user_state, String profession, String area, Integer integral, byte[] avatar, byte[] small_avatar, Boolean current) {
+    public User(Long id, String mail, String password, String nickname, String realname, Integer age, String phone, String gender, String user_state, String profession, String area, Integer integral, String avatar, Boolean current) {
         this.id = id;
         this.mail = mail;
         this.password = password;
@@ -76,7 +75,6 @@ public class User implements java.io.Serializable {
         this.area = area;
         this.integral = integral;
         this.avatar = avatar;
-        this.small_avatar = small_avatar;
         this.current = current;
     }
 
@@ -186,20 +184,12 @@ public class User implements java.io.Serializable {
         this.integral = integral;
     }
 
-    public byte[] getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public byte[] getSmall_avatar() {
-        return small_avatar;
-    }
-
-    public void setSmall_avatar(byte[] small_avatar) {
-        this.small_avatar = small_avatar;
     }
 
     public Boolean getCurrent() {

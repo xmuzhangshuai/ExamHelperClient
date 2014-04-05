@@ -121,21 +121,8 @@ public class UserService {
 	 * 从网络传回数据变为本地User
 	 */
 	public User NetUserToUser(com.netdomains.User netUser) {
-		byte[] avatar = null;
-		byte[] small_avatar = null;
-		if (netUser.getAvatar() != null) {
-			avatar = netUser.getAvatar().getBytes();
-		}
 
-		if (netUser.getSmallAvatar() != null) {
-			small_avatar = netUser.getSmallAvatar().getBytes();
-		}
-		User user = new User((long) netUser.getId(), netUser.getMail(), netUser.getPassword(), netUser.getNickname(),
-				netUser.getRealname(), netUser.getAge(), netUser.getPhone(), netUser.getGender(),
-				netUser.getUserState(), netUser.getProfession(), netUser.getArea(), netUser.getIntegral(), avatar,
-				small_avatar, true);
-
-		return user;
+		return null;
 	}
 
 	/**
@@ -150,15 +137,12 @@ public class UserService {
 
 		}
 
-		if (user.getSmall_avatar() != null) {
-			small_avatar = new String(user.getSmall_avatar());
-		}
-		
-		final com.netdomains.User netUser = new com.netdomains.User(user.getMail(), user.getPassword(),
-				user.getNickname(), user.getRealname(), user.getAge(), user.getPhone(), user.getGender(), avatar,
-				small_avatar, user.getUser_state(), user.getProfession(), user.getArea(), user.getIntegral(), null,
-				null, null, null, null, null);
-		netUser.setId(user.getId().intValue());
+		final com.netdomains.User nUser = new com.netdomains.User(user.getMail(), user.getPassword(),
+				user.getNickname(), user.getRealname(), user.getAge(), user.getPhone(), user.getGender(),
+				user.getUser_state(), user.getProfession(), user.getArea(), user.getIntegral(), user.getAvatar()
+						.toString(), null, null, null, null, null, null);
+
+		nUser.setId(user.getId().intValue());
 
 		new Thread(new Runnable() {
 
@@ -168,7 +152,7 @@ public class UserService {
 				String url = "ManageUserServlet";
 				Map<String, String> map = new HashMap<String, String>();
 				try {
-					map.put("com.bishe.examhelper.updateuser", FastJsonTool.createJsonString(netUser));
+					map.put("com.bishe.examhelper.updateuser", FastJsonTool.createJsonString(nUser));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

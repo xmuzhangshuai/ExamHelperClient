@@ -165,10 +165,10 @@ public class MaterialAnalysisFragment extends BaseQuestionFragment implements an
 	protected void initQuestionView() {
 		materialTextView.setText("    " + questionNumber + ".  " + materialAnalysis.getMaterial());// 设置题干
 		if (materialAnalysis.getMaterial_image() != null) {// 如果有图片则设置图片
-			byte[] imageByte = materialAnalysis.getMaterial_image();// 取出图片字节数组
-			Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
-			materialImage.setImageBitmap(imageBitmap);// 设置材料图片
-			materialImage.setVisibility(View.VISIBLE);// 设置可见
+//			byte[] imageByte = materialAnalysis.getMaterial_image();// 取出图片字节数组
+//			Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
+//			materialImage.setImageBitmap(imageBitmap);// 设置材料图片
+//			materialImage.setVisibility(View.VISIBLE);// 设置可见
 		}
 
 		questionsOfMaterialList = new ArrayList<QuestionsOfMaterial>();

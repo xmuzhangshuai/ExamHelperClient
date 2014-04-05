@@ -41,8 +41,7 @@ public class ExampleDaoGenerator {
 		userEntity.addStringProperty("profession");// 职业
 		userEntity.addStringProperty("area");// 区域
 		userEntity.addIntProperty("integral");// 积分
-		userEntity.addByteArrayProperty("avatar");// 用户头像
-		userEntity.addByteArrayProperty("small_avatar");// 用户小头像
+		userEntity.addStringProperty("avatar");// 用户头像
 		userEntity.addBooleanProperty("current");// 是否为当前用户
 		/*** 用户表 ***/
 
@@ -142,7 +141,7 @@ public class ExampleDaoGenerator {
 		MaterialAnalysis.setSuperclass("Question");
 		MaterialAnalysis.addIdProperty().autoincrement();
 		MaterialAnalysis.addStringProperty("material").notNull();// 材料
-		MaterialAnalysis.addByteArrayProperty("material_image");// 材料图片
+		MaterialAnalysis.addStringProperty("material_image");// 材料图片
 		MaterialAnalysis.addStringProperty("remark");// 备注
 		MaterialAnalysis.addBooleanProperty("flag");// 标志位
 		Property MaterialAnalysis_section_id = MaterialAnalysis.addLongProperty("section_id").notNull().getProperty();// 章节外键

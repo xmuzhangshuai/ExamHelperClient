@@ -32,7 +32,7 @@ public class MaterialAnalysisDao extends AbstractDao<MaterialAnalysis, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Material = new Property(1, String.class, "material", false, "MATERIAL");
-        public final static Property Material_image = new Property(2, byte[].class, "material_image", false, "MATERIAL_IMAGE");
+        public final static Property Material_image = new Property(2, String.class, "material_image", false, "MATERIAL_IMAGE");
         public final static Property Remark = new Property(3, String.class, "remark", false, "REMARK");
         public final static Property Flag = new Property(4, Boolean.class, "flag", false, "FLAG");
         public final static Property Section_id = new Property(5, long.class, "section_id", false, "SECTION_ID");
@@ -57,7 +57,7 @@ public class MaterialAnalysisDao extends AbstractDao<MaterialAnalysis, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'MATERIAL_ANALYSIS' (" + //
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'MATERIAL' TEXT NOT NULL ," + // 1: material
-                "'MATERIAL_IMAGE' BLOB," + // 2: material_image
+                "'MATERIAL_IMAGE' TEXT," + // 2: material_image
                 "'REMARK' TEXT," + // 3: remark
                 "'FLAG' INTEGER," + // 4: flag
                 "'SECTION_ID' INTEGER NOT NULL );"); // 5: section_id
@@ -80,9 +80,9 @@ public class MaterialAnalysisDao extends AbstractDao<MaterialAnalysis, Long> {
         }
         stmt.bindString(2, entity.getMaterial());
  
-        byte[] material_image = entity.getMaterial_image();
+        String material_image = entity.getMaterial_image();
         if (material_image != null) {
-            stmt.bindBlob(3, material_image);
+            stmt.bindString(3, material_image);
         }
  
         String remark = entity.getRemark();
@@ -115,7 +115,7 @@ public class MaterialAnalysisDao extends AbstractDao<MaterialAnalysis, Long> {
         MaterialAnalysis entity = new MaterialAnalysis( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // material
-            cursor.isNull(offset + 2) ? null : cursor.getBlob(offset + 2), // material_image
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // material_image
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // remark
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // flag
             cursor.getLong(offset + 5) // section_id
@@ -128,7 +128,7 @@ public class MaterialAnalysisDao extends AbstractDao<MaterialAnalysis, Long> {
     public void readEntity(Cursor cursor, MaterialAnalysis entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setMaterial(cursor.getString(offset + 1));
-        entity.setMaterial_image(cursor.isNull(offset + 2) ? null : cursor.getBlob(offset + 2));
+        entity.setMaterial_image(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setRemark(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setFlag(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setSection_id(cursor.getLong(offset + 5));

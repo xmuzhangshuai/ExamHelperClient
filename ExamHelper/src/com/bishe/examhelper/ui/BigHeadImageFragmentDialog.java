@@ -44,18 +44,18 @@ public class BigHeadImageFragmentDialog extends DialogFragment {
 		rootView = inflater.inflate(R.layout.fragment_big_head_image, container, false);
 		dragImageView = (DragImageView) rootView.findViewById(R.id.dragImageView);
 
-		byte[] imageByte = getUserFromDb().getAvatar();// 取出图片字节数组
-		Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
+//		byte[] imageByte = getUserFromDb().getAvatar();// 取出图片字节数组
+//		Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
+//
+//		Bitmap drageBitmap = ImageTools.getBitmap(imageBitmap, DensityUtil.getScreenWidthforPX(getActivity()),
+//				DensityUtil.getScreenHeightforPX(getActivity()));
 
-		Bitmap drageBitmap = ImageTools.getBitmap(imageBitmap, DensityUtil.getScreenWidthforPX(getActivity()),
-				DensityUtil.getScreenHeightforPX(getActivity()));
-
-		dragImageView.setImageBitmap(drageBitmap);
-		dragImageView.setmActivity(getActivity());
-
-		dragImageView.setScreen_H(DensityUtil.getScreenHeightforPX(getActivity())
-				- DensityUtil.getStatusBarHeight(getActivity()));
-		dragImageView.setScreen_W(DensityUtil.getScreenWidthforPX(getActivity()));
+//		dragImageView.setImageBitmap(drageBitmap);
+//		dragImageView.setmActivity(getActivity());
+//
+//		dragImageView.setScreen_H(DensityUtil.getScreenHeightforPX(getActivity())
+//				- DensityUtil.getStatusBarHeight(getActivity()));
+//		dragImageView.setScreen_W(DensityUtil.getScreenWidthforPX(getActivity()));
 
 		return rootView;
 	}
