@@ -1,12 +1,10 @@
 package com.bishe.examhelper.dbService;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.dao.DaoSession;
@@ -21,6 +19,7 @@ public class UserService {
 	private static Context appContext;
 	private DaoSession mDaoSession;
 	public UserDao userDao;
+	boolean flag = false;
 
 	public UserService() {
 		// TODO Auto-generated constructor stub
@@ -99,7 +98,13 @@ public class UserService {
 	 * 注销
 	 */
 	public void singOut() {
-		getCurrentUser().setCurrent(false);
+		List<User> users = userDao.loadAll();
+		if (users != null) {
+			for (int i = 0; i < users.size(); i++) {
+				users.get(i).setCurrent(false);
+				userDao.update(users.get(i));
+			}
+		}
 	}
 
 	/**
@@ -121,52 +126,78 @@ public class UserService {
 	 * 从网络传回数据变为本地User
 	 */
 	public User NetUserToUser(com.netdomains.User netUser) {
-
-		return null;
+		User user = null;
+		if (netUser != null) {
+			user = new User((long) netUser.getId(), netUser.getMail(), netUser.getPassword(), netUser.getNickname(),
+					netUser.getRealname(), netUser.getAge(), netUser.getPhone(), netUser.getGender(),
+					netUser.getUserState(), netUser.getProfession(), netUser.getArea(), netUser.getIntegral(),
+					netUser.getAvatar(), false);
+		}
+		return user;
 	}
 
 	/**
-	 * 通过多线程把User改变更新到服务器
+	 * 本地User变为网络User
+	 * @return
+	 */
+	public com.netdomains.User UserToNetUser(User user) {
+		com.netdomains.User netUser = new com.netdomains.User(user.getMail(), user.getPassword(), user.getNickname(),
+				user.getRealname(), user.getAge(), user.getPhone(), user.getGender(), user.getUser_state(),
+				user.getProfession(), user.getArea(), user.getIntegral(), user.getAvatar(), null, null, null, null,
+				null, null);
+		netUser.setId(user.getId().intValue());
+		return netUser;
+
+	}
+
+	/**
+	 * 从网络获取用户最新信息
+	 * @return
+	 */
+	public void getUserFromNet() {
+		User user = getCurrentUser();
+		if (user != null) {
+			final Map<String, String> map = new HashMap<String, String>();
+			map.put("mail", user.getMail());
+			map.put("pass", user.getPassword());
+			final String url = "ManageUserServlet";
+
+			try {
+				com.netdomains.User netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
+						com.netdomains.User.class);
+
+				if (netUser != null) {
+					User newUuser = NetUserToUser(netUser);
+					newUuser.setCurrent(true);
+					updateUser(newUuser);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 更新用户数据到网络
 	 */
 	public void updateUserToNet() {
 		User user = getCurrentUser();
-		String avatar = null;
-		String small_avatar = null;
-		if (user.getAvatar() != null) {
-			avatar = new String(user.getAvatar());
+		final com.netdomains.User netUser = UserToNetUser(user);
 
-		}
-
-		final com.netdomains.User nUser = new com.netdomains.User(user.getMail(), user.getPassword(),
-				user.getNickname(), user.getRealname(), user.getAge(), user.getPhone(), user.getGender(),
-				user.getUser_state(), user.getProfession(), user.getArea(), user.getIntegral(), user.getAvatar()
-						.toString(), null, null, null, null, null, null);
-
-		nUser.setId(user.getId().intValue());
-
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				String url = "ManageUserServlet";
-				Map<String, String> map = new HashMap<String, String>();
-				try {
-					map.put("com.bishe.examhelper.updateuser", FastJsonTool.createJsonString(nUser));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					Log.e("fastjson解析", "fastjson解析User出错");
-				}
-				try {
-					String msg = HttpUtil.postRequest(url, map);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					Log.e("网络存储", "网络存储用户出错");
-				}
+		// TODO Auto-generated method stub
+		if (netUser != null) {
+			final String url = "ManageUserServlet";
+			String userString = FastJsonTool.createJsonString(netUser);
+			final Map<String, String> map = new HashMap<String, String>();
+			map.put("com.bishe.examhelper.updateuser", userString);
+			try {
+				HttpUtil.postRequest(url, map);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}).start();
-
+		}
 	}
+
 }

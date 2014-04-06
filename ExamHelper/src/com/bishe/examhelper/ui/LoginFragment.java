@@ -6,6 +6,11 @@ import java.util.Map;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +33,7 @@ import com.bishe.examhelper.dbService.UserService;
 import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
+import com.bishe.examhelper.utils.NetworkUtils;
 
 /**
  * 
@@ -63,6 +69,17 @@ public class LoginFragment extends BaseV4Fragment {
 	private Button registerButton;// ×¢²á
 	private Button loginButton;// µÇÂ½
 
+	// ÌáÐÑÓÃ»§ÍøÂç×´¿öÓÐÒì³£
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+				NetworkUtils.networkStateTips(getActivity());
+			}
+		}
+	};
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_login, container, false);
@@ -71,6 +88,26 @@ public class LoginFragment extends BaseV4Fragment {
 		initView();
 
 		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		// ×¢²á¹ã²¥
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		getActivity().registerReceiver(broadcastReceiver, intentFilter);
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		// Ð¶ÔØ¹ã²¥
+		if (broadcastReceiver != null) {
+			getActivity().unregisterReceiver(broadcastReceiver);
+		}
 	}
 
 	@Override
@@ -113,7 +150,12 @@ public class LoginFragment extends BaseV4Fragment {
 		loginButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				attemptLogin();
+				if (NetworkUtils.isNetworkAvailable(getActivity())) {
+					attemptLogin();
+				} else {
+					NetworkUtils.networkStateTips(getActivity());
+				}
+
 			}
 		});
 
@@ -290,7 +332,9 @@ public class LoginFragment extends BaseV4Fragment {
 						com.netdomains.User.class);
 
 				if (netUser != null) {
+					userService.singOut();
 					User user = userService.NetUserToUser(netUser);
+					user.setCurrent(true);
 					userService.saveUser(user);
 					flag = true;
 				}

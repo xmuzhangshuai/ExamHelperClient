@@ -6,10 +6,16 @@ import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.slidingmenu.BaseSlidingFragmentActivity;
 import com.bishe.examhelper.slidingmenu.SlidingMenu;
 import com.bishe.examhelper.ui.PersonalModifyDialogFragment.OnUserInfoChangedListener;
+import com.bishe.examhelper.utils.NetworkUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;

@@ -5,8 +5,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.DialogInterface.OnClickListener;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.dbService.UserService;
 import com.bishe.examhelper.entities.User;
+import com.bishe.examhelper.utils.NetworkUtils;
 
 /**   
  *    
@@ -42,6 +48,17 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 	public interface OnUserInfoChangedListener {
 		public void onUserInfoChanged(User user);
 	}
+
+	// 提醒用户网络状况有异常
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+				NetworkUtils.networkStateTips(getActivity());
+			}
+		}
+	};
 
 	private View rootView;
 	private EditText userNickName;// 昵称
@@ -70,7 +87,11 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				modifyUser();
+				if (NetworkUtils.isNetworkAvailable(getActivity()))
+					modifyUser();
+				else {
+					NetworkUtils.networkStateTips(getActivity());
+				}
 			}
 		}).setNegativeButton("取消", new OnClickListener() {
 			@Override
@@ -91,6 +112,26 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 		}
 	}
 
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		// 注册广播
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		getActivity().registerReceiver(broadcastReceiver, intentFilter);
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		// 卸载广播
+		if (broadcastReceiver != null) {
+			getActivity().unregisterReceiver(broadcastReceiver);
+		}
+	}
+
 	/**
 	 * 初始化View
 	 */
@@ -100,7 +141,7 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 		userAge.setMaxValue(100);
 
 		// 如果用户已登录，从数据库中取用户数据
-		User user = getUserFromDb();
+		User user = UserService.getInstance(getActivity()).getCurrentUser();
 		if (user != null) {
 			userNickName.setText(user.getNickname());
 			userRealname.setText(user.getRealname());
@@ -140,24 +181,12 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 	}
 
 	/**
-	 * 判断数据库是否存有数据
-	 * @return
-	 */
-	protected User getUserFromDb() {
-		User user = UserService.getInstance(getActivity()).getCurrentUser();
-		if (user != null) {
-			return user;
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * 将修改的信息保存到数据库
+	 * 将修改的信息保存到数据库和网络
 	 * @param user
 	 */
 	public void modifyUser() {
-		User user = getUserFromDb();
+		UserService userService = UserService.getInstance(getActivity());
+		User user = userService.getCurrentUser();
 		if (user != null) {
 			user.setAge(userAge.getValue());
 			user.setNickname(userNickName.getText().toString());
@@ -169,9 +198,13 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 			} else {
 				user.setGender("女");
 			}
-			UserService userService = UserService.getInstance(getActivity());
+
 			userService.updateUser(user);
 			userChangedListener.onUserInfoChanged(user);
+
+			// 更新数据到网络
+			userService.updateUserToNet();
+
 			Toast.makeText(getActivity(), "修改成功！", 1).show();
 		} else {
 			Toast.makeText(getActivity(), "请先登录！", 1).show();

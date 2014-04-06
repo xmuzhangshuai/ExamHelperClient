@@ -20,8 +20,8 @@ public class ExampleDaoGenerator {
 		schema.setDefaultJavaPackageDao("com.bishe.examhelper.dao");
 		schema.enableKeepSectionsByDefault();
 		addQuestions(schema);
-		new DaoGenerator().generateAll(schema, "../ExamHelper/src-models");
-		// new DaoGenerator().generateAll(schema, "../SqliteTest/src-models");
+		// new DaoGenerator().generateAll(schema, "../ExamHelper/src-models");
+		new DaoGenerator().generateAll(schema, "../GetExamHelperDb/src-models");
 	}
 
 	private static void addQuestions(Schema schema) {

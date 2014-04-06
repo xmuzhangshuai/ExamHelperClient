@@ -2,13 +2,10 @@ package com.bishe.examhelper.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,7 +17,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidquery.AQuery;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
 import com.bishe.examhelper.dbService.UserService;
@@ -64,8 +61,10 @@ public class LeftFragment extends BaseV4Fragment {
 	private View userView;// 个人信息
 	private ImageButton switchButton;// 切换主题按钮
 	private ImageView headImage;// 头像
+	private Bitmap headBitmap;// 头像
 	private Button signOutButton;// 注销按钮
 	private Button changeImageButton;// 更改头像按钮
+	private boolean isChanged = false;// 是否更改头像
 
 	private SharedPreferences sharedPreferences;
 
@@ -126,17 +125,31 @@ public class LeftFragment extends BaseV4Fragment {
 		super.onResume();
 
 		// 如果用户已登录，从数据库中取用户数据
-		user = getUserFromDb();
+		user = getCurrentUser();
 		if (user != null) {
-//			byte[] imageByte = user.getSmall_avatar();// 取出图片字节数组
-//			if (imageByte != null) {
-//				Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
-//				Bitmap headBitmap = ImageTools.toRoundBitmap(imageBitmap);
-//				headImage.setImageBitmap(ImageTools.zoomBitmap(headBitmap, DensityUtil.dip2px(getActivity(), 100),
-//						DensityUtil.dip2px(getActivity(), 100)));
-//			} else {
-//				headImage.setBackgroundResource(R.drawable.photo);
-//			}
+			String headImageURI = user.getAvatar();
+			if (headImageURI != null) {
+				AQuery aq = new AQuery(rootView);
+				String thumbnail = HttpUtil.BASE_URL + headImageURI.trim();
+
+				Bitmap preset = aq.getCachedImage(thumbnail);
+				if (preset == null) {
+					aq = aq.cache(thumbnail, 10000);
+					preset = aq.getCachedImage(thumbnail);
+				}
+
+				if (preset != null && !isChanged) {
+					headBitmap = preset;
+
+					Bitmap smallAvatar = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(preset,
+							DensityUtil.dip2px(getActivity(), 100), DensityUtil.dip2px(getActivity(), 100)));
+					headImage.setImageBitmap(smallAvatar);
+				}
+
+			} else {
+				headImage.setImageResource(R.drawable.photo);
+				headBitmap = null;
+			}
 
 			login.setVisibility(View.GONE);
 			userView.setVisibility(View.VISIBLE);
@@ -238,8 +251,11 @@ public class LeftFragment extends BaseV4Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (getUserFromDb().getAvatar() != null) {
+				if (headBitmap != null) {
 					BigHeadImageFragmentDialog bigHeadImageFragmentDialog = new BigHeadImageFragmentDialog();
+					Bundle bundle = new Bundle();
+					bundle.putByteArray("com.bishe.examhelper.headimageBitmap", ImageTools.bitmapToBytes(headBitmap));
+					bigHeadImageFragmentDialog.setArguments(bundle);
 					bigHeadImageFragmentDialog.show(getActivity().getFragmentManager(),
 							"com.bieshe.examhelper.bigHeadImageFragmentDialog");
 				}
@@ -324,7 +340,8 @@ public class LeftFragment extends BaseV4Fragment {
 						ByteArrayOutputStream stream = new ByteArrayOutputStream();
 						photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
-						String fileName = "" + getUserFromDb().getId() + "headImage.png";
+						String fileName = "" + getCurrentUser().getId() + "headImage.png";
+
 						// 删除上次文件
 						ImageTools.deletePhotoAtPathAndName(
 								Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
@@ -335,17 +352,14 @@ public class LeftFragment extends BaseV4Fragment {
 
 						uploadImage(file.getPath());
 
-						// 大头像存进数据库
-						saveAvatar(photo, false);
-
 						// 裁剪成100*100圆形小图片
 						smallBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(photo, 100, 100));
-
-						// 把小头像存进数据库
-						saveAvatar(smallBitmap, true);
+						isChanged = true;
+						headImage.setImageBitmap(smallBitmap);
+						headBitmap = photo;
 					}
 				}
-				headImage.setImageBitmap(smallBitmap);
+
 				break;
 			default:
 				break;
@@ -419,7 +433,6 @@ public class LeftFragment extends BaseV4Fragment {
 
 	// 截取图片
 	public void cropImage(Uri uri, int outputX, int outputY, int requestCode) {
-		System.out.println(uri.getPath());
 		Intent intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
 		intent.putExtra("crop", "true");
@@ -437,28 +450,8 @@ public class LeftFragment extends BaseV4Fragment {
 	 * 判断数据库是否存有数据
 	 * @return
 	 */
-	protected User getUserFromDb() {
+	protected User getCurrentUser() {
 		return UserService.getInstance(getActivity()).getCurrentUser();
-	}
-
-	/**
-	 * 存贮用户头像
-	 * @param bitmap
-	 * @param is_small_avatar是否是小头像
-	 */
-	public void saveAvatar(Bitmap bitmap, boolean is_small_avatar) {
-		UserService userService = UserService.getInstance(getActivity());
-		User user = userService.getCurrentUser();
-		// 如果是小头像
-//		if (is_small_avatar && user != null) {
-//			user.setSmall_avatar(ImageTools.bitmapToBytes(bitmap));
-//		} else if (!is_small_avatar && user != null) {
-//			user.setAvatar(ImageTools.bitmapToBytes(bitmap));
-//		} else {
-//			Log.e("存储头像", "存入本地数据库出错！");
-//		}
-
-		userService.updateUser(user);
 	}
 
 	/**
@@ -498,6 +491,8 @@ public class LeftFragment extends BaseV4Fragment {
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
 				Toast.makeText(getActivity(), "头像上传成功！", 1).show();
+				// 重新更新用户内容
+				UserService.getInstance(getActivity()).getUserFromNet();
 			}
 
 			@Override

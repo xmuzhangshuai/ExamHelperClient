@@ -1,7 +1,15 @@
 package com.bishe.examhelper.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +30,8 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
 import com.bishe.examhelper.dbService.UserService;
 import com.bishe.examhelper.entities.User;
+import com.bishe.examhelper.utils.HttpUtil;
+import com.bishe.examhelper.utils.NetworkUtils;
 
 /**   
 *    
@@ -56,6 +66,17 @@ public class RegisterFragment extends BaseV4Fragment {
 	private View mLoginStatusView;// »º³å
 	private Button registerButton;// ×¢²á
 
+	// ÌáÐÑÓÃ»§ÍøÂç×´¿öÓÐÒì³£
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+				NetworkUtils.networkStateTips(getActivity());
+			}
+		}
+	};
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -63,6 +84,26 @@ public class RegisterFragment extends BaseV4Fragment {
 		findViewById();
 		initView();
 		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		// ×¢²á¹ã²¥
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		getActivity().registerReceiver(broadcastReceiver, intentFilter);
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		// Ð¶ÔØ¹ã²¥
+		if (broadcastReceiver != null) {
+			getActivity().unregisterReceiver(broadcastReceiver);
+		}
 	}
 
 	@Override
@@ -95,7 +136,12 @@ public class RegisterFragment extends BaseV4Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				attemptRegist();
+				if (NetworkUtils.isNetworkAvailable(getActivity())) {
+					attemptRegist();
+				} else {
+					NetworkUtils.networkStateTips(getActivity());
+				}
+
 			}
 		});
 	}
@@ -209,9 +255,19 @@ public class RegisterFragment extends BaseV4Fragment {
 			try {
 				// Simulate network access.
 				UserService userService = UserService.getInstance(getActivity());
-//				User user = new User(null, mEmail, mPassword, null, null, 0, mPhone, null, null, null, null, 0,
-//						null, null, true);
-//				userService.saveUser(user);
+				User user = new User(null, mEmail, mPassword, null, null, 0, mPhone, null, null, null, null, 0, null,
+						true);
+				userService.saveUser(user);
+
+				String url = "RegistServlet";
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("mail", mEmail);
+				map.put("pass", mPassword);
+				map.put("phone", mPhone);
+
+				// ×¢²á
+				HttpUtil.postRequest(url, map);
+
 			} catch (Exception e) {
 				Log.e("×¢²á", "×¢²áÊ§°Ü£¡");
 				e.printStackTrace();
