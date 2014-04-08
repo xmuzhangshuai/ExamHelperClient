@@ -32,9 +32,6 @@ import com.bishe.examhelper.dao.ExaminationDao;
 import com.bishe.examhelper.dao.MaterialAnalysisDao;
 import com.bishe.examhelper.dao.MultiChoiceDao;
 import com.bishe.examhelper.dao.SingleChoiceDao;
-import com.bishe.examhelper.dbService.MaterialAnalysisService;
-import com.bishe.examhelper.dbService.MultiChoiceService;
-import com.bishe.examhelper.dbService.SingleChoiceService;
 import com.bishe.examhelper.entities.ExamQuestion;
 import com.bishe.examhelper.entities.ExamSection;
 import com.bishe.examhelper.entities.Examination;
@@ -42,6 +39,9 @@ import com.bishe.examhelper.entities.MaterialAnalysis;
 import com.bishe.examhelper.entities.MultiChoice;
 import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.interfaces.OnAnswerChangedListener;
+import com.bishe.examhelper.service.MaterialAnalysisService;
+import com.bishe.examhelper.service.MultiChoiceService;
+import com.bishe.examhelper.service.SingleChoiceService;
 import com.bishe.examhelper.utils.DialogTools;
 
 /**   

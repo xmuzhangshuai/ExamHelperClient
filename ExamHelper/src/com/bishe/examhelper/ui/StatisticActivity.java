@@ -24,12 +24,12 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
 import com.bishe.examhelper.config.DefaultValues;
 import com.bishe.examhelper.dao.StudyRecordDao.Properties;
-import com.bishe.examhelper.dbService.MaterialAnalysisService;
-import com.bishe.examhelper.dbService.MultiChoiceService;
-import com.bishe.examhelper.dbService.QuestionTypeService;
-import com.bishe.examhelper.dbService.SingleChoiceService;
-import com.bishe.examhelper.dbService.StudyRecordService;
 import com.bishe.examhelper.entities.StudyRecord;
+import com.bishe.examhelper.service.MaterialAnalysisService;
+import com.bishe.examhelper.service.MultiChoiceService;
+import com.bishe.examhelper.service.QuestionTypeService;
+import com.bishe.examhelper.service.SingleChoiceService;
+import com.bishe.examhelper.service.StudyRecordService;
 
 public class StatisticActivity extends BaseActivity {
 	private GraphicalView mChartView;// œ‘ æPieChart

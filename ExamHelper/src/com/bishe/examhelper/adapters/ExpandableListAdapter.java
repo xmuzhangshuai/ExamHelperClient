@@ -1,10 +1,10 @@
 package com.bishe.examhelper.adapters;
 
 import com.bishe.examhelper.R;
-import com.bishe.examhelper.dbService.GroupsService;
-import com.bishe.examhelper.dbService.SectionService;
 import com.bishe.examhelper.entities.Groups;
 import com.bishe.examhelper.entities.Section;
+import com.bishe.examhelper.service.GroupsService;
+import com.bishe.examhelper.service.SectionService;
 
 import android.content.Context;
 import android.view.LayoutInflater;

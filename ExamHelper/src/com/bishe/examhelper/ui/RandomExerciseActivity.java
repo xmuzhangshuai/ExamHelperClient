@@ -12,10 +12,10 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.adapters.RandomExerciseAdapter;
 import com.bishe.examhelper.base.BaseFragmentActivity;
 import com.bishe.examhelper.config.DefaultValues;
-import com.bishe.examhelper.dbService.MaterialAnalysisService;
-import com.bishe.examhelper.dbService.MultiChoiceService;
-import com.bishe.examhelper.dbService.SingleChoiceService;
 import com.bishe.examhelper.entities.Question;
+import com.bishe.examhelper.service.MaterialAnalysisService;
+import com.bishe.examhelper.service.MultiChoiceService;
+import com.bishe.examhelper.service.SingleChoiceService;
 
 /**   
 *    

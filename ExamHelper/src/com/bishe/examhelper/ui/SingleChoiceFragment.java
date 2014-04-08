@@ -23,13 +23,13 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseQuestionFragment;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.config.DefaultValues;
-import com.bishe.examhelper.dbService.CollectionService;
-import com.bishe.examhelper.dbService.ErrorQuestionsService;
-import com.bishe.examhelper.dbService.SingleChoiceService;
-import com.bishe.examhelper.dbService.StudyRecordService;
 import com.bishe.examhelper.entities.Question;
 import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.interfaces.OnAnswerChangedListener;
+import com.bishe.examhelper.service.CollectionService;
+import com.bishe.examhelper.service.ErrorQuestionsService;
+import com.bishe.examhelper.service.SingleChoiceService;
+import com.bishe.examhelper.service.StudyRecordService;
 import com.umeng.socialize.controller.RequestType;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -252,6 +252,8 @@ public class SingleChoiceFragment extends BaseQuestionFragment implements View.O
 			/************²åÈë´íÎó¼ÇÂ¼*************/
 			ErrorQuestionsService errorQuestionsService = ErrorQuestionsService.getInstance(getActivity());
 			errorQuestionsService.addErrorQuestions(mysingleChoice);
+			
+			
 		}
 	}
 

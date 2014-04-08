@@ -19,15 +19,15 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.config.DefaultValues;
-import com.bishe.examhelper.dbService.MaterialAnalysisService;
-import com.bishe.examhelper.dbService.MultiChoiceService;
-import com.bishe.examhelper.dbService.NoteService;
-import com.bishe.examhelper.dbService.QuestionTypeService;
-import com.bishe.examhelper.dbService.SingleChoiceService;
 import com.bishe.examhelper.entities.MaterialAnalysis;
 import com.bishe.examhelper.entities.MultiChoice;
 import com.bishe.examhelper.entities.Note;
 import com.bishe.examhelper.entities.SingleChoice;
+import com.bishe.examhelper.service.MaterialAnalysisService;
+import com.bishe.examhelper.service.MultiChoiceService;
+import com.bishe.examhelper.service.NoteService;
+import com.bishe.examhelper.service.QuestionTypeService;
+import com.bishe.examhelper.service.SingleChoiceService;
 import com.bishe.examhelper.utils.DateTimeTools;
 
 public class MyNoteListFragment extends BaseV4Fragment {

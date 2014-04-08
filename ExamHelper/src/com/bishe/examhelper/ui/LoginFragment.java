@@ -29,8 +29,8 @@ import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
-import com.bishe.examhelper.dbService.UserService;
 import com.bishe.examhelper.entities.User;
+import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.NetworkUtils;
@@ -328,8 +328,8 @@ public class LoginFragment extends BaseV4Fragment {
 			map.put("pass", mPassword);
 			String url = "LoginServlet";
 			try {
-				com.netdomains.User netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
-						com.netdomains.User.class);
+				com.jsonobjects.User netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
+						com.jsonobjects.User.class);
 
 				if (netUser != null) {
 					userService.singOut();

@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
 import com.bishe.examhelper.config.Constants;
-import com.bishe.examhelper.dbService.CopyDataBase;
-import com.bishe.examhelper.dbService.DivideIntoGroup;
+import com.bishe.examhelper.service.CopyDataBase;
+import com.bishe.examhelper.service.DivideIntoGroup;
 import com.umeng.analytics.MobclickAgent;
 
 /**   

@@ -15,9 +15,9 @@ import android.widget.TextView;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
 import com.bishe.examhelper.config.DefaultKeys;
-import com.bishe.examhelper.dbService.NoteService;
 import com.bishe.examhelper.entities.Note;
 import com.bishe.examhelper.entities.Question;
+import com.bishe.examhelper.service.NoteService;
 import com.bishe.examhelper.utils.DateTimeTools;
 
 /**   

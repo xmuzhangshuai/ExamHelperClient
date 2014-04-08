@@ -18,8 +18,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
 import com.bishe.examhelper.config.DefaultKeys;
-import com.bishe.examhelper.dbService.ExaminationService;
 import com.bishe.examhelper.entities.Examination;
+import com.bishe.examhelper.service.ExaminationService;
 
 /**   
 *    
