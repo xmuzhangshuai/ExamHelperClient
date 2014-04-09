@@ -21,6 +21,7 @@ import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.utils.DateTimeTools;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
+import com.jsonobjects.JNote;
 
 public class NoteService {
 	private static final String TAG = NoteService.class.getSimpleName();
@@ -291,6 +292,7 @@ public class NoteService {
 		String URL = "NoteServlet";
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("note", jsonString);
+		map.put("type", "add");
 		try {
 			HttpUtil.postRequest(URL, map);
 		} catch (Exception e) {
@@ -300,4 +302,58 @@ public class NoteService {
 		}
 
 	}
+
+	/**
+	 * 把变更更新到网络服务器
+	 * @param note
+	 */
+	public void updateNoteToNet(Note note) {
+		JNote jNote = new JNote(null, note.getQuestion_id(), note.getNote_time(), note.getNote_content(),
+				note.getUser_id(), note.getQuestionType_id());
+
+		String jsonString = FastJsonTool.createJsonString(jNote);
+		String URL = "NoteServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("note", jsonString);
+		map.put("type", "edit");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "添加笔记");
+		}
+	}
+
+	/**
+	 * 从服务器删除Note
+	 * @param note
+	 */
+	public void delNoteFromNet(Note note) {
+		JNote jNote = new JNote(null, note.getQuestion_id(), note.getNote_time(), note.getNote_content(),
+				note.getUser_id(), note.getQuestionType_id());
+
+		String jsonString = FastJsonTool.createJsonString(jNote);
+		String URL = "NoteServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("note", jsonString);
+		map.put("type", "delete");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "添加笔记");
+		}
+	}
+	
+	/**
+	 * 从服务器获取某一
+	 * @return
+	 */
+//	public List<Note> getNoteListFromNet(){
+//		
+//	}
+	
+	
 }

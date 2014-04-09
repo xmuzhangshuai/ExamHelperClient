@@ -178,6 +178,14 @@ public class AddNoteActivity extends BaseActivity implements OnClickListener {
 						editText_mynote.setText("");
 						if (myNote != null) {
 							mNoteService.deleteNote(myNote);
+
+							new Thread() {
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									mNoteService.delNoteFromNet(myNote);
+								}
+							}.start();
 						}
 					}
 				}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -192,9 +200,14 @@ public class AddNoteActivity extends BaseActivity implements OnClickListener {
 	 * 将笔记添加到数据库
 	 */
 	protected void addNote() {
-		NoteService mNoteService = NoteService.getInstance(this);
+		final NoteService mNoteService = NoteService.getInstance(this);
 		if (myQuestion != null && editText_mynote.getText().toString().length() > 0) {
 			mNoteService.insertNote(myQuestion, editText_mynote.getText().toString());
+			new Thread() {
+				public void run() {
+					mNoteService.addNoteToNet(myQuestion, editText_mynote.getText().toString());
+				};
+			}.start();
 		}
 		myNote = mNoteService.loadNote(myQuestion);
 	}
@@ -203,7 +216,7 @@ public class AddNoteActivity extends BaseActivity implements OnClickListener {
 	 * 更新笔记
 	 */
 	protected void updateNote() {
-		NoteService mNoteService = NoteService.getInstance(this);
+		final NoteService mNoteService = NoteService.getInstance(this);
 		submit_edit.setVisibility(View.GONE);
 		myNoteString = editText_mynote.getText().toString();
 		displayNote();
@@ -213,6 +226,10 @@ public class AddNoteActivity extends BaseActivity implements OnClickListener {
 				myNote.setNote_content(myNoteString);// 更新内容
 				myNote.setNote_time(DateTimeTools.getCurrentDate());// 更新时间
 				mNoteService.updateNote(myNote);
+				
+				new Thread(){public void run() {
+					mNoteService.updateNoteToNet(myNote);
+				};}.start();
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();

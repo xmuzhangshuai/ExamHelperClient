@@ -1,5 +1,6 @@
 package com.bishe.examhelper.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.utils.DateTimeTools;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
+import com.jsonobjects.JCollection;
 
 public class CollectionService {
 
@@ -88,11 +90,16 @@ public class CollectionService {
 	 * ´ÓÍøÂçÉ¾³ý¼ÇÂ¼
 	 */
 	public void delCollectionFromNet(List<Collection> collections) {
+		List<JCollection> jCollections = new ArrayList<JCollection>();
 		for (int i = 0; i < collections.size(); i++) {
-
+			Collection collection = collections.get(i);
+			JCollection jCollection = new JCollection(collection.getId(), collection.getQuestion_id(),
+					collection.getCollect_time(), collection.getUser_id(), collection.getQuestionType_id(),
+					collection.getSection_id());
+			jCollections.add(jCollection);
 		}
 
-		String jsonString = FastJsonTool.createJsonString(collections);
+		String jsonString = FastJsonTool.createJsonString(jCollections);
 		String URL = "CollectionServlet";
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("collection", jsonString);

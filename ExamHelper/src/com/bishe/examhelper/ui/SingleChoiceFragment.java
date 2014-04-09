@@ -30,7 +30,6 @@ import com.bishe.examhelper.service.CollectionService;
 import com.bishe.examhelper.service.ErrorQuestionsService;
 import com.bishe.examhelper.service.SingleChoiceService;
 import com.bishe.examhelper.service.StudyRecordService;
-import com.bishe.examhelper.utils.NetworkUtils;
 import com.umeng.socialize.controller.RequestType;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
