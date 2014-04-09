@@ -47,7 +47,10 @@ public class UserService {
 	 * @return
 	 */
 	public Long getCurrentUserID() {
-		return getCurrentUser().getId();
+		if (getCurrentUser() != null) {
+			return getCurrentUser().getId();
+		}
+		return (long) 1;
 	}
 
 	/**
@@ -125,7 +128,7 @@ public class UserService {
 	/**
 	 * 从网络传回数据变为本地User
 	 */
-	public User NetUserToUser(com.jsonobjects.User netUser) {
+	public User NetUserToUser(com.jsonobjects.JUser netUser) {
 		User user = null;
 		if (netUser != null) {
 			user = new User((long) netUser.getId(), netUser.getMail(), netUser.getPassword(), netUser.getNickname(),
@@ -140,8 +143,8 @@ public class UserService {
 	 * 本地User变为网络User
 	 * @return
 	 */
-	public com.jsonobjects.User UserToNetUser(User user) {
-		com.jsonobjects.User netUser = new com.jsonobjects.User(user.getId(), user.getMail(), user.getPassword(),
+	public com.jsonobjects.JUser UserToNetUser(User user) {
+		com.jsonobjects.JUser netUser = new com.jsonobjects.JUser(user.getId(), user.getMail(), user.getPassword(),
 				user.getNickname(), user.getRealname(), user.getAge(), user.getPhone(), user.getGender(),
 				user.getUser_state(), user.getProfession(), user.getArea(), user.getIntegral(), user.getAvatar());
 		return netUser;
@@ -161,8 +164,8 @@ public class UserService {
 			final String url = "ManageUserServlet";
 
 			try {
-				com.jsonobjects.User netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
-						com.jsonobjects.User.class);
+				com.jsonobjects.JUser netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
+						com.jsonobjects.JUser.class);
 
 				if (netUser != null) {
 					User newUuser = NetUserToUser(netUser);
@@ -181,7 +184,7 @@ public class UserService {
 	 */
 	public void updateUserToNet() {
 		User user = getCurrentUser();
-		final com.jsonobjects.User netUser = UserToNetUser(user);
+		final com.jsonobjects.JUser netUser = UserToNetUser(user);
 
 		// TODO Auto-generated method stub
 		if (netUser != null) {

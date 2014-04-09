@@ -30,6 +30,7 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
 import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.service.UserService;
+import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.NetworkUtils;
 
@@ -255,9 +256,6 @@ public class RegisterFragment extends BaseV4Fragment {
 			try {
 				// Simulate network access.
 				UserService userService = UserService.getInstance(getActivity());
-				User user = new User(null, mEmail, mPassword, null, null, 0, mPhone, null, null, null, null, 0, null,
-						true);
-				userService.saveUser(user);
 
 				String url = "RegistServlet";
 				Map<String, String> map = new HashMap<String, String>();
@@ -266,7 +264,11 @@ public class RegisterFragment extends BaseV4Fragment {
 				map.put("phone", mPhone);
 
 				// ×¢²á
-				HttpUtil.postRequest(url, map);
+				String jsonString = HttpUtil.postRequest(url, map);
+				com.jsonobjects.JUser net = FastJsonTool.getObject(jsonString, com.jsonobjects.JUser.class);
+				User local = userService.NetUserToUser(net);
+				local.setCurrent(true);
+				userService.saveUser(local);
 
 			} catch (Exception e) {
 				Log.e("×¢²á", "×¢²áÊ§°Ü£¡");

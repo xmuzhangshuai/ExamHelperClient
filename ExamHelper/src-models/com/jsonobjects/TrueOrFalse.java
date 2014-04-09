@@ -4,7 +4,7 @@ package com.jsonobjects;
 /**
  * Entity mapped to table TRUE_OR_FALSE.
  */
-public class TrueOrFalse extends Question {
+public class TrueOrFalse extends JQuestion {
 
 	private Long id;
 	/** Not-null value. */

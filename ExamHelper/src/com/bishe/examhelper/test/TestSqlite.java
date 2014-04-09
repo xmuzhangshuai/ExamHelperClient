@@ -16,6 +16,7 @@ public class TestSqlite extends AndroidTestCase {
 
 	public void privnale() {
 		UserService userService = UserService.getInstance(getContext());
-		userService.deleteAllUser();
+		// userService.deleteAllUser();
+		System.out.println(userService.getCurrentUserID());
 	}
 }

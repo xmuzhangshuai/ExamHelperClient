@@ -1,8 +1,11 @@
 package com.bishe.examhelper.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.config.DefaultValues;
@@ -16,6 +19,9 @@ import com.bishe.examhelper.entities.MultiChoice;
 import com.bishe.examhelper.entities.QuestionType;
 import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.utils.DateTimeTools;
+import com.bishe.examhelper.utils.FastJsonTool;
+import com.bishe.examhelper.utils.HttpUtil;
+import com.tencent.plus.n;
 
 public class ErrorQuestionsService {
 	private static final String TAG = ErrorQuestionsService.class.getSimpleName();
@@ -106,24 +112,6 @@ public class ErrorQuestionsService {
 	}
 
 	/**
-	 * 插入一条单选题错题，如果曾经出过错，则出错次数加1
-	 * @param singleChoice
-	 */
-	public void addErrorQuestionsToNet(SingleChoice singleChoice) {
-		// 查找题型
-		QuestionType questiontype = mQuestionTypeDao.queryBuilder()
-				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.SINGLE_CHOICE))
-				.unique();
-		
-		//查找Section
-
-//		com.netdomains.Errorquestions errorquestion = new com.netdomains.Errorquestions(UserService.getInstance(
-//				appContext).getCurrentUser(), questiontype, section, singleChoice.getId(),
-//				DateTimeTools.getCurrentDate(), 1);
-
-	}
-
-	/**
 	 * 插入一条多选题错题，如果曾经出过错，则出错次数加1
 	 * @param singleChoice
 	 */
@@ -175,6 +163,88 @@ public class ErrorQuestionsService {
 					UserService.getInstance(appContext).getCurrentUserID(), questionTypeId,
 					materialAnalysis.getSection_id());
 			errorQuestionsDao.insert(errorQuestions);
+		}
+	}
+
+	/**
+	 * 将一条单选错题插入到网络服务器数据库
+	 * @param singleChoice
+	 */
+	public void addErrorQuestionsToNet(SingleChoice singleChoice) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.SINGLE_CHOICE))
+				.unique().getId();
+
+		com.jsonobjects.JErrorQuestions netErrorQuestions = new com.jsonobjects.JErrorQuestions(null,
+				singleChoice.getId(), DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext)
+						.getCurrentUserID(), questionTypeId, singleChoice.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(netErrorQuestions);
+		String URL = "ErrorQuestionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("errorQuestion", jsonString);
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "单选错题插入到网络服务器数据库");
+		}
+	}
+
+	/**
+	 * 将一条多选错题插入到网络服务器数据库
+	 * @param singleChoice
+	 */
+	public void addErrorQuestionsToNet(MultiChoice multiChoice) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.MULTI_CHOICE))
+				.unique().getId();
+
+		com.jsonobjects.JErrorQuestions netErrorQuestions = new com.jsonobjects.JErrorQuestions(null,
+				multiChoice.getId(), DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext)
+						.getCurrentUserID(), questionTypeId, multiChoice.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(netErrorQuestions);
+		String URL = "ErrorQuestionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("errorQuestion", jsonString);
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "多选错题插入到网络服务器数据库");
+		}
+	}
+
+	/**
+	 * 将一条材料分析错题插入到网络服务器数据库
+	 * @param singleChoice
+	 */
+	public void addErrorQuestionsToNet(MaterialAnalysis materialAnalysis) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao
+				.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
+						.eq(DefaultValues.MATERIAL_ANALYSIS)).unique().getId();
+
+		com.jsonobjects.JErrorQuestions netErrorQuestions = new com.jsonobjects.JErrorQuestions(null,
+				materialAnalysis.getId(), DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext)
+						.getCurrentUserID(), questionTypeId, materialAnalysis.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(netErrorQuestions);
+		String URL = "ErrorQuestionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("errorQuestion", jsonString);
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "材料分析错题插入到网络服务器数据库");
 		}
 	}
 

@@ -458,10 +458,15 @@ public class LeftFragment extends BaseV4Fragment {
 	 * 上传头像
 	 */
 	public void uploadImage(String filePath) {
+		UserService userService = UserService.getInstance(getActivity());
 		String uploadHost = HttpUtil.BASE_URL + "UploadServlet";
 		RequestParams params = new RequestParams();
-		params.addBodyParameter("user_key",
-				String.valueOf(UserService.getInstance(getActivity()).getCurrentUserID().intValue()));
+		User user = userService.getCurrentUser();
+		if (user != null) {
+			params.addBodyParameter("mail", user.getMail());
+			params.addBodyParameter("pass", user.getPassword());
+		}
+
 		params.addBodyParameter(filePath.replace("/", ""), new File(filePath));
 		uploadMethod(params, uploadHost);
 	}

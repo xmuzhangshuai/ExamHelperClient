@@ -1,5 +1,22 @@
 package com.bishe.examhelper.ui;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseQuestionFragment;
 import com.bishe.examhelper.config.DefaultKeys;
@@ -19,23 +36,6 @@ import com.umeng.socialize.controller.UMWXHandler;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.TencentWBSsoHandler;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**   
 *    
@@ -203,9 +203,19 @@ public class MultiChoiceFragment extends BaseQuestionFragment implements android
 				if (isChecked) {
 					collect_btn.setText("取消收藏");
 					collectionService.insertCollection(myMultiChoice);
+					new Thread() {
+						public void run() {
+							collectionService.addCollectionToNet(myMultiChoice);
+						};
+					}.start();
 					Toast.makeText(getActivity(), "收藏成功！", 1).show();
 				} else {
 					collectionService.deleteCollection();
+					new Thread() {
+						public void run() {
+							collectionService.delCollectionFromNet(myMultiChoice);
+						};
+					}.start();
 					collect_btn.setText("收藏");
 				}
 			}
@@ -258,8 +268,14 @@ public class MultiChoiceFragment extends BaseQuestionFragment implements android
 		// 如果回答不正确，则插入错误记录
 		if (!rightAnswer.trim().equals(myAnswer.trim())) {
 			/************插入错误记录*************/
-			ErrorQuestionsService errorQuestionsService = ErrorQuestionsService.getInstance(getActivity());
+			final ErrorQuestionsService errorQuestionsService = ErrorQuestionsService.getInstance(getActivity());
 			errorQuestionsService.addErrorQuestions(myMultiChoice);
+			new Thread() {
+				public void run() {
+					errorQuestionsService.addErrorQuestionsToNet(myMultiChoice);
+				};
+			}.start();
+
 		}
 
 	}

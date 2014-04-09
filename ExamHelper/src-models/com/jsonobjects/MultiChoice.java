@@ -3,7 +3,7 @@ package com.jsonobjects;
 /**
  * Entity mapped to table MULTI_CHOICE.
  */
-public class MultiChoice extends Question {
+public class MultiChoice extends JQuestion {
 
 	private Long id;
 	/** Not-null value. */

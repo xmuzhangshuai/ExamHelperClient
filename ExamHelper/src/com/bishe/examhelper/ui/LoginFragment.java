@@ -328,8 +328,8 @@ public class LoginFragment extends BaseV4Fragment {
 			map.put("pass", mPassword);
 			String url = "LoginServlet";
 			try {
-				com.jsonobjects.User netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
-						com.jsonobjects.User.class);
+				com.jsonobjects.JUser netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
+						com.jsonobjects.JUser.class);
 
 				if (netUser != null) {
 					userService.singOut();

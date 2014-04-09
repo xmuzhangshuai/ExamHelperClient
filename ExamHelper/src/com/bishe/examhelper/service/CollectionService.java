@@ -1,20 +1,25 @@
 package com.bishe.examhelper.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import android.content.Context;
+import android.util.Log;
 
 import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.config.DefaultValues;
 import com.bishe.examhelper.dao.CollectionDao;
+import com.bishe.examhelper.dao.CollectionDao.Properties;
 import com.bishe.examhelper.dao.DaoSession;
 import com.bishe.examhelper.dao.QuestionTypeDao;
-import com.bishe.examhelper.dao.CollectionDao.Properties;
 import com.bishe.examhelper.entities.Collection;
 import com.bishe.examhelper.entities.MaterialAnalysis;
 import com.bishe.examhelper.entities.MultiChoice;
 import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.utils.DateTimeTools;
-
-import android.content.Context;
+import com.bishe.examhelper.utils.FastJsonTool;
+import com.bishe.examhelper.utils.HttpUtil;
 
 public class CollectionService {
 
@@ -77,6 +82,28 @@ public class CollectionService {
 	 */
 	public void deleteCollection(Collection collection) {
 		mCollectionDao.delete(collection);
+	}
+
+	/**
+	 * 从网络删除记录
+	 */
+	public void delCollectionFromNet(List<Collection> collections) {
+		for (int i = 0; i < collections.size(); i++) {
+
+		}
+
+		String jsonString = FastJsonTool.createJsonString(collections);
+		String URL = "CollectionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("collection", jsonString);
+		map.put("type", "deleteAll");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "单选题收藏出错");
+		}
 	}
 
 	/**
@@ -164,8 +191,8 @@ public class CollectionService {
 				.unique().getId();
 
 		// 新建实体
-		mCollection = new Collection(null, singleChoice.getId(), DateTimeTools.getCurrentDate(),
-				UserService.getInstance(appContext).getCurrentUserID(), questionTypeId, singleChoice.getSection_id());
+		mCollection = new Collection(null, singleChoice.getId(), DateTimeTools.getCurrentDate(), UserService
+				.getInstance(appContext).getCurrentUserID(), questionTypeId, singleChoice.getSection_id());
 
 		mCollectionDao.insertOrReplace(mCollection);
 	}
@@ -181,8 +208,8 @@ public class CollectionService {
 				.unique().getId();
 
 		// 新建实体
-		mCollection = new Collection(null, multiChoice.getId(), DateTimeTools.getCurrentDate(),
-				UserService.getInstance(appContext).getCurrentUserID(), questionTypeId, multiChoice.getSection_id());
+		mCollection = new Collection(null, multiChoice.getId(), DateTimeTools.getCurrentDate(), UserService
+				.getInstance(appContext).getCurrentUserID(), questionTypeId, multiChoice.getSection_id());
 
 		mCollectionDao.insertOrReplace(mCollection);
 	}
@@ -199,10 +226,175 @@ public class CollectionService {
 						.eq(DefaultValues.MATERIAL_ANALYSIS)).unique().getId();
 
 		// 新建实体
-		mCollection = new Collection(null, materialAnalysis.getId(), DateTimeTools.getCurrentDate(),
-				UserService.getInstance(appContext).getCurrentUserID(), questionTypeId, materialAnalysis.getSection_id());
+		mCollection = new Collection(null, materialAnalysis.getId(), DateTimeTools.getCurrentDate(), UserService
+				.getInstance(appContext).getCurrentUserID(), questionTypeId, materialAnalysis.getSection_id());
 
 		mCollectionDao.insertOrReplace(mCollection);
+	}
+
+	/**
+	 * 将单选题收藏传送到网络
+	 */
+	public void addCollectionToNet(SingleChoice singleChoice) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.SINGLE_CHOICE))
+				.unique().getId();
+
+		com.jsonobjects.JCollection net = new com.jsonobjects.JCollection(null, singleChoice.getId(),
+				DateTimeTools.getCurrentDate(), UserService.getInstance(appContext).getCurrentUserID(), questionTypeId,
+				singleChoice.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(net);
+		String URL = "CollectionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("collection", jsonString);
+		map.put("type", "add");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "单选题收藏出错");
+		}
+	}
+
+	/**
+	 * 从网络端删除收藏
+	 * @param singleChoice
+	 */
+	public void delCollectionFromNet(SingleChoice singleChoice) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.SINGLE_CHOICE))
+				.unique().getId();
+
+		com.jsonobjects.JCollection net = new com.jsonobjects.JCollection(null, singleChoice.getId(),
+				DateTimeTools.getCurrentDate(), UserService.getInstance(appContext).getCurrentUserID(), questionTypeId,
+				singleChoice.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(net);
+		String URL = "CollectionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("collection", jsonString);
+		map.put("type", "delete");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "单选题收藏出错");
+		}
+	}
+
+	/**
+	 * 将多选题收藏传送到网络
+	 */
+	public void addCollectionToNet(MultiChoice multiChoice) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.MULTI_CHOICE))
+				.unique().getId();
+
+		com.jsonobjects.JCollection net = new com.jsonobjects.JCollection(null, multiChoice.getId(),
+				DateTimeTools.getCurrentDate(), UserService.getInstance(appContext).getCurrentUserID(), questionTypeId,
+				multiChoice.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(net);
+		String URL = "CollectionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("collection", jsonString);
+		map.put("type", "add");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "多选题收藏出错");
+		}
+	}
+
+	/**
+	 * 将多选题收藏从网络端删除
+	 */
+	public void delCollectionFromNet(MultiChoice multiChoice) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.MULTI_CHOICE))
+				.unique().getId();
+
+		com.jsonobjects.JCollection net = new com.jsonobjects.JCollection(null, multiChoice.getId(),
+				DateTimeTools.getCurrentDate(), UserService.getInstance(appContext).getCurrentUserID(), questionTypeId,
+				multiChoice.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(net);
+		String URL = "CollectionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("collection", jsonString);
+		map.put("type", "delete");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "多选题收藏出错");
+		}
+	}
+
+	/**
+	 * 将材料题收藏传送到网络
+	 */
+	public void addCollectionToNet(MaterialAnalysis materialAnalysis) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao
+				.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
+						.eq(DefaultValues.MATERIAL_ANALYSIS)).unique().getId();
+
+		com.jsonobjects.JCollection net = new com.jsonobjects.JCollection(null, materialAnalysis.getId(),
+				DateTimeTools.getCurrentDate(), UserService.getInstance(appContext).getCurrentUserID(), questionTypeId,
+				materialAnalysis.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(net);
+		String URL = "CollectionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("collection", jsonString);
+		map.put("type", "add");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "材料题收藏出错");
+		}
+	}
+
+	/**
+	 * 将材料题从网络端删除
+	 */
+	public void delCollectionFromNet(MaterialAnalysis materialAnalysis) {
+		// 查找题型ID
+		Long questionTypeId = mQuestionTypeDao
+				.queryBuilder()
+				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
+						.eq(DefaultValues.MATERIAL_ANALYSIS)).unique().getId();
+
+		com.jsonobjects.JCollection net = new com.jsonobjects.JCollection(null, materialAnalysis.getId(),
+				DateTimeTools.getCurrentDate(), UserService.getInstance(appContext).getCurrentUserID(), questionTypeId,
+				materialAnalysis.getSection_id());
+
+		String jsonString = FastJsonTool.createJsonString(net);
+		String URL = "CollectionServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("collection", jsonString);
+		map.put("type", "delete");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "材料题收藏出错");
+		}
 	}
 
 	/**

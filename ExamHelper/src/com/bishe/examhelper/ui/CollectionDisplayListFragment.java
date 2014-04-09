@@ -75,8 +75,7 @@ public class CollectionDisplayListFragment extends BaseV4Fragment {
 		initView();
 
 		/************从Intent获取收藏列表***************/
-		collectionList = (List<Collection>) getActivity().getIntent().getSerializableExtra(
-				DefaultKeys.COLLECTION_LIST);
+		collectionList = (List<Collection>) getActivity().getIntent().getSerializableExtra(DefaultKeys.COLLECTION_LIST);
 		if (collectionList != null) {
 			/*********初始化数据***********/
 			new InitData().execute();
@@ -206,7 +205,13 @@ public class CollectionDisplayListFragment extends BaseV4Fragment {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				CollectionService collectionService = CollectionService.getInstance(getActivity());
+				final CollectionService collectionService = CollectionService.getInstance(getActivity());
+				new Thread() {
+					public void run() {
+						collectionService.delCollectionFromNet(collectionList);
+					};
+				}.start();
+
 				for (Collection collection : collectionList) {
 					collectionService.deleteCollection(collection);
 				}

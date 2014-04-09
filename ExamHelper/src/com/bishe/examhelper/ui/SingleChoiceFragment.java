@@ -30,6 +30,7 @@ import com.bishe.examhelper.service.CollectionService;
 import com.bishe.examhelper.service.ErrorQuestionsService;
 import com.bishe.examhelper.service.SingleChoiceService;
 import com.bishe.examhelper.service.StudyRecordService;
+import com.bishe.examhelper.utils.NetworkUtils;
 import com.umeng.socialize.controller.RequestType;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -227,9 +228,20 @@ public class SingleChoiceFragment extends BaseQuestionFragment implements View.O
 				if (isChecked) {
 					collectButton.setText("取消收藏");
 					collectionService.insertCollection(mysingleChoice);
+					new Thread() {
+						public void run() {
+							collectionService.addCollectionToNet(mysingleChoice);
+						};
+					}.start();
+
 					Toast.makeText(getActivity(), "收藏成功！", 1).show();
 				} else {
 					collectionService.deleteCollection();
+					new Thread() {
+						public void run() {
+							collectionService.delCollectionFromNet(mysingleChoice);
+						};
+					}.start();
 					collectButton.setText("收藏");
 				}
 			}
@@ -250,10 +262,14 @@ public class SingleChoiceFragment extends BaseQuestionFragment implements View.O
 		// 如果答案不正确，则插入一条错误记录
 		if (!getStringByCheckedId(myCheckedId).equals(mysingleChoice.getAnswer().trim())) {
 			/************插入错误记录*************/
-			ErrorQuestionsService errorQuestionsService = ErrorQuestionsService.getInstance(getActivity());
+			final ErrorQuestionsService errorQuestionsService = ErrorQuestionsService.getInstance(getActivity());
 			errorQuestionsService.addErrorQuestions(mysingleChoice);
-			
-			
+			new Thread() {
+				public void run() {
+					errorQuestionsService.addErrorQuestionsToNet(mysingleChoice);
+				};
+			}.start();
+
 		}
 	}
 

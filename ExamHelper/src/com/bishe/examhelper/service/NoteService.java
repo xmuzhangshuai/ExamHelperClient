@@ -1,8 +1,11 @@
 package com.bishe.examhelper.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.config.DefaultValues;
@@ -16,6 +19,8 @@ import com.bishe.examhelper.entities.Note;
 import com.bishe.examhelper.entities.Question;
 import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.utils.DateTimeTools;
+import com.bishe.examhelper.utils.FastJsonTool;
+import com.bishe.examhelper.utils.HttpUtil;
 
 public class NoteService {
 	private static final String TAG = NoteService.class.getSimpleName();
@@ -213,7 +218,6 @@ public class NoteService {
 							.eq(DefaultValues.SINGLE_CHOICE)).unique().getId();
 
 			questionId = singleChoice.getId();
-
 		} else if (question.getQuestion_type().equals(DefaultValues.MULTI_CHOICE)) {// 如果是多选题
 			MultiChoice multiChoice = (MultiChoice) question;
 			// 查找题型ID
@@ -234,10 +238,66 @@ public class NoteService {
 		}
 
 		if (questionTypeId != null && questionId != null) {
-			note = new Note(null, questionId, DateTimeTools.getCurrentDate(), noteContent,
-					UserService.getInstance(appContext).getCurrentUserID(), questionTypeId);
+			note = new Note(null, questionId, DateTimeTools.getCurrentDate(), noteContent, UserService.getInstance(
+					appContext).getCurrentUserID(), questionTypeId);
 		}
 		noteDao.insert(note);
 	}
 
+	/**
+	 * 插入笔记到网络
+	 * @param singleChoice
+	 * @return
+	 */
+	public void addNoteToNet(Question question, String noteContent) {
+		Long questionTypeId = null;
+		Long questionId = null;
+		com.jsonobjects.JNote net = null;
+
+		if (question.getQuestion_type().equals(DefaultValues.SINGLE_CHOICE)) {// 如果是单选题
+			SingleChoice singleChoice = (SingleChoice) question;
+			// 查找题型ID
+			questionTypeId = mQuestionTypeDao
+					.queryBuilder()
+					.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
+							.eq(DefaultValues.SINGLE_CHOICE)).unique().getId();
+
+			questionId = singleChoice.getId();
+		} else if (question.getQuestion_type().equals(DefaultValues.MULTI_CHOICE)) {// 如果是多选题
+			MultiChoice multiChoice = (MultiChoice) question;
+			// 查找题型ID
+			questionTypeId = mQuestionTypeDao
+					.queryBuilder()
+					.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.MULTI_CHOICE))
+					.unique().getId();
+			questionId = multiChoice.getId();
+
+		} else if (question.getQuestion_type().equals(DefaultValues.MATERIAL_ANALYSIS)) {// 如果是材料题
+			MaterialAnalysis materialAnalysis = (MaterialAnalysis) question;
+			// 查找题型ID
+			questionTypeId = mQuestionTypeDao
+					.queryBuilder()
+					.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
+							.eq(DefaultValues.MATERIAL_ANALYSIS)).unique().getId();
+			questionId = materialAnalysis.getId();
+		}
+
+		if (questionTypeId != null && questionId != null) {
+			net = new com.jsonobjects.JNote(null, questionId, DateTimeTools.getCurrentDate(), noteContent, UserService
+					.getInstance(appContext).getCurrentUserID(), questionTypeId);
+		}
+
+		String jsonString = FastJsonTool.createJsonString(net);
+		String URL = "NoteServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("note", jsonString);
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "添加笔记");
+		}
+
+	}
 }

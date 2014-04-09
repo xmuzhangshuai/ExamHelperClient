@@ -3,6 +3,26 @@ package com.bishe.examhelper.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseQuestionFragment;
 import com.bishe.examhelper.config.DefaultKeys;
@@ -22,28 +42,6 @@ import com.umeng.socialize.controller.UMWXHandler;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.TencentWBSsoHandler;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**   
 *    
@@ -165,10 +163,12 @@ public class MaterialAnalysisFragment extends BaseQuestionFragment implements an
 	protected void initQuestionView() {
 		materialTextView.setText("    " + questionNumber + ".  " + materialAnalysis.getMaterial());// 设置题干
 		if (materialAnalysis.getMaterial_image() != null) {// 如果有图片则设置图片
-//			byte[] imageByte = materialAnalysis.getMaterial_image();// 取出图片字节数组
-//			Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);// 将字节数组转化成Bitmap
-//			materialImage.setImageBitmap(imageBitmap);// 设置材料图片
-//			materialImage.setVisibility(View.VISIBLE);// 设置可见
+			// byte[] imageByte = materialAnalysis.getMaterial_image();//
+			// 取出图片字节数组
+			// Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByte, 0,
+			// imageByte.length);// 将字节数组转化成Bitmap
+			// materialImage.setImageBitmap(imageBitmap);// 设置材料图片
+			// materialImage.setVisibility(View.VISIBLE);// 设置可见
 		}
 
 		questionsOfMaterialList = new ArrayList<QuestionsOfMaterial>();
@@ -236,9 +236,20 @@ public class MaterialAnalysisFragment extends BaseQuestionFragment implements an
 				if (isChecked) {
 					collect_btn.setText("取消收藏");
 					collectionService.insertCollection(materialAnalysis);
+					new Thread() {
+						public void run() {
+							collectionService.addCollectionToNet(materialAnalysis);
+						};
+					}.start();
+
 					Toast.makeText(getActivity(), "收藏成功！", 1).show();
 				} else {
 					collectionService.deleteCollection();
+					new Thread() {
+						public void run() {
+							collectionService.delCollectionFromNet(materialAnalysis);
+						};
+					}.start();
 					collect_btn.setText("收藏");
 				}
 			}
