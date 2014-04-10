@@ -6,7 +6,9 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:padding="8dp" >
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp" >
 
     <TextView
         android:id="@+id/textView_title"
@@ -90,12 +92,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="@android:color/transparent"
-        android:divider="@drawable/reader_item_divider"
-        android:dividerHeight="4dp"
+        android:divider="@null"
         android:fadingEdge="none"
         android:fastScrollEnabled="false"
-        android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
         android:listSelector="@android:color/transparent"
         android:smoothScrollbar="true" />
 

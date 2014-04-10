@@ -1,5 +1,6 @@
 package com.bishe.examhelper.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.jsonobjects.JUser;
+import com.umeng.analytics.j;
 
 public class UserService {
 	private static final String TAG = CollectionService.class.getSimpleName();
@@ -200,6 +202,30 @@ public class UserService {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 *  从网络端获取用户详情列表
+	 * @param jUsers
+	 * @return
+	 */
+	public List<JUser> getUserList(List<JUser> jUsers) {
+		List<JUser> newJUsers = new ArrayList<JUser>();
+		String url = "NoteServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		String jsonString = FastJsonTool.createJsonString(jUsers);
+		map.put("type", "getUserList");
+		map.put("note", jsonString);
+
+		try {
+			String jsonStringFromNet = HttpUtil.postRequest(url, map);
+			newJUsers = FastJsonTool.getObjectList(jsonStringFromNet, JUser.class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return newJUsers;
 	}
 
 }

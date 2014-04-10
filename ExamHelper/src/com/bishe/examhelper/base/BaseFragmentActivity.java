@@ -1,6 +1,7 @@
 package com.bishe.examhelper.base;
 
 import com.bishe.examhelper.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 
 import android.annotation.SuppressLint;
@@ -88,10 +89,8 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		ActionBar actionBar = super.getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		// actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
 		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.title_bar));
 		actionBar.setStackedBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_stacked_bg));
-		// actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
 		actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.title_bar));
 		return actionBar;
 	}

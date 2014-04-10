@@ -46,11 +46,6 @@ public class GuideActivity extends BaseActivity {
 		// 发送策略定义了用户由统计分析SDK产生的数据发送回友盟服务器的频率。
 		MobclickAgent.updateOnlineConfig(this);
 
-		// 设置全屏显示
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 		// 获取启动的次数
 		countPreferences = getSharedPreferences("start_count", 0);
 		int count = countPreferences.getInt("count", 0);

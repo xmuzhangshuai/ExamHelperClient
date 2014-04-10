@@ -22,8 +22,7 @@
                 android:id="@+id/headimage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/headimage" />
+                android:layout_marginLeft="10dp" />
 
             <!-- 名字和账号 -->
 

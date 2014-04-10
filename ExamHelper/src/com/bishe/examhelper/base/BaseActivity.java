@@ -1,6 +1,7 @@
 package com.bishe.examhelper.base;
 
 import com.bishe.examhelper.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 
 import android.annotation.SuppressLint;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 *    
 */
 public abstract class BaseActivity extends Activity {
+	protected ImageLoader imageLoader = ImageLoader.getInstance();
 	public static final String TAG = BaseActivity.class.getSimpleName();
 
 	protected Handler mHandler = null;
@@ -40,9 +42,6 @@ public abstract class BaseActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		AppManager.getInstance().addActivity(this);
-		// if (!ImageLoader.getInstance().isInited()) {
-		// ImageLoaderConfig.initImageLoader(this, Constants.BASE_IMAGE_CACHE);
-		// }
 	}
 
 	@Override
@@ -91,10 +90,9 @@ public abstract class BaseActivity extends Activity {
 		// TODO Auto-generated method stub
 		ActionBar actionBar = super.getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		// actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
+
 		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.title_bar));
 		actionBar.setStackedBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_stacked_bg));
-		// actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_bg_repeat));
 		actionBar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.title_bar));
 		return actionBar;
 	}
@@ -164,7 +162,6 @@ public abstract class BaseActivity extends Activity {
 	public Dialog showProgressDialog() {
 		ProgressDialog dialog = new ProgressDialog(this);
 		dialog.setMessage("请稍候，正在努力加载...");
-		// dialog.setCancelable(false);
 		dialog.show();
 		return dialog;
 	}

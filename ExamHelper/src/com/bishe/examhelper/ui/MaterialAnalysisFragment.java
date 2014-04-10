@@ -343,7 +343,7 @@ public class MaterialAnalysisFragment extends BaseQuestionFragment implements an
 			mController.setShareContent(materialAnalysis.getMaterial() + "\n"
 					+ materialAnalysis.getQuestionsOfMaterialList());
 			// 设置分享图片，参数2为本地图片的资源引用
-			mController.setShareMedia(new UMImage(getActivity(), R.drawable.headimage));
+			mController.setShareMedia(new UMImage(getActivity(), R.drawable.logo));
 
 			// 添加微信平台，参数1为当前Activity, 参数2为用户申请的AppID, 参数3为点击分享内容跳转到的目标url
 			UMWXHandler wxHandler = mController.getConfig().supportWXPlatform(getActivity(),

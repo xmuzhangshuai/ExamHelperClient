@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/system_bule" >
+    android:background="@drawable/mainbackground2" >
 
     <ImageView
         android:id="@+id/splash_logo"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
         android:background="@drawable/logo" />
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/splash_logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" >
+        android:layout_marginTop="220dp" >
 
         <ImageView
             android:layout_width="wrap_content"
