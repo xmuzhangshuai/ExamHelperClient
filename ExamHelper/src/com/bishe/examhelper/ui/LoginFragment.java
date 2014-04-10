@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -29,25 +30,22 @@ import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
+import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.NetworkUtils;
+import com.jsonobjects.JUser;
 
 /**
  * 
-*    
-* 项目名称：ExamHelper   
-* 类名称：LoginFragment   
-* 类描述：   登陆页面的Fragment
-* 创建人：张帅  
-* 创建时间：2014-3-23 下午2:23:11   
-* 修改人：张帅   
-* 修改时间：2014-3-23 下午2:23:11   
-* 修改备注：   
-* @version    
-*
+ * 
+ * 项目名称：ExamHelper 类名称：LoginFragment 类描述： 登陆页面的Fragment 创建人：张帅 创建时间：2014-3-23
+ * 下午2:23:11 修改人：张帅 修改时间：2014-3-23 下午2:23:11 修改备注：
+ * 
+ * @version
+ * 
  */
 public class LoginFragment extends BaseV4Fragment {
 
@@ -68,6 +66,7 @@ public class LoginFragment extends BaseV4Fragment {
 	private View rootView;
 	private Button registerButton;// 注册
 	private Button loginButton;// 登陆
+	private SharedPreferences locationPreferences;// 记录用户位置
 
 	// 提醒用户网络状况有异常
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -81,8 +80,11 @@ public class LoginFragment extends BaseV4Fragment {
 	};
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_login, container, false);
+		locationPreferences = getActivity().getSharedPreferences("location",
+				Context.MODE_PRIVATE);
 
 		findViewById();
 		initView();
@@ -117,7 +119,8 @@ public class LoginFragment extends BaseV4Fragment {
 		mPasswordView = (EditText) rootView.findViewById(R.id.password);
 		mLoginFormView = rootView.findViewById(R.id.login_form);
 		mLoginStatusView = rootView.findViewById(R.id.login_status);
-		mLoginStatusMessageView = (TextView) rootView.findViewById(R.id.login_status_message);
+		mLoginStatusMessageView = (TextView) rootView
+				.findViewById(R.id.login_status_message);
 		loginButton = (Button) rootView.findViewById(R.id.sign_in_button);
 		registerButton = (Button) rootView.findViewById(R.id.register_button);
 
@@ -135,16 +138,18 @@ public class LoginFragment extends BaseV4Fragment {
 		mEmailView.setText(mEmail);
 		mPasswordView.setText(mPassword);
 
-		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-			@Override
-			public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-				if (id == R.id.login || id == EditorInfo.IME_NULL) {
-					attemptLogin();
-					return true;
-				}
-				return false;
-			}
-		});
+		mPasswordView
+				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+					@Override
+					public boolean onEditorAction(TextView textView, int id,
+							KeyEvent keyEvent) {
+						if (id == R.id.login || id == EditorInfo.IME_NULL) {
+							attemptLogin();
+							return true;
+						}
+						return false;
+					}
+				});
 
 		// 登陆
 		loginButton.setOnClickListener(new View.OnClickListener() {
@@ -165,10 +170,12 @@ public class LoginFragment extends BaseV4Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				RegisterFragment registerFragment = new RegisterFragment();
-				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+				FragmentTransaction fragmentTransaction = getActivity()
+						.getSupportFragmentManager().beginTransaction();
 				// 设置切换效果
-				fragmentTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out,
-						R.anim.push_right_in, R.anim.push_right_out);
+				fragmentTransaction.setCustomAnimations(R.anim.push_left_in,
+						R.anim.push_left_out, R.anim.push_right_in,
+						R.anim.push_right_out);
 				fragmentTransaction.replace(R.id.container, registerFragment);
 				fragmentTransaction.addToBackStack(null);
 				fragmentTransaction.commit();
@@ -239,23 +246,28 @@ public class LoginFragment extends BaseV4Fragment {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+			int shortAnimTime = getResources().getInteger(
+					android.R.integer.config_shortAnimTime);
 
 			mLoginStatusView.setVisibility(View.VISIBLE);
-			mLoginStatusView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
+			mLoginStatusView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 1 : 0)
 					.setListener(new AnimatorListenerAdapter() {
 						@Override
 						public void onAnimationEnd(Animator animation) {
-							mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+							mLoginStatusView.setVisibility(show ? View.VISIBLE
+									: View.GONE);
 						}
 					});
 
 			mLoginFormView.setVisibility(View.VISIBLE);
-			mLoginFormView.animate().setDuration(shortAnimTime).alpha(show ? 0 : 1)
+			mLoginFormView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 0 : 1)
 					.setListener(new AnimatorListenerAdapter() {
 						@Override
 						public void onAnimationEnd(Animator animation) {
-							mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+							mLoginFormView.setVisibility(show ? View.GONE
+									: View.VISIBLE);
 						}
 					});
 		} else {
@@ -268,17 +280,12 @@ public class LoginFragment extends BaseV4Fragment {
 
 	/**
 	 * 
-	*    
-	* 项目名称：ExamHelper   
-	* 类名称：UserLoginTask   
-	* 类描述：   联网登录
-	* 创建人：张帅  
-	* 创建时间：2014-3-23 下午5:38:29   
-	* 修改人：张帅   
-	* 修改时间：2014-3-23 下午5:38:29   
-	* 修改备注：   
-	* @version    
-	*
+	 * 
+	 * 项目名称：ExamHelper 类名称：UserLoginTask 类描述： 联网登录 创建人：张帅 创建时间：2014-3-23
+	 * 下午5:38:29 修改人：张帅 修改时间：2014-3-23 下午5:38:29 修改备注：
+	 * 
+	 * @version
+	 * 
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
@@ -305,7 +312,8 @@ public class LoginFragment extends BaseV4Fragment {
 				Toast.makeText(getActivity(), "登录成功！", 2000).show();
 				getActivity().finish();
 			} else {
-				mPasswordView.setError(getString(R.string.error_incorrect_password));
+				mPasswordView
+						.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
 			}
 		}
@@ -317,7 +325,7 @@ public class LoginFragment extends BaseV4Fragment {
 		}
 
 		/**
-		 *验证登陆
+		 * 验证登陆
 		 */
 		public boolean login() {
 			boolean flag = false;
@@ -328,15 +336,20 @@ public class LoginFragment extends BaseV4Fragment {
 			map.put("pass", mPassword);
 			String url = "LoginServlet";
 			try {
-				com.jsonobjects.JUser netUser = FastJsonTool.getObject(HttpUtil.postRequest(url, map),
-						com.jsonobjects.JUser.class);
+				JUser jUser = FastJsonTool.getObject(
+						HttpUtil.postRequest(url, map), JUser.class);
 
-				if (netUser != null) {
+				if (jUser != null) {
 					userService.singOut();
-					User user = userService.NetUserToUser(netUser);
+					User user = userService.NetUserToUser(jUser);
 					user.setCurrent(true);
+					String location = locationPreferences.getString(
+							DefaultKeys.PREF_LOCATION, "北京市");
+					user.setArea(location);
 					userService.saveUser(user);
+					userService.updateUserToNet();
 					flag = true;
+
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

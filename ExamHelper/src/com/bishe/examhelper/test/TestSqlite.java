@@ -3,6 +3,7 @@ package com.bishe.examhelper.test;
 import com.androidquery.AQuery;
 import com.bishe.examhelper.dao.DaoSession;
 import com.bishe.examhelper.dao.SingleChoiceDao;
+import com.bishe.examhelper.service.NoteService;
 import com.bishe.examhelper.service.StudyRecordService;
 import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.utils.HttpUtil;
@@ -17,6 +18,7 @@ public class TestSqlite extends AndroidTestCase {
 	public void privnale() {
 		UserService userService = UserService.getInstance(getContext());
 		// userService.deleteAllUser();
-		System.out.println(userService.getCurrentUserID());
+		NoteService noteService = NoteService.getInstance(getContext());
+		noteService.addNoteListToNet(noteService.loadAllNotes());
 	}
 }

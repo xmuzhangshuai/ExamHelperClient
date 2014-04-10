@@ -18,13 +18,13 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 允许应用程序联网，以便向我们的服务器端发送数据。 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 用于评论模块分享位置信息 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 用于评论模块分享位置信息 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
         android:targetPackage="com.bishe.examhelper" >
     </instrumentation>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -201,6 +201,13 @@
             android:name="com.umeng.common.net.DownloadingService"
             android:exported="true"
             android:process=":DownloadingService" >
+        </service>
+
+        <!-- 声明百度定位服务 -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
         </service>
 
         <!-- ###################添加UmengAppkey###################### -->

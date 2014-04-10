@@ -14,6 +14,7 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -44,19 +45,14 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
-/**   
-*    
-* 项目名称：ExamHelper   
-* 类名称：LeftFragment   
-* 类描述：   主页面左滑菜单Fragment，个人中心页面
-* 创建人：张帅  
-* 创建时间：2013-12-22 下午7:24:30   
-* 修改人：zhangshuai   
-* 修改时间：2013-12-22 下午7:24:30   
-* 修改备注：   
-* @version    
-*    
-*/
+/**
+ * 
+ * 项目名称：ExamHelper 类名称：LeftFragment 类描述： 主页面左滑菜单Fragment，个人中心页面 创建人：张帅
+ * 创建时间：2013-12-22 下午7:24:30 修改人：zhangshuai 修改时间：2013-12-22 下午7:24:30 修改备注：
+ * 
+ * @version
+ * 
+ */
 public class LeftFragment extends BaseV4Fragment {
 	private View userView;// 个人信息
 	private ImageButton switchButton;// 切换主题按钮
@@ -88,24 +84,29 @@ public class LeftFragment extends BaseV4Fragment {
 	private static final int CROP_PICTURE = 3;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.main_left_fragment, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.main_left_fragment, container,
+				false);
 
 		findViewById();
 
-		/*** 从sharedPreference中取出主题并设置，默认为1号主题***/
+		/*** 从sharedPreference中取出主题并设置，默认为1号主题 ***/
 		int defaultThemeID = R.drawable.person_center_background01;
 		int defaultThemeColorID = R.color.Ucenter_theme3;
-		sharedPreferences = getActivity().getSharedPreferences(getString(R.string.preference_user_center),
+		sharedPreferences = getActivity().getSharedPreferences(
+				getString(R.string.preference_user_center),
 				Context.MODE_PRIVATE);
-		int themeID = sharedPreferences.getInt(getString(R.string.user_center_theme_key), defaultThemeID);
-		int themeColorID = sharedPreferences
-				.getInt(getString(R.string.user_center_themecolor_key), defaultThemeColorID);
+		int themeID = sharedPreferences.getInt(
+				getString(R.string.user_center_theme_key), defaultThemeID);
+		int themeColorID = sharedPreferences.getInt(
+				getString(R.string.user_center_themecolor_key),
+				defaultThemeColorID);
 		relativeLayout.setBackgroundResource(themeID);
 		personalTextView.setBackgroundResource(themeColorID);
 		securityTextView.setBackgroundResource(themeColorID);
 		integralTextView.setBackgroundResource(themeColorID);
-		/*** 从sharedPreference中取出主题并设置，默认为1号主�?***/
+		/*** 从sharedPreference中取出主题并设置，默认为1号主�? ***/
 
 		initView();
 		return rootView;
@@ -115,7 +116,8 @@ public class LeftFragment extends BaseV4Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// 新建sharedPreferences存储用户信息
-		sharedPreferences = getActivity().getSharedPreferences(getString(R.string.preference_user_center),
+		sharedPreferences = getActivity().getSharedPreferences(
+				getString(R.string.preference_user_center),
 				Context.MODE_PRIVATE);
 	}
 
@@ -141,8 +143,10 @@ public class LeftFragment extends BaseV4Fragment {
 				if (preset != null && !isChanged) {
 					headBitmap = preset;
 
-					Bitmap smallAvatar = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(preset,
-							DensityUtil.dip2px(getActivity(), 100), DensityUtil.dip2px(getActivity(), 100)));
+					Bitmap smallAvatar = ImageTools.toRoundBitmap(ImageTools
+							.zoomBitmap(preset,
+									DensityUtil.dip2px(getActivity(), 100),
+									DensityUtil.dip2px(getActivity(), 100)));
 					headImage.setImageBitmap(smallAvatar);
 				}
 
@@ -191,14 +195,17 @@ public class LeftFragment extends BaseV4Fragment {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		/** 点击更换主题，显示更换主题的dialog **/
-		switchButton = (ImageButton) getActivity().findViewById(R.id.pCenter_button_switchtheme);
+		switchButton = (ImageButton) getActivity().findViewById(
+				R.id.pCenter_button_switchtheme);
 		switchButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				FragmentManager fragmentManager = getActivity().getFragmentManager();
+				FragmentManager fragmentManager = getActivity()
+						.getFragmentManager();
 				ThemeSitcherDialogFragment themeSitcher = new ThemeSitcherDialogFragment();
-				themeSitcher.show(fragmentManager, "com.bishe.examhelper.themesitcherdialogfragment");
+				themeSitcher.show(fragmentManager,
+						"com.bishe.examhelper.themesitcherdialogfragment");
 			}
 		});
 		/** 点击更换主题，显示更换主题的dialog **/
@@ -208,21 +215,29 @@ public class LeftFragment extends BaseV4Fragment {
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		userView = (LinearLayout) rootView.findViewById(R.id.pCenter_HeadImage_LinearLayout);
-		relativeLayout = (RelativeLayout) rootView.findViewById(R.id.person_cente_relativeLayout);// 背景图片
-		personalTextView = (TextView) rootView.findViewById(R.id.user_center_itemname1);// 个人背景颜色
-		securityTextView = (TextView) rootView.findViewById(R.id.user_center_itemname2);// 安全背景颜色
-		integralTextView = (TextView) rootView.findViewById(R.id.user_center_itemname3);// 积分背景颜色
+		userView = (LinearLayout) rootView
+				.findViewById(R.id.pCenter_HeadImage_LinearLayout);
+		relativeLayout = (RelativeLayout) rootView
+				.findViewById(R.id.person_cente_relativeLayout);// 背景图片
+		personalTextView = (TextView) rootView
+				.findViewById(R.id.user_center_itemname1);// 个人背景颜色
+		securityTextView = (TextView) rootView
+				.findViewById(R.id.user_center_itemname2);// 安全背景颜色
+		integralTextView = (TextView) rootView
+				.findViewById(R.id.user_center_itemname3);// 积分背景颜色
 		login = (Button) rootView.findViewById(R.id.login_btn);
 		nickNameTextView = (TextView) rootView.findViewById(R.id.pCenter_name);// 昵称
 		mailTextView = (TextView) rootView.findViewById(R.id.pCenter_account);// 邮箱
-		headImage = (ImageView) rootView.findViewById(R.id.pCenter_button_headimage);// 头像
-		realNameTextView = (TextView) rootView.findViewById(R.id.user_real_name);// 真实姓名
+		headImage = (ImageView) rootView
+				.findViewById(R.id.pCenter_button_headimage);// 头像
+		realNameTextView = (TextView) rootView
+				.findViewById(R.id.user_real_name);// 真实姓名
 		genderTextView = (TextView) rootView.findViewById(R.id.user_gender);// 性别
 		phoneTextView = (TextView) rootView.findViewById(R.id.user_phone);// 手机号码
 		integral = (TextView) rootView.findViewById(R.id.user_integral);// 积分
 		signOutButton = (Button) rootView.findViewById(R.id.sign_out);// 注销
-		changeImageButton = (Button) rootView.findViewById(R.id.change_headimage);// 更改头像
+		changeImageButton = (Button) rootView
+				.findViewById(R.id.change_headimage);// 更改头像
 
 	}
 
@@ -241,7 +256,8 @@ public class LeftFragment extends BaseV4Fragment {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(getActivity(), LoginActivity.class);
 				startActivity(intent);
-				getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				getActivity().overridePendingTransition(R.anim.push_left_in,
+						R.anim.push_left_out);
 			}
 		});
 
@@ -254,9 +270,11 @@ public class LeftFragment extends BaseV4Fragment {
 				if (headBitmap != null) {
 					BigHeadImageFragmentDialog bigHeadImageFragmentDialog = new BigHeadImageFragmentDialog();
 					Bundle bundle = new Bundle();
-					bundle.putByteArray("com.bishe.examhelper.headimageBitmap", ImageTools.bitmapToBytes(headBitmap));
+					bundle.putByteArray("com.bishe.examhelper.headimageBitmap",
+							ImageTools.bitmapToBytes(headBitmap));
 					bigHeadImageFragmentDialog.setArguments(bundle);
-					bigHeadImageFragmentDialog.show(getActivity().getFragmentManager(),
+					bigHeadImageFragmentDialog.show(getActivity()
+							.getFragmentManager(),
 							"com.bieshe.examhelper.bigHeadImageFragmentDialog");
 				}
 
@@ -271,25 +289,34 @@ public class LeftFragment extends BaseV4Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setIcon(R.drawable.icon_warning).setTitle("温馨提示").setMessage("是否注销？")
-						.setPositiveButton("是", new DialogInterface.OnClickListener() {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+				builder.setIcon(R.drawable.icon_warning)
+						.setTitle("温馨提示")
+						.setMessage("是否注销？")
+						.setPositiveButton("是",
+								new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-								UserService userService = UserService.getInstance(getActivity());
-								// 注销
-								userService.singOut();
-								LeftFragment.this.onResume();
-							}
-						}).setNegativeButton("否", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										UserService userService = UserService
+												.getInstance(getActivity());
+										// 注销
+										userService.singOut();
+										LeftFragment.this.onResume();
+									}
+								})
+						.setNegativeButton("否",
+								new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-							}
-						}).show();
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+									}
+								}).show();
 			}
 		});
 
@@ -317,9 +344,11 @@ public class LeftFragment extends BaseV4Fragment {
 				if (intent != null) {
 					uri = intent.getData();
 				} else {
-					String fileName = getActivity().getSharedPreferences("temp", Context.MODE_PRIVATE).getString(
-							"tempName", "");
-					uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName));
+					String fileName = getActivity().getSharedPreferences(
+							"temp", Context.MODE_PRIVATE).getString("tempName",
+							"");
+					uri = Uri.fromFile(new File(Environment
+							.getExternalStorageDirectory(), fileName));
 				}
 				cropImage(uri, 500, 500, CROP_PICTURE);
 				break;
@@ -340,20 +369,26 @@ public class LeftFragment extends BaseV4Fragment {
 						ByteArrayOutputStream stream = new ByteArrayOutputStream();
 						photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
-						String fileName = "" + getCurrentUser().getId() + "headImage.png";
+						String fileName = "" + getCurrentUser().getId()
+								+ "headImage.png";
 
 						// 删除上次文件
-						ImageTools.deletePhotoAtPathAndName(
-								Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
-						ImageTools.savePhotoToSDCard(photo,
-								Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
+						ImageTools.deletePhotoAtPathAndName(Environment
+								.getExternalStorageDirectory()
+								.getAbsolutePath(), fileName);
+						ImageTools.savePhotoToSDCard(photo, Environment
+								.getExternalStorageDirectory()
+								.getAbsolutePath(), fileName);
 
-						File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), fileName);
+						File file = new File(Environment
+								.getExternalStorageDirectory()
+								.getAbsolutePath(), fileName);
 
 						uploadImage(file.getPath());
 
 						// 裁剪成100*100圆形小图片
-						smallBitmap = ImageTools.toRoundBitmap(ImageTools.zoomBitmap(photo, 100, 100));
+						smallBitmap = ImageTools.toRoundBitmap(ImageTools
+								.zoomBitmap(photo, 100, 100));
 						isChanged = true;
 						headImage.setImageBitmap(smallBitmap);
 						headBitmap = photo;
@@ -369,6 +404,7 @@ public class LeftFragment extends BaseV4Fragment {
 
 	/**
 	 * 显示对话框，从拍照和相册选择图片来源
+	 * 
 	 * @param context
 	 * @param isCrop
 	 */
@@ -376,58 +412,72 @@ public class LeftFragment extends BaseV4Fragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("图片来源");
 		builder.setNegativeButton("取消", null);
-		builder.setItems(new String[] { "拍照", "相册" }, new DialogInterface.OnClickListener() {
-			// 类型码
-			int REQUEST_CODE;
+		builder.setItems(new String[] { "拍照", "相册" },
+				new DialogInterface.OnClickListener() {
+					// 类型码
+					int REQUEST_CODE;
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				/**
-				 * 拍照
-				 */
-				case TAKE_PICTURE:
-					Uri imageUri = null;
-					String fileName = null;
-					Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					// 拍照裁剪
-					REQUEST_CODE = CROP;
-					// 删除上一次截图的临时文件
-					SharedPreferences sharedPreferences = getActivity().getSharedPreferences("temp",
-							Context.MODE_PRIVATE);
-					ImageTools.deletePhotoAtPathAndName(Environment.getExternalStorageDirectory().getAbsolutePath(),
-							sharedPreferences.getString("tempName", ""));
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which) {
+						/**
+						 * 拍照
+						 */
+						case TAKE_PICTURE:
+							Uri imageUri = null;
+							String fileName = null;
+							Intent openCameraIntent = new Intent(
+									MediaStore.ACTION_IMAGE_CAPTURE);
+							// 拍照裁剪
+							REQUEST_CODE = CROP;
+							// 删除上一次截图的临时文件
+							SharedPreferences sharedPreferences = getActivity()
+									.getSharedPreferences("temp",
+											Context.MODE_PRIVATE);
+							ImageTools.deletePhotoAtPathAndName(Environment
+									.getExternalStorageDirectory()
+									.getAbsolutePath(), sharedPreferences
+									.getString("tempName", ""));
 
-					// 保存本次截图临时文件名字
-					fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
-					Editor editor = sharedPreferences.edit();
-					editor.putString("tempName", fileName);
-					editor.commit();
+							// 保存本次截图临时文件名字
+							fileName = String.valueOf(System
+									.currentTimeMillis()) + ".jpg";
+							Editor editor = sharedPreferences.edit();
+							editor.putString("tempName", fileName);
+							editor.commit();
 
-					imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName));
-					// 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
-					openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-					startActivityForResult(openCameraIntent, REQUEST_CODE);
-					break;
+							imageUri = Uri.fromFile(new File(Environment
+									.getExternalStorageDirectory(), fileName));
+							// 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
+							openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+									imageUri);
+							startActivityForResult(openCameraIntent,
+									REQUEST_CODE);
+							break;
 
-				/**
-				 * 从图片库选择
-				 */
-				case CHOOSE_PICTURE:
-					Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+						/**
+						 * 从图片库选择
+						 */
+						case CHOOSE_PICTURE:
+							Intent openAlbumIntent = new Intent(
+									Intent.ACTION_GET_CONTENT);
 
-					// 图库选择裁剪
-					REQUEST_CODE = CROP;
-					// 打开图片库
-					openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-					startActivityForResult(openAlbumIntent, REQUEST_CODE);
-					break;
+							// 图库选择裁剪
+							REQUEST_CODE = CROP;
+							// 打开图片库
+							openAlbumIntent
+									.setDataAndType(
+											MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+											"image/*");
+							startActivityForResult(openAlbumIntent,
+									REQUEST_CODE);
+							break;
 
-				default:
-					break;
-				}
-			}
-		});
+						default:
+							break;
+						}
+					}
+				});
 		builder.create().show();
 	}
 
@@ -448,6 +498,7 @@ public class LeftFragment extends BaseV4Fragment {
 
 	/**
 	 * 判断数据库是否存有数据
+	 * 
 	 * @return
 	 */
 	protected User getCurrentUser() {
@@ -473,39 +524,67 @@ public class LeftFragment extends BaseV4Fragment {
 
 	/**
 	 * 上传文件
+	 * 
 	 * @param params
 	 * @param uploadHost
 	 */
 	public void uploadMethod(final RequestParams params, final String uploadHost) {
 		HttpUtils http = new HttpUtils();
-		http.send(HttpMethod.POST, uploadHost, params, new RequestCallBack<String>() {
-			@Override
-			public void onStart() {
-				Toast.makeText(getActivity(), "开始上传...", 1).show();
-			}
+		http.send(HttpMethod.POST, uploadHost, params,
+				new RequestCallBack<String>() {
+					@Override
+					public void onStart() {
+						Toast.makeText(getActivity(), "开始上传...", 1).show();
+					}
 
-			@Override
-			public void onLoading(long total, long current, boolean isUploading) {
-				if (isUploading) {
-					System.out.println("upload: " + current + "/" + total);
-				} else {
-					System.out.println("reply: " + current + "/" + total);
-				}
-			}
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+						if (isUploading) {
+							System.out.println("upload: " + current + "/"
+									+ total);
+						} else {
+							System.out.println("reply: " + current + "/"
+									+ total);
+						}
+					}
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				Toast.makeText(getActivity(), "头像上传成功！", 1).show();
-				// 重新更新用户内容
-				UserService.getInstance(getActivity()).getUserFromNet();
-			}
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						Toast.makeText(getActivity(), "头像上传成功！", 1).show();
+						// 重新更新用户内容
+						new GetUserTask().execute();
 
-			@Override
-			public void onFailure(HttpException error, String msg) {
-				System.out.println(error.getExceptionCode() + ":" + msg);
-				Toast.makeText(getActivity(), "头像上传失败！" + msg, 1).show();
-			}
-		});
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						System.out.println(error.getExceptionCode() + ":" + msg);
+						Toast.makeText(getActivity(), "头像上传失败！" + msg, 1)
+								.show();
+					}
+				});
+	}
+
+	/*
+	 * 从网络获取用户信息
+	 */
+	class GetUserTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			UserService.getInstance(getActivity()).getUserFromNet();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			LeftFragment.this.onResume();
+		}
+
 	}
 
 }

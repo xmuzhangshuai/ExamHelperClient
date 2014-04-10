@@ -1,5 +1,6 @@
 package com.bishe.examhelper.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -346,14 +347,39 @@ public class NoteService {
 			Log.e("网络", "添加笔记");
 		}
 	}
-	
+
 	/**
 	 * 从服务器获取某一
 	 * @return
 	 */
-//	public List<Note> getNoteListFromNet(){
-//		
-//	}
-	
-	
+	// public List<Note> getNoteListFromNet(){
+	//
+	// }
+
+	/**
+	 * 往服务器传入笔记列表
+	 * @param notes
+	 */
+	public void addNoteListToNet(List<Note> notes) {
+		List<JNote> jNotes = new ArrayList<JNote>();
+		for (Note note : notes) {
+			JNote jNote = new JNote(null, note.getQuestion_id(), note.getNote_time(), note.getNote_content(),
+					UserService.getInstance(appContext).getCurrentUserID(), note.getQuestionType_id());
+			jNotes.add(jNote);
+		}
+		
+		String jsonString = FastJsonTool.createJsonString(jNotes);
+		String URL = "NoteServlet";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("note", jsonString);
+		map.put("type", "addList");
+		try {
+			HttpUtil.postRequest(URL, map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("网络", "添加笔记");
+		}
+	}
+
 }

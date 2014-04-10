@@ -185,7 +185,7 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 	 * @param user
 	 */
 	public void modifyUser() {
-		UserService userService = UserService.getInstance(getActivity());
+		final UserService userService = UserService.getInstance(getActivity());
 		User user = userService.getCurrentUser();
 		if (user != null) {
 			user.setAge(userAge.getValue());
@@ -203,7 +203,11 @@ public class PersonalModifyDialogFragment extends DialogFragment {
 			userChangedListener.onUserInfoChanged(user);
 
 			// 更新数据到网络
-			userService.updateUserToNet();
+			new Thread() {
+				public void run() {
+					userService.updateUserToNet();
+				};
+			}.start();
 
 			Toast.makeText(getActivity(), "修改成功！", 1).show();
 		} else {

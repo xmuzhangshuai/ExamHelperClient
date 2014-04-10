@@ -71,4 +71,8 @@ public class DefaultKeys {
 
 	/***********考试指南************/
 	public static final String 	BUNDLE_EXAMGUIDE_TYPE = "bundle_examguide_type";// 考试指南目录
+	
+	/*************位置信息*******************/
+	public static final String 	PREF_LOCATION = "location";// 用户位置
+	public static final String 	PREF_DETAIL_LOCATION = "detailLocation";// 用户精确位置
 }

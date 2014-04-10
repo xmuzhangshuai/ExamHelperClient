@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -28,11 +29,13 @@ import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
+import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.NetworkUtils;
+import com.jsonobjects.JUser;
 
 /**   
 *    
@@ -66,6 +69,7 @@ public class RegisterFragment extends BaseV4Fragment {
 	private EditText mPhoneView;
 	private View mLoginStatusView;// 缓冲
 	private Button registerButton;// 注册
+	private SharedPreferences locationPreferences;// 记录用户位置
 
 	// 提醒用户网络状况有异常
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -82,6 +86,7 @@ public class RegisterFragment extends BaseV4Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fragment_regist, container, false);
+		locationPreferences = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
 		findViewById();
 		initView();
 		return rootView;
@@ -265,10 +270,14 @@ public class RegisterFragment extends BaseV4Fragment {
 
 				// 注册
 				String jsonString = HttpUtil.postRequest(url, map);
-				com.jsonobjects.JUser net = FastJsonTool.getObject(jsonString, com.jsonobjects.JUser.class);
+				JUser net = FastJsonTool.getObject(jsonString, JUser.class);
 				User local = userService.NetUserToUser(net);
 				local.setCurrent(true);
+				String location = locationPreferences.getString(DefaultKeys.PREF_LOCATION, "北京市");
+				local.setArea(location);
 				userService.saveUser(local);
+
+				userService.updateUserToNet();
 
 			} catch (Exception e) {
 				Log.e("注册", "注册失败！");

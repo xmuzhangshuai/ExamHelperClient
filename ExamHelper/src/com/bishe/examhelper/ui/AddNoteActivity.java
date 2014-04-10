@@ -1,24 +1,26 @@
 package com.bishe.examhelper.ui;
 
+import java.util.LinkedList;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bishe.examhelper.R;
-import com.bishe.examhelper.base.BaseActivity;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.entities.Note;
 import com.bishe.examhelper.entities.Question;
 import com.bishe.examhelper.service.NoteService;
 import com.bishe.examhelper.utils.DateTimeTools;
+import com.umeng.analytics.MobclickAgent;
 
 /**   
 *    
@@ -33,14 +35,14 @@ import com.bishe.examhelper.utils.DateTimeTools;
 * @version    
 *    
 */
-public class AddNoteActivity extends BaseActivity implements OnClickListener {
+public class AddNoteActivity extends ListActivity implements OnClickListener {
 	/***********Views************/
 	private TextView textView_title;// 文本编辑区题目
 	private EditText editText_mynote;// 文本编辑区
 	private Button add_btn;// 添加按钮
 	private TextView edit_btn;// 编辑按钮
 	private TextView delete_btn;// 删除按钮
-	private ListView everyone_note_listView;// 大家的笔记
+//	private PullToRefreshListView everyone_note_listView;// 大家的笔记
 	private LinearLayout btn_area;// 按钮区域，包含编辑按钮和删除按钮
 	private Button submit_edit;// 确定修改按钮
 
@@ -48,6 +50,8 @@ public class AddNoteActivity extends BaseActivity implements OnClickListener {
 	private Question myQuestion;// 题目
 	private Note myNote;// 笔记
 	private String myNoteString;// 笔记内容
+	private LinkedList<String> mListItems;
+	private ArrayAdapter<String> mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +73,26 @@ public class AddNoteActivity extends BaseActivity implements OnClickListener {
 	}
 
 	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPause(this);
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
 		textView_title = (TextView) findViewById(R.id.textView_title);
 		editText_mynote = (EditText) findViewById(R.id.editText_mynote);
 		add_btn = (Button) findViewById(R.id.add_btn);
-		everyone_note_listView = (ListView) findViewById(R.id.everyone_note_listView);
+//		everyone_note_listView = (PullToRefreshListView) findViewById(R.id.everyone_note_listView);
 		btn_area = (LinearLayout) findViewById(R.id.btn_area);
 		edit_btn = (TextView) findViewById(R.id.edit_btn);
 		delete_btn = (TextView) findViewById(R.id.delete_btn);
@@ -89,6 +107,56 @@ public class AddNoteActivity extends BaseActivity implements OnClickListener {
 		edit_btn.setOnClickListener(this);
 		delete_btn.setOnClickListener(this);
 		submit_edit.setOnClickListener(this);
+
+		// Set a listener to be invoked when the list should be refreshed.
+//		everyone_note_listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+//
+//			@Override
+//			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+//				// TODO Auto-generated method stub
+//				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+//						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+//
+//				// Update the LastUpdatedLabel
+//				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+//
+//				// Do work to refresh the list here.
+//				new GetDataTask().execute();
+//			}
+//		});
+//
+//		// Add an end-of-list listener
+//		everyone_note_listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+//
+//			@Override
+//			public void onLastItemVisible() {
+//				// TODO Auto-generated method stub
+//				Toast.makeText(AddNoteActivity.this, "End of List!", Toast.LENGTH_SHORT).show();
+//			}
+//		});
+//
+//		ListView actualListView = everyone_note_listView.getRefreshableView();
+//
+//		// Need to use the Actual ListView when registering for Context Menu
+//		registerForContextMenu(actualListView);
+//
+//		mListItems = new LinkedList<String>();
+//		mListItems.addAll(Arrays.asList(mStrings));
+//
+//		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListItems);
+//
+//		/**
+//		 * Add Sound Event Listener
+//		 */
+//		SoundPullEventListener<ListView> soundListener = new SoundPullEventListener<ListView>(this);
+//		soundListener.addSoundEvent(State.PULL_TO_REFRESH, R.raw.pull_event);
+//		soundListener.addSoundEvent(State.RESET, R.raw.reset_sound);
+//		soundListener.addSoundEvent(State.REFRESHING, R.raw.refreshing_sound);
+//		everyone_note_listView.setOnPullEventListener(soundListener);
+//
+//		// You can also just use setListAdapter(mAdapter) or
+//		// mPullRefreshListView.setAdapter(mAdapter)
+//		actualListView.setAdapter(mAdapter);
 	}
 
 	@Override
@@ -226,14 +294,57 @@ public class AddNoteActivity extends BaseActivity implements OnClickListener {
 				myNote.setNote_content(myNoteString);// 更新内容
 				myNote.setNote_time(DateTimeTools.getCurrentDate());// 更新时间
 				mNoteService.updateNote(myNote);
-				
-				new Thread(){public void run() {
-					mNoteService.updateNoteToNet(myNote);
-				};}.start();
+
+				new Thread() {
+					public void run() {
+						mNoteService.updateNoteToNet(myNote);
+					};
+				}.start();
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
 		}
 	}
+
+	/**
+	 * 
+	*    
+	* 项目名称：ExamHelper   
+	* 类名称：GetDataTask   
+	* 类描述：   
+	* 创建人：张帅  
+	* 创建时间：2014-4-10 上午11:53:23   
+	* @version    
+	*
+	 */
+//	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+//
+//		@Override
+//		protected String[] doInBackground(Void... params) {
+//			// Simulates a background job.
+//			try {
+//				Thread.sleep(4000);
+//			} catch (InterruptedException e) {
+//			}
+//			return mStrings;
+//		}
+//
+//		@Override
+//		protected void onPostExecute(String[] result) {
+//			mListItems.addFirst("新增。。");
+//			mAdapter.notifyDataSetChanged();
+//
+//			// Call onRefreshComplete when the list has been refreshed.
+//			everyone_note_listView.onRefreshComplete();
+//
+//			super.onPostExecute(result);
+//		}
+//	}
+
+	private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam", "Abondance", "Ackawi",
+			"Acorn", "Adelost", "Affidelice au Chablis", "Afuega'l Pitu", "Airag", "Airedale", "Aisy Cendre",
+			"Allgauer Emmentaler", "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam", "Abondance", "Ackawi",
+			"Acorn", "Adelost", "Affidelice au Chablis", "Afuega'l Pitu", "Airag", "Airedale", "Aisy Cendre",
+			"Allgauer Emmentaler" };
 }

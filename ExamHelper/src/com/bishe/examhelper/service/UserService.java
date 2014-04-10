@@ -12,6 +12,7 @@ import com.bishe.examhelper.dao.UserDao;
 import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
+import com.jsonobjects.JUser;
 
 public class UserService {
 	private static final String TAG = CollectionService.class.getSimpleName();
@@ -128,7 +129,7 @@ public class UserService {
 	/**
 	 * 从网络传回数据变为本地User
 	 */
-	public User NetUserToUser(com.jsonobjects.JUser netUser) {
+	public User NetUserToUser(JUser netUser) {
 		User user = null;
 		if (netUser != null) {
 			user = new User((long) netUser.getId(), netUser.getMail(), netUser.getPassword(), netUser.getNickname(),
@@ -143,10 +144,10 @@ public class UserService {
 	 * 本地User变为网络User
 	 * @return
 	 */
-	public com.jsonobjects.JUser UserToNetUser(User user) {
-		com.jsonobjects.JUser netUser = new com.jsonobjects.JUser(user.getId(), user.getMail(), user.getPassword(),
-				user.getNickname(), user.getRealname(), user.getAge(), user.getPhone(), user.getGender(),
-				user.getUser_state(), user.getProfession(), user.getArea(), user.getIntegral(), user.getAvatar());
+	public JUser UserToNetUser(User user) {
+		JUser netUser = new JUser(user.getId(), user.getMail(), user.getPassword(), user.getNickname(),
+				user.getRealname(), user.getAge(), user.getPhone(), user.getGender(), user.getUser_state(),
+				user.getProfession(), user.getArea(), user.getIntegral(), user.getAvatar());
 		return netUser;
 
 	}
@@ -184,7 +185,7 @@ public class UserService {
 	 */
 	public void updateUserToNet() {
 		User user = getCurrentUser();
-		final com.jsonobjects.JUser netUser = UserToNetUser(user);
+		final JUser netUser = UserToNetUser(user);
 
 		// TODO Auto-generated method stub
 		if (netUser != null) {
