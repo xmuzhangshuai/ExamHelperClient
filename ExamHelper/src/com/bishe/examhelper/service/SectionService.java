@@ -9,6 +9,8 @@ import com.bishe.examhelper.dao.DaoSession;
 import com.bishe.examhelper.dao.SectionDao;
 import com.bishe.examhelper.dao.SubjectDao;
 import com.bishe.examhelper.dao.SubjectDao.Properties;
+import com.bishe.examhelper.entities.Collection;
+import com.bishe.examhelper.entities.ErrorQuestions;
 import com.bishe.examhelper.entities.MaterialAnalysis;
 import com.bishe.examhelper.entities.MultiChoice;
 import com.bishe.examhelper.entities.Section;
@@ -125,4 +127,35 @@ public class SectionService {
 		return count;
 	}
 
+	/**
+	 * 返回当前用户章节下的收藏列表
+	 * @return
+	 */
+	public List<Collection> getCurrentCollections(Section section) {
+		List<Collection> temp = section.getCollectionList();
+		List<Collection> cList = new ArrayList<Collection>();
+		for (Collection collection : temp) {
+			if (collection.getUser_id() == UserService.getInstance(appContext).getCurrentUserID()) {
+				cList.add(collection);
+			}
+		}
+
+		return cList;
+	}
+
+	/**
+	 * 返回当前用户章节下的错题列表
+	 * @return
+	 */
+	public List<ErrorQuestions> getCurrentErrors(Section section) {
+		List<ErrorQuestions> temp = section.getErrorQuestionsList();
+		List<ErrorQuestions> eList = new ArrayList<ErrorQuestions>();
+		for (ErrorQuestions errorQuestion : temp) {
+			if (errorQuestion.getUser_id() == UserService.getInstance(appContext).getCurrentUserID()) {
+				eList.add(errorQuestion);
+			}
+		}
+
+		return eList;
+	}
 }

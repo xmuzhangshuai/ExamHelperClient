@@ -62,45 +62,43 @@ public class CenterFragment extends Fragment {
 				// TODO Auto-generated method stub
 				Intent intent = null;
 				switch (position) {
-				case 0:// 如果点击了继续上次
-					break;
-				case 1:// 如果点击了分类练习
+				case 0:// 如果点击了分类练习
 					intent = new Intent(getActivity(), SortPracticeActivity.class);
 					break;
-				case 2:// 如果点击了随机练习
+				case 1:// 如果点击了随机练习
 					intent = new Intent(getActivity(), RandomExerciseActivity.class);
 					break;
-				case 3:// 如果点击了模拟考场
+				case 2:// 如果点击了模拟考场
 					intent = new Intent(getActivity(), MockExamGuideActivity.class);
 					break;
-				case 4:// 如果点击了错题重放
+				case 3:// 如果点击了错题重放
 					intent = new Intent(getActivity(), MyErrorActivity.class);
 					break;
-				case 5:// 如果点击了我的收藏
+				case 4:// 如果点击了我的收藏
 					intent = new Intent(getActivity(), MyCollectionActivity.class);
 					break;
-				case 6:// 如果点击了我的笔记
+				case 5:// 如果点击了我的笔记
 					intent = new Intent(getActivity(), MyNoteActivity.class);
 					break;
-				case 7:// 如果点击了学习记录
+				case 6:// 如果点击了学习记录
 					intent = new Intent(getActivity(), StudyRecordActivity.class);
 					break;
-				case 8:// 如果点击了试题排行
+				case 7:// 如果点击了试题排行
 					intent = new Intent(getActivity(), DefaultActivity.class);
 					break;
-				case 9:// 如果点击了考试指南
+				case 8:// 如果点击了考试指南
 					intent = new Intent(getActivity(), ExamGuideActivity.class);
 					break;
-				case 10:// 如果点击了题库搜索
+				case 9:// 如果点击了题库搜索
 					intent = new Intent(getActivity(), DefaultActivity.class);
 					break;
-				case 11:// 如果点击了统计分析
+				case 10:// 如果点击了统计分析
 					intent = new Intent(getActivity(), StatisticActivity.class);
 					break;
-				case 12:// 如果点击了我的答疑
+				case 11:// 如果点击了我的答疑
 					intent = new Intent(getActivity(), DefaultActivity.class);
 					break;
-				case 13:// 如果点击了答疑广场
+				case 12:// 如果点击了答疑广场
 					intent = new Intent(getActivity(), DefaultActivity.class);
 					break;
 				default:

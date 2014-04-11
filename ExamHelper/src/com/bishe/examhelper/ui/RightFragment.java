@@ -45,6 +45,7 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
+		agent = new FeedbackAgent(getActivity());
 
 		/*******设置字体大小的Summary**********/
 		ListPreference fontsPref = (ListPreference) findPreference(DefaultKeys.KEY_PREF_SWITCH_FONTSIZE);
@@ -55,6 +56,7 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		agent.sync();
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		/*******给恢复默认绑定事件**********/
 		Preference settingDefault = findPreference(DefaultKeys.KEY_PREF_SETTING_DEFAULT);
@@ -159,7 +161,6 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 		/************如果点击了意见反馈************/
 		else if (preference.getKey().equals(DefaultKeys.KEY_PREF_ADVICE_FEEDBACK)) {
 			// 当开发者回复用户反馈后，需要提醒用户
-			agent = new FeedbackAgent(getActivity());
 			agent.startFeedbackActivity();
 		}
 

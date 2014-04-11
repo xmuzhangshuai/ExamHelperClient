@@ -3,7 +3,7 @@
 
     <!-- 以下是功能模块名称数组 -->
     <string-array name="function_names">
-        <item>@string/f_name1</item>
+       
         <item>@string/f_name2</item>
         <item>@string/f_name3</item>
         <item>@string/f_name4</item>

@@ -106,9 +106,6 @@ public class ByFrequencyFragment extends BaseV4Fragment {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
 			/*******加载进度********/
-			// progressDialog = new ProgressDialog(getActivity());
-			// progressDialog.setMessage("请稍候，正在努力加载...");
-			// progressDialog.show();
 
 			titleList = new ArrayList<String>();
 			titleList.add("错三次或以上");
@@ -131,7 +128,7 @@ public class ByFrequencyFragment extends BaseV4Fragment {
 			List<ErrorQuestions> allErrorList = new ArrayList<ErrorQuestions>();
 
 			ErrorQuestionsService errorQuestionsService = ErrorQuestionsService.getInstance(getActivity());
-			allErrorList = errorQuestionsService.loadAllErrorQuestions();
+			allErrorList = errorQuestionsService.loadCurrentQuestions();
 
 			/************循环判断出错时间距离现在的时间间隔,并进行分组*****************/
 			for (ErrorQuestions errorQuestions : allErrorList) {
@@ -162,7 +159,6 @@ public class ByFrequencyFragment extends BaseV4Fragment {
 			/************新建Adapter***************/
 			mAdapter = new CommonListAdapter(getActivity(), titleList, subtitleList);
 			listView.setAdapter(mAdapter);
-			// progressDialog.dismiss();
 		}
 
 	}

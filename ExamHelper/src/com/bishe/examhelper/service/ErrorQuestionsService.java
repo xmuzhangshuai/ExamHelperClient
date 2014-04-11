@@ -71,6 +71,15 @@ public class ErrorQuestionsService {
 	}
 
 	/**
+	 * 返回当前用户错题列表
+	 * @return
+	 */
+	public List<ErrorQuestions> loadCurrentQuestions() {
+		return errorQuestionsDao.queryBuilder()
+				.where(Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).list();
+	}
+
+	/**
 	 * 根据ID删除某条记录
 	 */
 	public void deleteErrorQuestionsById(Long id) {
@@ -95,9 +104,10 @@ public class ErrorQuestionsService {
 				.unique().getId();
 
 		// 查找对应题型、出错的题目
-		ErrorQuestions errorQuestions = errorQuestionsDao.queryBuilder()
-				.where(Properties.Question_id.eq(singleChoice.getId()), Properties.QuestionType_id.eq(questionTypeId))
-				.unique();
+		ErrorQuestions errorQuestions = errorQuestionsDao
+				.queryBuilder()
+				.where(Properties.Question_id.eq(singleChoice.getId()), Properties.QuestionType_id.eq(questionTypeId),
+						Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
 
 		if (errorQuestions != null) {// 如果已经存在
 			errorQuestions.setError_num(errorQuestions.getError_num() + 1);// 出错次数加1
@@ -122,9 +132,10 @@ public class ErrorQuestionsService {
 				.unique().getId();
 
 		// 查找对应题型、出错的题目
-		ErrorQuestions errorQuestions = errorQuestionsDao.queryBuilder()
-				.where(Properties.Question_id.eq(multiChoice.getId()), Properties.QuestionType_id.eq(questionTypeId))
-				.unique();
+		ErrorQuestions errorQuestions = errorQuestionsDao
+				.queryBuilder()
+				.where(Properties.Question_id.eq(multiChoice.getId()), Properties.QuestionType_id.eq(questionTypeId),
+						Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
 
 		if (errorQuestions != null) {// 如果已经存在
 			errorQuestions.setError_num(errorQuestions.getError_num() + 1);// 出错次数加1
@@ -152,7 +163,8 @@ public class ErrorQuestionsService {
 		ErrorQuestions errorQuestions = errorQuestionsDao
 				.queryBuilder()
 				.where(Properties.Question_id.eq(materialAnalysis.getId()),
-						Properties.QuestionType_id.eq(questionTypeId)).unique();
+						Properties.QuestionType_id.eq(questionTypeId),
+						Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
 
 		if (errorQuestions != null) {// 如果已经存在
 			errorQuestions.setError_num(errorQuestions.getError_num() + 1);// 出错次数加1

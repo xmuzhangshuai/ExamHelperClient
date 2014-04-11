@@ -900,8 +900,8 @@ int id multi_choice_inflaterId 0x7f0700a1
 int id multi_choice_stem 0x7f07009f
 int id my_answer 0x7f070093
 int id my_score 0x7f07003f
-int id name 0x7f07002f
 int id next_question 0x7f07009e
+int id nickname 0x7f07002f
 int id note_content 0x7f070068
 int id note_listView 0x7f07007b
 int id note_time 0x7f0700a9

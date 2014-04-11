@@ -38,7 +38,7 @@ public class CenterFragmentAdapter extends BaseAdapter {
 			R.color.lightview9, R.color.lightview10, R.color.lightview11, R.color.lightview12, R.color.lightview13,
 			R.color.lightview14 };
 	/******** 主页面功能块图片*********/
-	private int[] blocksImage = new int[] { R.drawable.function_continue, R.drawable.function_per_practice,
+	private int[] blocksImage = new int[] {  R.drawable.function_per_practice,
 			R.drawable.function_random_practice, R.drawable.function_simulate_examroom,
 			R.drawable.function_error_again, R.drawable.function_mycollect, R.drawable.function_mynote,
 			R.drawable.function_study_record, R.drawable.function_hot_exams, R.drawable.function_exam_guide,

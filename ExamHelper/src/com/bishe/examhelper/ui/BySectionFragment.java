@@ -41,10 +41,12 @@ public class BySectionFragment extends BaseV4Fragment {
 	private List<Section> sectionList;// 章节列表
 	private CommonListAdapter mAdapter;
 	private String type;// 要展示的类型，如错题、收藏题目等
+	SectionService mSectionService;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		mSectionService = SectionService.getInstance(getActivity());
 		rootView = inflater.inflate(R.layout.common_list, container, false);
 		findViewById();
 		// 获取类型
@@ -80,21 +82,20 @@ public class BySectionFragment extends BaseV4Fragment {
 				if (type.equals(DefaultValues.BY_COLLECTION)
 						&& sectionList.get(position).getCollectionList().size() > 0) {
 					Intent intent = new Intent(getActivity(), QuestionsDisplayActivity.class);
-					intent.putExtra(DefaultKeys.BY_SECTION_FRAGMENT_TYPE, type);//设置类型
-					intent.putExtra(DefaultKeys.COLLECTION_LIST, (Serializable) sectionList.get(position)
-							.getCollectionList());
+					intent.putExtra(DefaultKeys.BY_SECTION_FRAGMENT_TYPE, type);// 设置类型
+					intent.putExtra(DefaultKeys.COLLECTION_LIST,
+							(Serializable) mSectionService.getCurrentCollections(sectionList.get(position)));
 					startActivity(intent);
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 
 				/*********如果是错题列表************/
-				if (type.equals(DefaultValues.BY_ERROR)
-						&& sectionList.get(position).getErrorQuestionsList().size() > 0) {
+				if (type.equals(DefaultValues.BY_ERROR) && sectionList.get(position).getErrorQuestionsList().size() > 0) {
 					Intent intent = new Intent(getActivity(), QuestionsDisplayActivity.class);
-					intent.putExtra(DefaultKeys.BY_SECTION_FRAGMENT_TYPE, type);//设置类型
-					//传错题列表参数
-					intent.putExtra(DefaultKeys.ERROR_LIST, (Serializable) sectionList.get(position)
-							.getErrorQuestionsList());
+					intent.putExtra(DefaultKeys.BY_SECTION_FRAGMENT_TYPE, type);// 设置类型
+					// 传错题列表参数
+					intent.putExtra(DefaultKeys.ERROR_LIST,
+							(Serializable) mSectionService.getCurrentErrors(sectionList.get(position)));
 					startActivity(intent);
 					getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
@@ -113,7 +114,6 @@ public class BySectionFragment extends BaseV4Fragment {
 	*
 	 */
 	private class InitData extends AsyncTask<Void, Void, Void> {
-//		private ProgressDialog progressDialog;
 		private List<String> titleList;// 章节名称
 		private List<String> subtitleList;// 错题个数
 
@@ -121,17 +121,13 @@ public class BySectionFragment extends BaseV4Fragment {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-			/*******加载进度********/
-//			progressDialog = new ProgressDialog(getActivity());
-//			progressDialog.setMessage("请稍候，正在努力加载...");
-//			progressDialog.show();
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			/***********取出章节列表****************/
-			SectionService mSectionService = SectionService.getInstance(getActivity());
+
 			sectionList = mSectionService.getSectionsBySubjectName(DefaultValues.SUBJECT_POLITICAL_EXAM);
 
 			titleList = new ArrayList<String>();
@@ -143,7 +139,9 @@ public class BySectionFragment extends BaseV4Fragment {
 				for (Section section : sectionList) {
 					section.resetCollectionList();
 					titleList.add(section.getSection_name());
-					subtitleList.add("共" + section.getCollectionList().size() + "题");
+					subtitleList.add("共" + mSectionService.getCurrentCollections(section).size() + "题");
+					// subtitleList.add("共" + section.getCollectionList().size()
+					// + "题");
 				}
 			}
 
@@ -153,7 +151,9 @@ public class BySectionFragment extends BaseV4Fragment {
 				for (Section section : sectionList) {
 					section.resetErrorQuestionsList();
 					titleList.add(section.getSection_name());
-					subtitleList.add("共" + section.getErrorQuestionsList().size() + "题");
+					// subtitleList.add("共" +
+					// section.getErrorQuestionsList().size() + "题");
+					subtitleList.add("共" + mSectionService.getCurrentErrors(section).size() + "题");
 				}
 			}
 
@@ -167,7 +167,6 @@ public class BySectionFragment extends BaseV4Fragment {
 			/************新建Adapter***************/
 			mAdapter = new CommonListAdapter(getActivity(), titleList, subtitleList);
 			listView.setAdapter(mAdapter);
-//			progressDialog.dismiss();
 		}
 
 	}

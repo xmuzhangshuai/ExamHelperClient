@@ -15,11 +15,15 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.androidquery.AQuery;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.entities.Examination;
+import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.service.ExaminationService;
+import com.bishe.examhelper.service.UserService;
+import com.bishe.examhelper.utils.HttpUtil;
 
 /**   
 *    
@@ -43,6 +47,8 @@ public class MockExamGuideActivity extends BaseActivity {
 	private Button startButton;// 开始按钮
 	private Button switchButton;// 选择试题按钮
 	private TextView examRequest;// 试卷要求
+	private TextView nickNameTextView;// 昵称
+	private TextView accountTextView;// 账号
 	private List<Examination> examinationList;// 模拟试题列表
 	public Long examId = (long) -1;// 选中的模拟试卷试卷ID
 
@@ -78,6 +84,8 @@ public class MockExamGuideActivity extends BaseActivity {
 		startButton = (Button) findViewById(R.id.start_mock_exam_btn);
 		switchButton = (Button) findViewById(R.id.switch_mock_exam_btn);
 		examRequest = (TextView) findViewById(R.id.exam_request);
+		nickNameTextView = (TextView) findViewById(R.id.nickname);
+		accountTextView = (TextView) findViewById(R.id.account);
 	}
 
 	@Override
@@ -158,6 +166,16 @@ public class MockExamGuideActivity extends BaseActivity {
 			}
 		});
 
+		/**
+		 * 设置用户信息
+		 */
+		User user = UserService.getInstance(MockExamGuideActivity.this).getCurrentUser();
+		if (user != null) {
+			AQuery aq = new AQuery(MockExamGuideActivity.this);
+			aq.id(R.id.headimage).image(HttpUtil.BASE_URL + user.getAvatar(), true, true, 0, R.drawable.photoconor);
+			nickNameTextView.setText(user.getNickname());
+			accountTextView.setText(user.getMail());
+		}
 	}
 
 	/*****返回用户设置信息*******/

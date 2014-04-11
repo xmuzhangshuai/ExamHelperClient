@@ -73,6 +73,15 @@ public class CollectionService {
 	}
 
 	/**
+	 * 返回当前用户所有收藏
+	 * @return
+	 */
+	public List<Collection> loadCurrentCollections() {
+		return mCollectionDao.queryBuilder()
+				.where(Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).list();
+	}
+
+	/**
 	 * 根据ID删除某条记录
 	 */
 	public void deleteCollectionById(Long id) {
@@ -127,9 +136,10 @@ public class CollectionService {
 				.unique().getId();
 
 		// 查找对应题型、题目的收藏
-		Collection collection = mCollectionDao.queryBuilder()
-				.where(Properties.Question_id.eq(singleChoice.getId()), Properties.QuestionType_id.eq(questionTypeId))
-				.unique();
+		Collection collection = mCollectionDao
+				.queryBuilder()
+				.where(Properties.Question_id.eq(singleChoice.getId()), Properties.QuestionType_id.eq(questionTypeId),
+						Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
 		if (collection != null) {
 			flag = true;
 			mCollection = collection;
@@ -151,9 +161,10 @@ public class CollectionService {
 				.unique().getId();
 
 		// 查找对应题型、题目的收藏
-		Collection collection = mCollectionDao.queryBuilder()
-				.where(Properties.Question_id.eq(multiChoice.getId()), Properties.QuestionType_id.eq(questionTypeId))
-				.unique();
+		Collection collection = mCollectionDao
+				.queryBuilder()
+				.where(Properties.Question_id.eq(multiChoice.getId()), Properties.QuestionType_id.eq(questionTypeId),
+						Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
 		if (collection != null) {
 			flag = true;
 			mCollection = collection;
@@ -179,7 +190,8 @@ public class CollectionService {
 		Collection collection = mCollectionDao
 				.queryBuilder()
 				.where(Properties.Question_id.eq(materialAnalysis.getId()),
-						Properties.QuestionType_id.eq(questionTypeId)).unique();
+						Properties.QuestionType_id.eq(questionTypeId),
+						Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
 		if (collection != null) {
 			flag = true;
 			mCollection = collection;

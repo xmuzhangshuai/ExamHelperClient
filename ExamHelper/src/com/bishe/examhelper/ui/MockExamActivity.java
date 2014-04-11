@@ -139,9 +139,6 @@ public class MockExamActivity extends BaseFragmentActivity implements OnClickLis
 			int current = data.getIntExtra(DefaultKeys.KEY_MOCK_EXAM_PREVIEW_BACK, 0);
 			mViewPager.setCurrentItem(current, true);
 		}
-		// if (requestCode == 2 && resultCode == 2 && data != null) {
-		// model = data.getStringExtra(DefaultKeys.KEY_QUESTION_MODEL);
-		// }
 	}
 
 	/*********监听返回键，提示用户正在答题*********/

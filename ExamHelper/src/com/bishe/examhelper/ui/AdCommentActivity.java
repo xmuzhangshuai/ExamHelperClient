@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.newxp.controller.ExchangeDataService;
 import com.umeng.newxp.view.ExchangeViewManager;
 

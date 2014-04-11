@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -125,10 +124,6 @@ public class ByTimeFragment extends BaseV4Fragment {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-			/*******加载进度********/
-			// progressDialog = new ProgressDialog(getActivity());
-			// progressDialog.setMessage("请稍候，正在努力加载...");
-			// progressDialog.show();
 
 			titleList = new ArrayList<String>();
 			titleList.add("当日内");
@@ -151,10 +146,10 @@ public class ByTimeFragment extends BaseV4Fragment {
 					collectionList.add(list);
 				}
 
-				// 存储所有的错题
+				// 存储所有的收藏
 				List<Collection> allCollectionList = new ArrayList<Collection>();
 				CollectionService collectionService = CollectionService.getInstance(getActivity());
-				allCollectionList = collectionService.loadAllCollections();
+				allCollectionList = collectionService.loadCurrentCollections();
 
 				/************循环判断出错时间距离现在的时间间隔,并进行分组*****************/
 				for (Collection collection : allCollectionList) {
@@ -195,7 +190,7 @@ public class ByTimeFragment extends BaseV4Fragment {
 				List<ErrorQuestions> allErrorList = new ArrayList<ErrorQuestions>();
 
 				ErrorQuestionsService errorQuestionsService = ErrorQuestionsService.getInstance(getActivity());
-				allErrorList = errorQuestionsService.loadAllErrorQuestions();
+				allErrorList = errorQuestionsService.loadCurrentQuestions();
 
 				/************循环判断出错时间距离现在的时间间隔,并进行分组*****************/
 				for (ErrorQuestions errorQuestions : allErrorList) {
@@ -232,7 +227,6 @@ public class ByTimeFragment extends BaseV4Fragment {
 			/************新建Adapter***************/
 			mAdapter = new CommonListAdapter(getActivity(), titleList, subtitleList);
 			listView.setAdapter(mAdapter);
-			// progressDialog.dismiss();
 		}
 
 	}
