@@ -72,7 +72,9 @@ public class NoteService {
 	 * @return
 	 */
 	public List<Note> loadAllNotesByTime() {
-		return noteDao.queryBuilder().orderDesc(Properties.Note_time).list();
+		return noteDao.queryBuilder()
+				.where(Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID()))
+				.orderDesc(Properties.Note_time).list();
 	}
 
 	/**
@@ -195,8 +197,10 @@ public class NoteService {
 			questionId = materialAnalysis.getId();
 		}
 
-		note = noteDao.queryBuilder()
-				.where(Properties.QuestionType_id.eq(questionTypeId), Properties.Question_id.eq(questionId)).unique();
+		note = noteDao
+				.queryBuilder()
+				.where(Properties.QuestionType_id.eq(questionTypeId), Properties.Question_id.eq(questionId),
+						Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
 
 		return note;
 	}
@@ -355,34 +359,27 @@ public class NoteService {
 	 */
 	public Long getQuestionTypeID(Question question) {
 		Long questionTypeId = null;
-		//		Long questionId = null;
 
 		if (question.getQuestion_type().equals(DefaultValues.SINGLE_CHOICE)) {// 如果是单选题
-			SingleChoice singleChoice = (SingleChoice) question;
 			// 查找题型ID
 			questionTypeId = mQuestionTypeDao
 					.queryBuilder()
 					.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
 							.eq(DefaultValues.SINGLE_CHOICE)).unique().getId();
 
-			//			questionId = singleChoice.getId();
 		} else if (question.getQuestion_type().equals(DefaultValues.MULTI_CHOICE)) {// 如果是多选题
-			MultiChoice multiChoice = (MultiChoice) question;
 			// 查找题型ID
 			questionTypeId = mQuestionTypeDao
 					.queryBuilder()
 					.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.MULTI_CHOICE))
 					.unique().getId();
-			//			questionId = multiChoice.getId();
 
 		} else if (question.getQuestion_type().equals(DefaultValues.MATERIAL_ANALYSIS)) {// 如果是材料题
-			MaterialAnalysis materialAnalysis = (MaterialAnalysis) question;
 			// 查找题型ID
 			questionTypeId = mQuestionTypeDao
 					.queryBuilder()
 					.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
 							.eq(DefaultValues.MATERIAL_ANALYSIS)).unique().getId();
-			//			questionId = materialAnalysis.getId();
 		}
 
 		return questionTypeId;
@@ -424,7 +421,7 @@ public class NoteService {
 		map.put("type", "getNoteList");
 		map.put("questionTypeId", String.valueOf(getQuestionTypeID(question)));
 		map.put("questionId", String.valueOf(getQuestionID(question)));
-		
+
 		try {
 			String jsonString = HttpUtil.postRequest(url, map);
 			jNotes = FastJsonTool.getObjectList(jsonString, JNote.class);

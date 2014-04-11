@@ -356,19 +356,17 @@ public class AddNoteActivity extends AbsListViewBaseActivity implements OnClickL
 				 * 从网络服务器获取该题目的笔记列表
 				 */
 				NoteService noteService = NoteService.getInstance(AddNoteActivity.this);
+				noteList = new LinkedList<JNote>();
 				List<JNote> jNoteList = noteService.getNoteListFormNet(myQuestion);
-				for (JNote jNote : jNoteList) {
-					if (!noteList.contains(jNote)) {
-						noteList.addLast(jNote);
-					}
-				}
+				noteList.addAll(jNoteList);
 
 				/**
 				 * 从笔记列表中抽取用户列表
 				 */
+				jUserList = new LinkedList<JUser>();
 				for (JNote jNote : jNoteList) {
 					JUser jUser = new JUser(jNote.getUser_id());
-					jUserList.addLast(jUser);
+					jUserList.add(jUser);
 				}
 
 				/**
