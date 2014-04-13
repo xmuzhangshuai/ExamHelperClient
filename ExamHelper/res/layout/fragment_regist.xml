@@ -21,9 +21,8 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="1px"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:drawableLeft="@drawable/login_user_account_ico"
                 android:gravity="right"
                 android:paddingLeft="5.0dip"
@@ -33,11 +32,10 @@
 
             <EditText
                 android:id="@+id/email"
-                android:layout_width="1px"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10.0dip"
                 android:layout_marginRight="15.0dip"
-                android:layout_weight="8"
                 android:background="@android:color/white"
                 android:hint="请输入注册邮箱"
                 android:inputType="textEmailAddress"
@@ -60,9 +58,8 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="1px"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:drawableLeft="@drawable/login_password_ico"
                 android:gravity="right"
                 android:paddingLeft="5.0dip"
@@ -72,11 +69,10 @@
 
             <EditText
                 android:id="@+id/password"
-                android:layout_width="1px"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10.0dip"
                 android:layout_marginRight="15.0dip"
-                android:layout_weight="8"
                 android:background="@android:color/white"
                 android:hint="请输入密码"
                 android:inputType="textPassword"
@@ -98,9 +94,8 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="1px"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:drawableLeft="@drawable/phone"
                 android:gravity="right"
                 android:paddingLeft="5.0dip"
@@ -110,11 +105,10 @@
 
             <EditText
                 android:id="@+id/phone"
-                android:layout_width="1px"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10.0dip"
                 android:layout_marginRight="15.0dip"
-                android:layout_weight="8"
                 android:background="@android:color/white"
                 android:hint="请输入手机号"
                 android:inputType="phone"

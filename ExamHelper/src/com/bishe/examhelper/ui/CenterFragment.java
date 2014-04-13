@@ -99,7 +99,7 @@ public class CenterFragment extends Fragment {
 					intent = new Intent(getActivity(), DefaultActivity.class);
 					break;
 				case 12:// 如果点击了答疑广场
-					intent = new Intent(getActivity(), DefaultActivity.class);
+					intent = new Intent(getActivity(), QuerySquareActivity.class);
 					break;
 				default:
 					break;

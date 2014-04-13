@@ -132,6 +132,15 @@
                 android:value="com.bishe.examhelper.ui.MainActivity" />
         </activity>
 
+        <!-- 统计分析StatisticActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.QuerySquareActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
         <!-- 默认DefaultActivity -->
         <activity android:name="com.bishe.examhelper.ui.DefaultActivity" />
 
