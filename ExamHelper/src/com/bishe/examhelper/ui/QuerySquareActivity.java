@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -25,15 +24,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.AbsListViewBaseActivity;
@@ -51,6 +52,13 @@ import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+/**
+ * 类名称：QuerySquareActivity
+ * 类描述：答疑广场
+ * 创建人： 张帅
+ * 创建时间：2014-4-14 下午4:37:21
+ *
+ */
 public class QuerySquareActivity extends AbsListViewBaseActivity {
 	private DisplayImageOptions options; // DisplayImageOptions是用于设置图片显示的类
 	private PullToRefreshListView queryListView;// queryListview
@@ -76,7 +84,6 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	private LinkedList<String> mQureyListItems;
 	//疑问列表Adapter
 	private MyQueryListAdapter mQueryListAdapter;
-	private GetDataTask mDataTask = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +121,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 
 		findViewById();
 		initView();
-		mDataTask = new GetDataTask();
-		mDataTask.execute();
+		new GetDataTask().execute();
 
 		mQureyListItems = new LinkedList<String>();
 		mQueryListAdapter = new MyQueryListAdapter();
@@ -142,7 +148,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case R.id.action_query:
-			startActivity(new Intent(QuerySquareActivity.this, DefaultActivity.class));
+			startActivity(new Intent(QuerySquareActivity.this, PublishQueryActivity.class));
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			return true;
 
@@ -182,7 +188,19 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				// Do work to refresh the list here.
-				mDataTask.execute();
+				new GetDataTask().execute();
+			}
+		});
+
+		//点击列表项目事件
+		queryListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(QuerySquareActivity.this, QueryDetailActivity.class);
+				startActivity(intent);
+				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			}
 		});
 
@@ -311,13 +329,11 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	 *
 	 */
 	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
-		Dialog dialog;
 
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-			dialog = showProgressDialog();
 		}
 
 		@Override
@@ -342,17 +358,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 			// Call onRefreshComplete when the list has been refreshed.
 			queryListView.onRefreshComplete();
 
-			dialog.cancel();
 			super.onPostExecute(result);
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		if (!mDataTask.isCancelled()) {
-			mDataTask.cancel(true);
 		}
 	}
 
@@ -433,20 +439,10 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 			});
 
 			holder.answerNum.setOnClickListener(new OnClickListener() {
-
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Toast.makeText(QuerySquareActivity.this, "点击了我要回答！", 1).show();
-				}
-			});
-
-			view.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Toast.makeText(QuerySquareActivity.this, "点击了条目！", 1).show();
 				}
 			});
 
@@ -457,12 +453,11 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 			* 参数3：显示图片的设置 
 			* 参数4：监听器 
 			*/
-			//			imageLoader.displayImage(HttpUtil.BASE_URL + jUserList.get(position).getAvatar(), holder.headImageView,
-			//					options, animateFirstListener);
+			//						imageLoader.displayImage(HttpUtil.BASE_URL + jUserList.get(position).getAvatar(), holder.headImageView,
+			//								options, animateFirstListener);
 
 			return view;
 		}
-
 	}
 
 	/** 

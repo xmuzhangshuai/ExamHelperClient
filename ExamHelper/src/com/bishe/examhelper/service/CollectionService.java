@@ -78,7 +78,8 @@ public class CollectionService {
 	 */
 	public List<Collection> loadCurrentCollections() {
 		return mCollectionDao.queryBuilder()
-				.where(Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).list();
+				.where(Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID()))
+				.orderDesc(Properties.Collect_time).list();
 	}
 
 	/**

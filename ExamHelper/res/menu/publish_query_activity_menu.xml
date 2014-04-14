@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_takephoto"
+        android:icon="@drawable/ic_action_camera"
+        android:showAsAction="ifRoom|withText"
+        android:title="拍照"/>
+    <item
+        android:id="@+id/action_getphoto"
+        android:icon="@drawable/ic_action_compoe_gallery"
+        android:showAsAction="ifRoom|withText"
+        android:title="相册"/>
+    <item
+        android:id="@+id/action_addquestion"
+        android:icon="@drawable/btn_add_default_1"
+        android:showAsAction="ifRoom|withText"
+        android:title="添加"/>
+    <item
+        android:id="@+id/action_publish"
+        android:icon="@drawable/ic_action_send"
+        android:showAsAction="ifRoom|withText"
+        android:title="发布"/>
+
+</menu>

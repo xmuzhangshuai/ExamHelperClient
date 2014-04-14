@@ -65,11 +65,15 @@
 
         <ImageView
             android:id="@+id/content_image"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/content"
             android:layout_below="@+id/content"
             android:layout_marginTop="5dp"
+            android:adjustViewBounds="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:maxHeight="160dp"
             android:scaleType="fitStart"
             android:src="@drawable/mainbackground2" />
     </RelativeLayout>

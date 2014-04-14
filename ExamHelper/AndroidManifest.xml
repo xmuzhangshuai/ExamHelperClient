@@ -144,6 +144,9 @@
         <!-- 默认DefaultActivity -->
         <activity android:name="com.bishe.examhelper.ui.DefaultActivity" />
 
+        <!-- 选择收藏题目CollectionListDisplayActivity -->
+        <activity android:name="com.bishe.examhelper.ui.CollectionListDisplayActivity" />
+
         <!-- 登陆LoginActivity -->
         <activity
             android:name="com.bishe.examhelper.ui.LoginActivity"
@@ -170,7 +173,29 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bishe.examhelper.ui.MainActivity" />
         </activity>
-        
+
+        <!-- 发布疑问PublishQueryActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.PublishQueryActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.QuerySquareActivity"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <meta-data
+                android:name="android.support.UI_OPTIONS"
+                android:value="splitActionBarWhenNarrow" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.QuerySquareActivity" />
+        </activity>
+
+        <!-- 疑问详情QueryDetailActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.QueryDetailActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.QuerySquareActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.QuerySquareActivity" />
+        </activity>
+
         <!-- 展示图片mageShower -->
         <activity
             android:name="com.bishe.examhelper.ui.ImageShower"

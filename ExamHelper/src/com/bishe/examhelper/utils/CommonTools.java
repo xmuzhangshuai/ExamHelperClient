@@ -2,8 +2,14 @@ package com.bishe.examhelper.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.bishe.examhelper.R;
+import com.bishe.examhelper.config.DefaultKeys;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -55,6 +61,31 @@ public class CommonTools {
 
 		return matcher.matches();
 
+	}
+
+	/**
+	 * 返回用户省市
+	 * @param context
+	 * @return
+	 */
+	public static String getLocation(Context context) {
+		String location = "";//省市
+
+		SharedPreferences locationPreferences = context.getSharedPreferences("location", Context.MODE_PRIVATE);
+		location = locationPreferences.getString(DefaultKeys.PREF_LOCATION, "北京市");
+		return location;
+	}
+
+	/**
+	 * 返回用户详细地址
+	 * @param context
+	 * @return
+	 */
+	public static String getDetailLocation(Context context) {
+		String location = "";
+		SharedPreferences locationPreferences = context.getSharedPreferences("location", Context.MODE_PRIVATE);
+		location = locationPreferences.getString(DefaultKeys.PREF_DETAIL_LOCATION, "北京市");
+		return location;
 	}
 
 }
