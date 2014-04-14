@@ -30,8 +30,8 @@ public class QueryDetailActivity extends BaseActivity {
 	private ImageView headImageView;
 	private ImageView contentImageView;
 	private TextView userNameTextView;
-	private TextView timeTextView;
 	private TextView locationTextView;
+	private TextView timeTextView;
 	private TextView letterNum;
 	private EditText myAnswerEditText;
 	private ImageView sendMyAnswer;
