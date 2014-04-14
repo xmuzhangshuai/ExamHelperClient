@@ -170,6 +170,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bishe.examhelper.ui.MainActivity" />
         </activity>
+        
+        <!-- 展示图片mageShower -->
+        <activity
+            android:name="com.bishe.examhelper.ui.ImageShower"
+            android:theme="@style/ImageScale" />
 
         <!-- ###################注册SDK使用的Activity###################### -->
         <!-- 分享编辑页 -->

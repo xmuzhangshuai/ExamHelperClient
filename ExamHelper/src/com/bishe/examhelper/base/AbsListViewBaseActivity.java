@@ -22,13 +22,7 @@ public class AbsListViewBaseActivity extends BaseActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		// applyScrollListener();
 	}
-
-	// private void applyScrollListener() {
-	// listView.setOnScrollListener(new PauseOnScrollListener(imageLoader,
-	// pauseOnScroll, pauseOnFling));
-	// }
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
