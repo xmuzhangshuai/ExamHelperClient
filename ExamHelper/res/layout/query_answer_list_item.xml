@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp" >
+
+    <ImageView
+        android:id="@+id/headImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/default_hedad_iamge" />
+
+    <TextView
+        android:id="@+id/userNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/headImage"
+        android:text="春秋风雨风晴雪"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/userNickname"
+        android:layout_alignBottom="@+id/userNickname"
+        android:layout_alignParentRight="true"
+        android:text="10分钟前"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userNickname"
+        android:layout_below="@+id/userNickname"
+        android:layout_marginTop="10dp"
+        android:textColor="#595959"
+        android:textSize="14sp" />
+
+</RelativeLayout>
