@@ -3,6 +3,7 @@ package com.bishe.examhelper.base;
 import com.bishe.examhelper.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -42,6 +43,7 @@ public abstract class BaseActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		AppManager.getInstance().addActivity(this);
+		PushAgent.getInstance(this).onAppStart();
 	}
 
 	@Override

@@ -6,8 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -19,6 +17,7 @@ import com.bishe.examhelper.config.Constants;
 import com.bishe.examhelper.service.CopyDataBase;
 import com.bishe.examhelper.service.DivideIntoGroup;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 /**   
  *    
@@ -41,6 +40,9 @@ public class GuideActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		PushAgent mPushAgent = PushAgent.getInstance(GuideActivity.this);
+		mPushAgent.enable();
+
 		super.onCreate(savedInstanceState);
 
 		// 发送策略定义了用户由统计分析SDK产生的数据发送回友盟服务器的频率。

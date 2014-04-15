@@ -1,9 +1,5 @@
 package com.bishe.examhelper.base;
 
-import com.bishe.examhelper.R;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Dialog;
@@ -13,6 +9,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
+
+import com.bishe.examhelper.R;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 /**   
 *    
@@ -40,6 +40,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		AppManager.getInstance().addActivity(this);
+		PushAgent.getInstance(this).onAppStart();
 	}
 
 	@Override
