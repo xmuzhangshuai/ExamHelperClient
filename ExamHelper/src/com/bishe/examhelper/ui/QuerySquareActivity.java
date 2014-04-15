@@ -2,8 +2,10 @@ package com.bishe.examhelper.ui;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,17 +43,24 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.AbsListViewBaseActivity;
 import com.bishe.examhelper.customerwidget.JazzyViewPager;
 import com.bishe.examhelper.customerwidget.JazzyViewPager.TransitionEffect;
+import com.bishe.examhelper.utils.CommonTools;
+import com.bishe.examhelper.utils.DateTimeTools;
+import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.ImageTools;
 import com.bishe.examhelper.utils.OutlineContainer;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.jsonobjects.JQuerys;
+import com.jsonobjects.JUser;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 /**
  * 类名称：QuerySquareActivity
@@ -60,7 +70,8 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  *
  */
 public class QuerySquareActivity extends AbsListViewBaseActivity {
-	private DisplayImageOptions options; // DisplayImageOptions是用于设置图片显示的类
+	private DisplayImageOptions headImageOptions; // DisplayImageOptions是用于设置图片显示的类
+	private DisplayImageOptions queryImageOptions; // DisplayImageOptions是用于设置图片显示的类
 	private PullToRefreshListView queryListView;// queryListview
 
 	// ============== 广告切换 ===================
@@ -80,10 +91,14 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 
 	// ============== 广告切换 ===================
 
-	//疑问列表
-	private LinkedList<String> mQureyListItems;
 	//疑问列表Adapter
 	private MyQueryListAdapter mQueryListAdapter;
+	//网络传回数据，包含Query和User列表
+	private LinkedList<Map<String, Object>> netData;
+	private LinkedList<JQuerys> queryList;
+	private LinkedList<JUser> userList;
+	private int START_INDEX = 0;// 从第1条开始
+	private static final int SIZE = 10;// 每次下载十条数据
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +136,15 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 
 		findViewById();
 		initView();
-		new GetDataTask().execute();
 
-		mQureyListItems = new LinkedList<String>();
+		netData = new LinkedList<Map<String, Object>>();
+		queryList = new LinkedList<JQuerys>();
+		userList = new LinkedList<JUser>();
+
+		new GetDataTask().execute(0);
+
 		mQueryListAdapter = new MyQueryListAdapter();
+		queryListView.setMode(Mode.BOTH);
 		queryListView.setAdapter(mQueryListAdapter);
 	}
 
@@ -175,11 +195,11 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		// ======= 初始化ViewPager ========
 		initAdImageViewPager();
 
-		//设置下拉刷新事件
-		queryListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		//设置上拉下拉刷新事件
+		queryListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
 			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 				// TODO Auto-generated method stub
 				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
@@ -188,8 +208,22 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				// Do work to refresh the list here.
-				new GetDataTask().execute();
+				new GetDataTask().execute(0);
 			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+				// TODO Auto-generated method stub
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+
+				// Do work to refresh the list here.
+				new GetDataTask().execute(0);
+			}
+
 		});
 
 		//点击列表项目事件
@@ -274,10 +308,18 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	 */
 	public void setImageLoaderOption() {
 		// 使用DisplayImageOptions.Builder()创建DisplayImageOptions
-		options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.default_ad)// 设置图片下载期间显示的图片
-				.showImageForEmptyUri(R.drawable.default_ad) // 设置图片Uri为空或是错误的时候显示的图片
-				.showImageOnFail(R.drawable.default_ad) // 设置图片加载或解码过程中发生错误显示的图片
+		headImageOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.default_hedad_iamge)// 设置图片下载期间显示的图片
+				.showImageForEmptyUri(R.drawable.photoconor) // 设置图片Uri为空或是错误的时候显示的图片
+				.showImageOnFail(R.drawable.photoconor) // 设置图片加载或解码过程中发生错误显示的图片
+				.displayer(new RoundedBitmapDisplayer(20)) // 设置成圆角图片  
 				.cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+				.cacheOnDisc(true) // 设置下载的图片是否缓存在SD卡中
+				.build(); // 创建配置过得DisplayImageOption对象
+
+		queryImageOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.loading)// 设置图片下载期间显示的图片
+				.showImageForEmptyUri(R.drawable.image_error) // 设置图片Uri为空或是错误的时候显示的图片
+				.showImageOnFail(R.drawable.image_error) // 设置图片加载或解码过程中发生错误显示的图片
+				.cacheInMemory(false) // 设置下载的图片是否缓存在内存中
 				.cacheOnDisc(true) // 设置下载的图片是否缓存在SD卡中
 				.build(); // 创建配置过得DisplayImageOption对象
 	}
@@ -328,30 +370,67 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	 * 创建时间：2014-4-13 下午8:25:59
 	 *
 	 */
-	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+	private class GetDataTask extends AsyncTask<Integer, Void, List<Map<String, Object>>> {
 
 		@Override
-		protected void onPreExecute() {
+		protected List<Map<String, Object>> doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
-			super.onPreExecute();
-		}
+			int startCount = params[0];
+			String url = "QueryServlet";
+			String type = null;
+			Map<String, String> map = new HashMap<String, String>();
 
-		@Override
-		protected String[] doInBackground(Void... params) {
-			// Simulates a background job.
+			//首次取数据
+			if (startCount == 0) {
+				START_INDEX = 0;
+				type = "first";
+			}
+
+			//每次取回SIZE条数据
+			else if (startCount > 0) {
+				START_INDEX = START_INDEX + SIZE;
+				type = "getMore";
+			}
+
+			map.put("size", "" + SIZE);
+			map.put("type", type);
+			map.put("startIndex", "" + START_INDEX);
+			String data;
 			try {
-
-				for (int i = 0; i < 10; i++) {
-					mQureyListItems.add("" + i);
-				}
+				data = HttpUtil.postRequest(url, map);
+				List<Map<String, Object>> temp = FastJsonTool.getObjectMap(data);
+				return temp;
 			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("答疑广场", "获取数据出错！");
 			}
 			return null;
 		}
 
 		@Override
-		protected void onPostExecute(String[] result) {
-			mQureyListItems.addFirst("新增");
+		protected void onPostExecute(List<Map<String, Object>> result) {
+			// TODO Auto-generated method stub
+
+			//如果是首次获取数据
+			if (START_INDEX == 0) {
+				netData = new LinkedList<Map<String, Object>>();
+				userList = new LinkedList<JUser>();
+				queryList = new LinkedList<JQuerys>();
+				netData.addAll(result);
+				for (Map<String, Object> map : netData) {
+					userList.add((JUser) map.get("juser"));
+					queryList.add((JQuerys) map.get("jquery"));
+				}
+			}
+			//如果是获取更多
+			else if (START_INDEX > 0) {
+				netData.addAll(result);
+				for (Map<String, Object> map : result) {
+					userList.addLast((JUser) map.get("juser"));
+					queryList.addLast((JQuerys) map.get("jquery"));
+				}
+			}
 
 			mQueryListAdapter.notifyDataSetChanged();
 
@@ -386,7 +465,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return mQureyListItems.size();
+			return netData.size();
 		}
 
 		@Override
@@ -421,9 +500,19 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
 			}
 
-			holder.queryContent.setText("1927年大革命失败后，党的工作重心开始转向农村，在农村建立革命根据地。农村革命根据地能够在中国长期存在和发展的根本原因是什么？"
-					+ mQureyListItems.get(position));
-			//			holder.userNameTextView.setText("");
+			//设置用户头像
+			imageLoader.displayImage(HttpUtil.BASE_URL + userList.get(position).getAvatar(), holder.headImageView,
+					headImageOptions, animateFirstListener);
+			//设置用户名
+			holder.userNameTextView.setText(userList.get(position).getNickname());
+			//设置时间
+			holder.timeTextView.setText(DateTimeTools.getInterval(queryList.get(position).getQuery_time()));
+			//设置地点
+			holder.locationTextView.setText(CommonTools.getDetailLocation(QuerySquareActivity.this));
+			//设置提问内容
+			holder.queryContent.setText(queryList.get(position).getQuery_stem());
+			
+			holder.userNameTextView.setText("");
 
 			holder.contentImage.setOnClickListener(new OnClickListener() {
 				@Override
@@ -445,16 +534,6 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 					Toast.makeText(QuerySquareActivity.this, "点击了我要回答！", 1).show();
 				}
 			});
-
-			/** 
-			* 显示图片 
-			* 参数1：图片URL 
-			* 参数2：显示图片的控件 
-			* 参数3：显示图片的设置 
-			* 参数4：监听器 
-			*/
-			//						imageLoader.displayImage(HttpUtil.BASE_URL + jUserList.get(position).getAvatar(), holder.headImageView,
-			//								options, animateFirstListener);
 
 			return view;
 		}
@@ -515,11 +594,12 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 
 		@Override
 		public Object instantiateItem(View container, int position) {
-			imageLoader.displayImage(mImageUrls.get(position), mImageViews[position], options);
+			imageLoader.displayImage(mImageUrls.get(position), mImageViews[position], queryImageOptions);
 			((ViewPager) container).addView(mImageViews[position], 0);
 			mViewPager.setObjectForPosition(mImageViews[position], position);
 			return mImageViews[position];
 		}
 
 	}
+
 }

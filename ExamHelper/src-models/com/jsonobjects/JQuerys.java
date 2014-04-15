@@ -1,5 +1,7 @@
 package com.jsonobjects;
 
+import java.util.Date;
+
 /**
  * Entity mapped to table QUERYS.
  */
@@ -11,6 +13,7 @@ public class JQuerys {
 	private String query_stem;
 	private Integer integral;
 	private Long adopt_user_id;
+	private String query_image;
 	private long user_id;
 	private long questionType_id;
 
@@ -21,14 +24,16 @@ public class JQuerys {
 		this.id = id;
 	}
 
-	public JQuerys(Long id, long question_id, java.util.Date query_time, String query_stem, Integer integral,
-			Long adopt_user_id, long user_id, long questionType_id) {
+	public JQuerys(Long id, long question_id, Date query_time, String query_stem, Integer integral, Long adopt_user_id,
+			String query_image, long user_id, long questionType_id) {
+		super();
 		this.id = id;
 		this.question_id = question_id;
 		this.query_time = query_time;
 		this.query_stem = query_stem;
 		this.integral = integral;
 		this.adopt_user_id = adopt_user_id;
+		this.query_image = query_image;
 		this.user_id = user_id;
 		this.questionType_id = questionType_id;
 	}
@@ -95,6 +100,14 @@ public class JQuerys {
 
 	public void setQuestionType_id(long questionType_id) {
 		this.questionType_id = questionType_id;
+	}
+
+	public String getQuery_image() {
+		return query_image;
+	}
+
+	public void setQuery_image(String query_image) {
+		this.query_image = query_image;
 	}
 
 }

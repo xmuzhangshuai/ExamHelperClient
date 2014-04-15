@@ -38,6 +38,32 @@ public class DateTimeTools {
 	}
 
 	/**
+	 * 比较和当前时间差，返回String
+	 * @param date
+	 * @return
+	 */
+	public static String getInterval(Date date) {
+		String intervalString = "";
+		// 获取时间差
+		Map<String, Integer> interval = DateTimeTools.compareTo(DateTimeTools.getCurrentDate(), date);
+		// 根据时间先后设置人性化时间提醒
+		if (interval.get("year") >= 1) {
+			intervalString = interval.get("year") + "年前";
+		} else if (interval.get("month") >= 1) {
+			intervalString = interval.get("month") + "月前";
+		} else if (interval.get("day") >= 1) {
+			intervalString = interval.get("day") + "天前";
+		} else if (interval.get("hour") >= 1) {
+			intervalString = interval.get("hour") + "小时前";
+		} else if (interval.get("minute") >= 3) {
+			intervalString = interval.get("minute") + "分钟前";
+		} else {
+			intervalString = "刚刚";
+		}
+		return intervalString;
+	}
+
+	/**
 	 * 返回当前系统时间
 	 * @return String格式
 	 */

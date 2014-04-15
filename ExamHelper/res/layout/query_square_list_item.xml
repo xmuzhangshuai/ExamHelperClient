@@ -75,7 +75,7 @@
             android:focusableInTouchMode="false"
             android:maxHeight="160dp"
             android:scaleType="fitStart"
-            android:src="@drawable/mainbackground2" />
+            android:visibility="gone" />
     </RelativeLayout>
 
     <Button

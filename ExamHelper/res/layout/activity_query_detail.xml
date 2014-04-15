@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="50dp"
+        android:layout_alignParentLeft="true"
         android:background="@drawable/send_my_answer_bg"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -36,6 +36,8 @@
             android:hint="我要回答"
             android:inputType="textMultiLine"
             android:textSize="15sp" >
+
+            <requestFocus />
         </EditText>
 
         <View
