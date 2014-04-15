@@ -24,7 +24,7 @@
         android:layout_height="fill_parent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@drawable/bg_body"
-        android:dividerHeight="2dp"
+        android:dividerHeight="1dp"
         android:drawSelectorOnTop="false"
         android:fastScrollEnabled="false"
         android:smoothScrollbar="true" />

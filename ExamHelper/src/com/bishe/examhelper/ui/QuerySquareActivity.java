@@ -2,6 +2,7 @@ package com.bishe.examhelper.ui;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +44,6 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.AbsListViewBaseActivity;
 import com.bishe.examhelper.customerwidget.JazzyViewPager;
 import com.bishe.examhelper.customerwidget.JazzyViewPager.TransitionEffect;
-import com.bishe.examhelper.utils.CommonTools;
 import com.bishe.examhelper.utils.DateTimeTools;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
@@ -53,8 +53,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.jsonobjects.JQuerys;
-import com.jsonobjects.JUser;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
@@ -95,10 +93,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	private MyQueryListAdapter mQueryListAdapter;
 	//网络传回数据，包含Query和User列表
 	private LinkedList<Map<String, Object>> netData;
-	private LinkedList<JQuerys> queryList;
-	private LinkedList<JUser> userList;
-	private int START_INDEX = 0;// 从第1条开始
-	private static final int SIZE = 10;// 每次下载十条数据
+	private int pageNow = 0;//控制页数
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +133,6 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		initView();
 
 		netData = new LinkedList<Map<String, Object>>();
-		queryList = new LinkedList<JQuerys>();
-		userList = new LinkedList<JUser>();
 
 		new GetDataTask().execute(0);
 
@@ -203,12 +196,10 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				// TODO Auto-generated method stub
 				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-
-				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-				// Do work to refresh the list here.
-				new GetDataTask().execute(0);
+				pageNow = 0;
+				new GetDataTask().execute(pageNow);
 			}
 
 			@Override
@@ -216,12 +207,10 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				// TODO Auto-generated method stub
 				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-
-				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-				// Do work to refresh the list here.
-				new GetDataTask().execute(0);
+				pageNow++;
+				new GetDataTask().execute(pageNow);
 			}
 
 		});
@@ -371,33 +360,22 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	 *
 	 */
 	private class GetDataTask extends AsyncTask<Integer, Void, List<Map<String, Object>>> {
+		int page = 0;
 
 		@Override
 		protected List<Map<String, Object>> doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
-			int startCount = params[0];
+			int page = params[0];
 			String url = "QueryServlet";
-			String type = null;
+			String type = "getQueryByPage";
 			Map<String, String> map = new HashMap<String, String>();
 
-			//首次取数据
-			if (startCount == 0) {
-				START_INDEX = 0;
-				type = "first";
-			}
-
-			//每次取回SIZE条数据
-			else if (startCount > 0) {
-				START_INDEX = START_INDEX + SIZE;
-				type = "getMore";
-			}
-
-			map.put("size", "" + SIZE);
+			map.put("pageNow", String.valueOf(page));
 			map.put("type", type);
-			map.put("startIndex", "" + START_INDEX);
 			String data;
 			try {
 				data = HttpUtil.postRequest(url, map);
+
 				List<Map<String, Object>> temp = FastJsonTool.getObjectMap(data);
 				return temp;
 			} catch (Exception e) {
@@ -411,28 +389,19 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		@Override
 		protected void onPostExecute(List<Map<String, Object>> result) {
 			// TODO Auto-generated method stub
-
-			//如果是首次获取数据
-			if (START_INDEX == 0) {
-				netData = new LinkedList<Map<String, Object>>();
-				userList = new LinkedList<JUser>();
-				queryList = new LinkedList<JQuerys>();
-				netData.addAll(result);
-				for (Map<String, Object> map : netData) {
-					userList.add((JUser) map.get("juser"));
-					queryList.add((JQuerys) map.get("jquery"));
+			if (result != null) {
+				//如果是首次获取数据
+				if (page == 0) {
+					netData = new LinkedList<Map<String, Object>>();
+					netData.addAll(result);
 				}
-			}
-			//如果是获取更多
-			else if (START_INDEX > 0) {
-				netData.addAll(result);
-				for (Map<String, Object> map : result) {
-					userList.addLast((JUser) map.get("juser"));
-					queryList.addLast((JQuerys) map.get("jquery"));
+				//如果是获取更多
+				else if (page > 0) {
+					netData.addAll(result);
 				}
-			}
 
-			mQueryListAdapter.notifyDataSetChanged();
+				mQueryListAdapter.notifyDataSetChanged();
+			}
 
 			// Call onRefreshComplete when the list has been refreshed.
 			queryListView.onRefreshComplete();
@@ -501,18 +470,27 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 			}
 
 			//设置用户头像
-			imageLoader.displayImage(HttpUtil.BASE_URL + userList.get(position).getAvatar(), holder.headImageView,
+			imageLoader.displayImage(HttpUtil.BASE_URL + netData.get(position).get("userImage"), holder.headImageView,
 					headImageOptions, animateFirstListener);
 			//设置用户名
-			holder.userNameTextView.setText(userList.get(position).getNickname());
+			holder.userNameTextView.setText((CharSequence) netData.get(position).get("username"));
 			//设置时间
-			holder.timeTextView.setText(DateTimeTools.getInterval(queryList.get(position).getQuery_time()));
-			//设置地点
-			holder.locationTextView.setText(CommonTools.getDetailLocation(QuerySquareActivity.this));
+
+			//			Timestamp.valueOf((String) netData.get(position).get("queryTime")).getTime();
+			holder.timeTextView.setText(DateTimeTools.getInterval(new Date((Long) netData.get(position)
+					.get("queryTime"))));
+			//设置地
+			holder.locationTextView.setText((CharSequence) netData.get(position).get("userLocation"));
 			//设置提问内容
-			holder.queryContent.setText(queryList.get(position).getQuery_stem());
-			
-			holder.userNameTextView.setText("");
+			holder.queryContent.setText((CharSequence) netData.get(position).get("queryContent"));
+
+			//设置疑问图片
+			if (netData.get(position).get("queryImage") != null) {
+				holder.contentImage.setVisibility(View.VISIBLE);
+				imageLoader.displayImage(HttpUtil.BASE_URL + netData.get(position).get("queryImage"),
+						holder.contentImage, queryImageOptions, animateFirstListener);
+
+			}
 
 			holder.contentImage.setOnClickListener(new OnClickListener() {
 				@Override
@@ -531,7 +509,9 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Toast.makeText(QuerySquareActivity.this, "点击了我要回答！", 1).show();
+					Intent intent = new Intent(QuerySquareActivity.this, QueryDetailActivity.class);
+					startActivity(intent);
+					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				}
 			});
 
