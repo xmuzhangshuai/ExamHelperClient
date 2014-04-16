@@ -28,7 +28,7 @@
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/headiamge"
             android:paddingTop="5dp"
-            android:text="化妆日记" />
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/time"
@@ -37,20 +37,18 @@
             android:layout_alignLeft="@+id/user_nickname"
             android:layout_below="@+id/user_nickname"
             android:layout_marginTop="2dp"
-            android:text="4小时前"
             android:textColor="#F4A460"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/time"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/time"
-            android:text="来自：厦门大学"
             android:textColor="#BFBFBF"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -82,17 +80,14 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <Button
+    <TextView
         android:id="@+id/answer_num"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@drawable/selector_answer_back"
+        android:background="@drawable/answer_bg"
         android:drawableLeft="@drawable/icon_comment"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:gravity="center_vertical|left"
         android:paddingLeft="5dp"
-        android:text="我来回答"
         android:textColor="#777777"
         android:textSize="12sp" />
 

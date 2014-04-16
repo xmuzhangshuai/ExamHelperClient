@@ -28,17 +28,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.AbsListViewBaseActivity;
@@ -94,6 +90,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	//网络传回数据，包含Query和User列表
 	private LinkedList<Map<String, Object>> netData;
 	private int pageNow = 0;//控制页数
+	private View myAdView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -131,20 +128,22 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 
 		findViewById();
 		initView();
-
 		netData = new LinkedList<Map<String, Object>>();
 
-		new GetDataTask().execute(0);
-
-		mQueryListAdapter = new MyQueryListAdapter();
 		queryListView.setMode(Mode.BOTH);
+		ListView mListView = queryListView.getRefreshableView();
+		mListView.addHeaderView(myAdView);
+		mQueryListAdapter = new MyQueryListAdapter();
 		queryListView.setAdapter(mQueryListAdapter);
+
+		new GetDataTask().execute(0);
 	}
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+
 		queryListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
 	}
 
@@ -174,8 +173,9 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		mIndicator = (LinearLayout) findViewById(R.id.index_product_images_indicator);
-		mViewPager = (JazzyViewPager) findViewById(R.id.index_ad_images_container);
+		myAdView = getLayoutInflater().inflate(R.layout.ad_viwepager, null);
+		mIndicator = (LinearLayout) myAdView.findViewById(R.id.index_product_images_indicator);
+		mViewPager = (JazzyViewPager) myAdView.findViewById(R.id.index_ad_images_container);
 		queryListView = (PullToRefreshListView) findViewById(R.id.queryList);
 	}
 
@@ -209,21 +209,12 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-				pageNow++;
-				new GetDataTask().execute(pageNow);
-			}
-
-		});
-
-		//点击列表项目事件
-		queryListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(QuerySquareActivity.this, QueryDetailActivity.class);
-				startActivity(intent);
-				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				if (pageNow >= 0) {
+					++pageNow;
+					new GetDataTask().execute(pageNow);
+				} else {
+					refreshView.onRefreshComplete();
+				}
 			}
 		});
 
@@ -300,7 +291,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		headImageOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.default_hedad_iamge)// 设置图片下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.photoconor) // 设置图片Uri为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.photoconor) // 设置图片加载或解码过程中发生错误显示的图片
-				.displayer(new RoundedBitmapDisplayer(20)) // 设置成圆角图片  
+				.displayer(new RoundedBitmapDisplayer(10)) // 设置成圆角图片  
 				.cacheInMemory(true) // 设置下载的图片是否缓存在内存中
 				.cacheOnDisc(true) // 设置下载的图片是否缓存在SD卡中
 				.build(); // 创建配置过得DisplayImageOption对象
@@ -308,7 +299,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		queryImageOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.loading)// 设置图片下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.image_error) // 设置图片Uri为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.image_error) // 设置图片加载或解码过程中发生错误显示的图片
-				.cacheInMemory(false) // 设置下载的图片是否缓存在内存中
+				.cacheInMemory(true) // 设置下载的图片是否缓存在内存中
 				.cacheOnDisc(true) // 设置下载的图片是否缓存在SD卡中
 				.build(); // 创建配置过得DisplayImageOption对象
 	}
@@ -365,7 +356,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		@Override
 		protected List<Map<String, Object>> doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
-			int page = params[0];
+			page = params[0];
 			String url = "QueryServlet";
 			String type = "getQueryByPage";
 			Map<String, String> map = new HashMap<String, String>();
@@ -397,6 +388,9 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				}
 				//如果是获取更多
 				else if (page > 0) {
+					if (result.size() < 10) {
+						pageNow = -1;
+					}
 					netData.addAll(result);
 				}
 
@@ -428,7 +422,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 			public TextView userNameTextView;
 			public TextView timeTextView;
 			public TextView locationTextView;
-			public Button answerNum;
+			public TextView answerNum;
 		}
 
 		@Override
@@ -450,7 +444,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
 			final ViewHolder holder;
@@ -462,12 +456,32 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				holder.userNameTextView = (TextView) view.findViewById(R.id.user_nickname);
 				holder.timeTextView = (TextView) view.findViewById(R.id.time);
 				holder.locationTextView = (TextView) view.findViewById(R.id.location);
-				holder.answerNum = (Button) view.findViewById(R.id.answer_num);
+				holder.answerNum = (TextView) view.findViewById(R.id.answer_num);
 				holder.contentImage = (ImageView) view.findViewById(R.id.content_image);
 				view.setTag(holder); // 给View添加一个格外的数据 
 			} else {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
 			}
+
+			view.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(QuerySquareActivity.this, QueryDetailActivity.class);
+					intent.putExtra("queryID", String.valueOf(netData.get(position).get("queryId")));
+					intent.putExtra("userImage", String.valueOf(netData.get(position).get("userImage")));
+					intent.putExtra("username", String.valueOf(netData.get(position).get("username")));
+					intent.putExtra("userLocation", String.valueOf(netData.get(position).get("userLocation")));
+					intent.putExtra("queryContent", String.valueOf(netData.get(position).get("queryContent")));
+					intent.putExtra("userID", String.valueOf(netData.get(position).get("userID")));
+					intent.putExtra("queryTime",
+							DateTimeTools.getInterval(new Date((Long) netData.get(position).get("queryTime"))));
+					intent.putExtra("queryImage", (String) netData.get(position).get("queryImage"));
+					startActivity(intent);
+					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+				}
+			});
 
 			//设置用户头像
 			imageLoader.displayImage(HttpUtil.BASE_URL + netData.get(position).get("userImage"), holder.headImageView,
@@ -475,8 +489,6 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 			//设置用户名
 			holder.userNameTextView.setText((CharSequence) netData.get(position).get("username"));
 			//设置时间
-
-			//			Timestamp.valueOf((String) netData.get(position).get("queryTime")).getTime();
 			holder.timeTextView.setText(DateTimeTools.getInterval(new Date((Long) netData.get(position)
 					.get("queryTime"))));
 			//设置地
@@ -489,31 +501,33 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 				holder.contentImage.setVisibility(View.VISIBLE);
 				imageLoader.displayImage(HttpUtil.BASE_URL + netData.get(position).get("queryImage"),
 						holder.contentImage, queryImageOptions, animateFirstListener);
-
+			} else {
+				holder.contentImage.setVisibility(View.GONE);
 			}
 
 			holder.contentImage.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Toast.makeText(QuerySquareActivity.this, "点击了图片！", 1).show();
-					Bitmap bitmap = ImageTools.drawableToBitmap(QuerySquareActivity.this.getResources().getDrawable(
-							R.drawable.mainbackground2));
+					Bitmap bitmap = ImageTools.drawableToBitmap(holder.contentImage.getDrawable());
 					Intent intent = new Intent(QuerySquareActivity.this, ImageShower.class);
 					intent.putExtra("imageToLoad", ImageTools.bitmapToBytes(bitmap));
 					startActivity(intent);
+					bitmap.recycle();
 				}
 			});
 
-			holder.answerNum.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Intent intent = new Intent(QuerySquareActivity.this, QueryDetailActivity.class);
-					startActivity(intent);
-					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-				}
-			});
+			holder.answerNum.setText(String.valueOf(netData.get(position).get("queryAnswerNum")) + "条回答");
+
+			//			holder.answerNum.setOnClickListener(new OnClickListener() {
+			//				@Override
+			//				public void onClick(View v) {
+			//					// TODO Auto-generated method stub
+			//					Intent intent = new Intent(QuerySquareActivity.this, QueryDetailActivity.class);
+			//					startActivity(intent);
+			//					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+			//				}
+			//			});
 
 			return view;
 		}

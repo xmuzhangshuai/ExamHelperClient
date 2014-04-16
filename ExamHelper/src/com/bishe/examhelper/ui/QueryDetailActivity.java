@@ -2,8 +2,11 @@ package com.bishe.examhelper.ui;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -12,35 +15,54 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
+import com.bishe.examhelper.utils.DateTimeTools;
+import com.bishe.examhelper.utils.FastJsonTool;
+import com.bishe.examhelper.utils.HttpUtil;
+import com.bishe.examhelper.utils.ImageTools;
+import com.jsonobjects.JAnswerQuery;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class QueryDetailActivity extends BaseActivity {
 	/***********VIEW************/
+	private View queryContentView;
+	private View footerView;
 	private ImageView headImageView;
 	private ImageView contentImageView;
 	private TextView userNameTextView;
 	private TextView locationTextView;
 	private TextView timeTextView;
 	private TextView letterNum;
+	private TextView queryTextView;
 	private EditText myAnswerEditText;
 	private ImageView sendMyAnswer;
 	private ListView mListView;
+	private ImageView noAnswer;
 
 	/**************用户变量**************/
 	public static final int NUM = 250;
-	List<String> queryAnswerList;
+	List<Map<String, Object>> queryAnswerList;
 	QueryAnswerListAdapter mAdapter;
+	private int queryID;
+	private int userID;
+	private String userImage;
+	private String userName;
+	private String userLocation;
+	private String queryContent;
+	private String queryTime;
+	private String queryImage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,26 +70,46 @@ public class QueryDetailActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_query_detail);
 
-		queryAnswerList = new ArrayList<String>();
+		queryAnswerList = new ArrayList<Map<String, Object>>();
+
+		//从Intent获取数据
+		getIntentData();
 
 		findViewById();
 		initView();
 
-		new GetDadaTask().execute();
-
-		mListView.addHeaderView(getLayoutInflater().inflate(R.layout.query_content_view, null));
+		mListView.addHeaderView(queryContentView);
+		mListView.addFooterView(footerView);
 		mAdapter = new QueryAnswerListAdapter();
-		mListView.setAdapter(mAdapter);
+
+		new GetDadaTask().execute();
+	}
+
+	private void getIntentData() {
+		queryID = Integer.parseInt(getIntent().getStringExtra("queryID"));
+		userImage = getIntent().getStringExtra("userImage");
+		userName = getIntent().getStringExtra("username");
+		userLocation = getIntent().getStringExtra("userLocation");
+		queryContent = getIntent().getStringExtra("queryContent");
+		queryTime = getIntent().getStringExtra("queryTime");
+		queryImage = getIntent().getStringExtra("queryImage");
+		userID = Integer.parseInt(getIntent().getStringExtra("userID"));
 	}
 
 	@Override
 	protected void findViewById() {
 		// TODO Auto-generated method stub
-		headImageView = (ImageView) findViewById(R.id.headiamge);
-		contentImageView = (ImageView) findViewById(R.id.contentImage);
-		userNameTextView = (TextView) findViewById(R.id.user_nickname);
-		timeTextView = (TextView) findViewById(R.id.time);
-		locationTextView = (TextView) findViewById(R.id.location);
+		queryContentView = getLayoutInflater().inflate(R.layout.query_content_view, null);
+		headImageView = (ImageView) queryContentView.findViewById(R.id.headiamge);
+		contentImageView = (ImageView) queryContentView.findViewById(R.id.contentImage);
+		userNameTextView = (TextView) queryContentView.findViewById(R.id.user_nickname);
+		timeTextView = (TextView) queryContentView.findViewById(R.id.time);
+		locationTextView = (TextView) queryContentView.findViewById(R.id.location);
+		queryTextView = (TextView) queryContentView.findViewById(R.id.content);
+
+		footerView = getLayoutInflater().inflate(R.layout.answer_query_footerview, null);
+		noAnswer = (ImageView) footerView.findViewById(R.id.no_answer);
+
 		letterNum = (TextView) findViewById(R.id.letterNum);
 		myAnswerEditText = (EditText) findViewById(R.id.myAnswer);
 		sendMyAnswer = (ImageView) findViewById(R.id.sendAnswer);
@@ -117,6 +159,32 @@ public class QueryDetailActivity extends BaseActivity {
 				}
 			}
 		});
+
+		//设置用户头像
+		imageLoader.displayImage(HttpUtil.BASE_URL + userImage, headImageView, ImageTools.getHeadImageOptions(20),
+				new AnimateFirstDisplayListener());
+
+		if (queryImage != null) {
+			contentImageView.setVisibility(View.VISIBLE);
+			imageLoader.displayImage(HttpUtil.BASE_URL + queryImage, contentImageView, ImageTools.getImageOptions(),
+					new AnimateFirstDisplayListener());
+		} else {
+			contentImageView.setVisibility(View.GONE);
+		}
+		userNameTextView.setText(userName);
+		locationTextView.setText(userLocation);
+		timeTextView.setText(queryTime);
+		queryTextView.setText(queryContent);
+
+		//设置评论事件
+		sendMyAnswer.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new AnswerToNet().execute();
+			}
+		});
 	}
 
 	/**
@@ -132,8 +200,16 @@ public class QueryDetailActivity extends BaseActivity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
-			for (int i = 0; i < 20; i++) {
-				queryAnswerList.add("怎么样才能藏好一个人，二不让他时不时的跑出来在心里捣乱？怎么样才能藏好一个人，二不让他时不时的跑出来在心里捣乱？" + i);
+			String url = "QueryServlet";
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("queryID", String.valueOf(queryID));
+			map.put("type", "getAnswerList");
+			try {
+				String jsonString = HttpUtil.postRequest(url, map);
+				queryAnswerList = FastJsonTool.getObjectMap(jsonString);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			return null;
 		}
@@ -141,8 +217,57 @@ public class QueryDetailActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
+			mListView.setAdapter(mAdapter);
 			mAdapter.notifyDataSetChanged();
+
+			if (queryAnswerList.size() > 0) {
+				noAnswer.setVisibility(View.GONE);
+			} else {
+				noAnswer.setVisibility(View.VISIBLE);
+			}
 			super.onPostExecute(result);
+		}
+	}
+
+	/**
+	 * 
+	 * 类名称：AnswerToNet
+	 * 类描述：评论异步任务
+	 * 创建人： 张帅
+	 * 创建时间：2014-4-16 下午11:16:40
+	 *
+	 */
+	class AnswerToNet extends AsyncTask<Void, Void, String> {
+
+		@Override
+		protected String doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			String url = "QueryServlet";
+			Map<String, String> map = new HashMap<String, String>();
+			JAnswerQuery jAnswerQuery = new JAnswerQuery(null, myAnswerEditText.getText().toString(),
+					DateTimeTools.getCurrentDate(), userID, queryID);
+			map.put("type", "addAnswer");
+			map.put("answerQuery", FastJsonTool.createJsonString(jAnswerQuery));
+			try {
+				return HttpUtil.postRequest(url, map);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if (result.equals("ok")) {
+				Toast.makeText(QueryDetailActivity.this, "回答成功", 1).show();
+				new GetDadaTask().execute();
+			} else {
+				Toast.makeText(QueryDetailActivity.this, "网络出现异常", 1).show();
+			}
+
 		}
 	}
 
@@ -199,21 +324,15 @@ public class QueryDetailActivity extends BaseActivity {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
 			}
 
-			holder.answerTextView.setText(queryAnswerList.get(position));
-			//			holder.userNameTextView.setText(jUserList.get(position).getNickname());
-			/** 
-			* 显示图片 
-			* 参数1：图片url 
-			* 参数2：显示图片的控件 
-			* 参数3：显示图片的设置 
-			* 参数4：监听器 
-			*/
-			//			imageLoader.displayImage(HttpUtil.BASE_URL + jUserList.get(position).getAvatar(), holder.headImageView,
-			//					options, animateFirstListener);
+			holder.answerTextView.setText((CharSequence) queryAnswerList.get(position).get("answerContent"));
+			holder.userNameTextView.setText((CharSequence) queryAnswerList.get(position).get("userName"));
+			holder.timeTextView.setText(DateTimeTools.getInterval(new Date((Long) queryAnswerList.get(position).get(
+					"answerTime"))));
+			imageLoader.displayImage(HttpUtil.BASE_URL + queryAnswerList.get(position).get("headImage"),
+					holder.headImageView, ImageTools.getHeadImageOptions(10), animateFirstListener);
 
 			return view;
 		}
-
 	}
 
 	/** 

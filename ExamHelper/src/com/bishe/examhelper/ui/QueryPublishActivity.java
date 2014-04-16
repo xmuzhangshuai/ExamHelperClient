@@ -1,13 +1,17 @@
 package com.bishe.examhelper.ui;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -41,9 +46,12 @@ import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.entities.User;
 import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.utils.CommonTools;
+import com.bishe.examhelper.utils.DateTimeTools;
+import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.ImageTools;
 import com.bishe.examhelper.utils.NetworkUtils;
+import com.jsonobjects.JQuerys;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -78,6 +86,9 @@ public class QueryPublishActivity extends BaseActivity {
 	private Question mQuestion;
 	private Bitmap contentBitmap;
 	private String mPhotoPath;
+	private long questionID;
+	private String queryImageUrl;
+	private long questionTypeID;
 
 	// 提醒用户网络状况有异常
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -143,7 +154,6 @@ public class QueryPublishActivity extends BaseActivity {
 			} else {
 				publish();
 			}
-			Toast.makeText(QueryPublishActivity.this, "发布", 1).show();
 			break;
 		case R.id.action_takephoto:
 			Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
@@ -211,12 +221,7 @@ public class QueryPublishActivity extends BaseActivity {
 		//拍照
 		else if (requestCode == 1) {
 			try {
-				//				Bundle extras = data.getExtras();
-				//				contentBitmap = (Bitmap) extras.get("data");
-				//				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				//				contentBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 				contentBitmap = BitmapFactory.decodeFile(mPhotoPath, null);
-				contentBitmap.compress(Bitmap.CompressFormat.JPEG, 50, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: handle exception  
@@ -230,6 +235,8 @@ public class QueryPublishActivity extends BaseActivity {
 				/**********如果是单选题**********/
 				if (object.getClass().getSimpleName().equals(SingleChoice.class.getSimpleName())) {
 					SingleChoice singleChoice = (SingleChoice) object;
+					questionTypeID = 1;
+					questionID = singleChoice.getId();
 					content = "单项选择题：" + "\n" + "    " + singleChoice.getQuestion_stem() + "\n" + "A."
 							+ singleChoice.getOptionA() + "\n" + "B." + singleChoice.getOptionB() + "\n" + "C."
 							+ singleChoice.getOptionC() + "\n" + "D." + singleChoice.getOptionD();
@@ -238,6 +245,8 @@ public class QueryPublishActivity extends BaseActivity {
 				/**********如果是多选题**********/
 				if (object.getClass().getSimpleName().equals(MultiChoice.class.getSimpleName())) {
 					MultiChoice multiChoice = (MultiChoice) object;
+					questionID = multiChoice.getId();
+					questionTypeID = 2;
 					content = "多项选择题：" + "\n" + "    " + multiChoice.getQuestion_stem() + "\n" + "A."
 							+ multiChoice.getOptionA() + "\n" + "B." + multiChoice.getOptionB() + "\n" + "C."
 							+ multiChoice.getOptionC() + "\n" + "D." + multiChoice.getOptionD();
@@ -246,6 +255,8 @@ public class QueryPublishActivity extends BaseActivity {
 				/**********如果是材料题**********/
 				if (object.getClass().getSimpleName().equals(MaterialAnalysis.class.getSimpleName())) {
 					MaterialAnalysis materialAnalysis = (MaterialAnalysis) object;
+					questionID = materialAnalysis.getId();
+					questionTypeID = 3;
 					content = "材料分析题：" + "\n" + "    " + materialAnalysis.getMaterial().substring(0, 200) + "...";
 				}
 				queryConent.setText(content);
@@ -340,14 +351,29 @@ public class QueryPublishActivity extends BaseActivity {
 	 */
 	private void publish() {
 		UserService userService = UserService.getInstance(QueryPublishActivity.this);
-		if (userService.getCurrentUserID() == 1) {
+		if (userService.getCurrentUser() == null) {
 			Toast.makeText(QueryPublishActivity.this, "请先登录", 1).show();
 		} else {
 			/**************上传图片****************/
 			if (mPhotoPath != null) {
 				uploadImage(mPhotoPath);
+			} else {
+				pushToNet();
 			}
+
 		}
+	}
+
+	/**
+	 * 把疑问信息发送到网络
+	 */
+	private void pushToNet() {
+
+		JQuerys jQuerys = new JQuerys(null, questionID, DateTimeTools.getCurrentDate(), queryConent.getText()
+				.toString(), 0, null, queryImageUrl, UserService.getInstance(QueryPublishActivity.this)
+				.getCurrentUserID(), questionTypeID);
+		String jsonString = FastJsonTool.createJsonString(jQuerys);
+		new PublishQueryTask().execute(jsonString);
 	}
 
 	/**
@@ -358,6 +384,8 @@ public class QueryPublishActivity extends BaseActivity {
 		/**********如果是单选题**********/
 		if (mQuestion.getQuestion_type().equals(SingleChoice.class.getSimpleName())) {
 			SingleChoice singleChoice = (SingleChoice) mQuestion;
+			questionID = singleChoice.getId();
+			questionTypeID = 1;
 			content = "单项选择题：" + "\n" + "    " + singleChoice.getQuestion_stem() + "\n" + "A."
 					+ singleChoice.getOptionA() + "\n" + "B." + singleChoice.getOptionB() + "\n" + "C."
 					+ singleChoice.getOptionC() + "\n" + "D." + singleChoice.getOptionD();
@@ -366,6 +394,8 @@ public class QueryPublishActivity extends BaseActivity {
 		/**********如果是多选题**********/
 		if (mQuestion.getQuestion_type().equals(MultiChoice.class.getSimpleName())) {
 			MultiChoice multiChoice = (MultiChoice) mQuestion;
+			questionID = multiChoice.getId();
+			questionTypeID = 2;
 			content = "多项选择题：" + "\n" + "    " + multiChoice.getQuestion_stem() + "\n" + "A."
 					+ multiChoice.getOptionA() + "\n" + "B." + multiChoice.getOptionB() + "\n" + "C."
 					+ multiChoice.getOptionC() + "\n" + "D." + multiChoice.getOptionD();
@@ -374,21 +404,53 @@ public class QueryPublishActivity extends BaseActivity {
 		/**********如果是材料题**********/
 		if (mQuestion.getQuestion_type().equals(MaterialAnalysis.class.getSimpleName())) {
 			MaterialAnalysis materialAnalysis = (MaterialAnalysis) mQuestion;
+			questionID = materialAnalysis.getId();
+			questionTypeID = 3;
 			content = "材料分析题：" + "\n" + "    " + materialAnalysis.getMaterial().substring(0, 200) + "...";
 		}
 		queryConent.setText(content);
 	}
 
 	/**
-	 * 上传头像
+	 * 上传图片
 	 */
 	public void uploadImage(String filePath) {
+		String tempPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/zoom.jpg";
+		File tempFile = new File(tempPath);
+		if (!tempFile.exists()) {
+			try {
+				tempFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		Bitmap bitmap = ImageTools.getPhotoFromSDCard(filePath);
+		FileOutputStream fileOutputStream = null;
+		try {
+			fileOutputStream = new FileOutputStream(tempPath);
+			if (bitmap != null) {
+				if (bitmap.compress(Bitmap.CompressFormat.JPEG, 20, fileOutputStream)) {
+					try {
+						fileOutputStream.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		UserService userService = UserService.getInstance(QueryPublishActivity.this);
 		String uploadHost = HttpUtil.BASE_URL + "ImageUploadServlet";
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("userID", String.valueOf(userService.getCurrentUserID()));
 		params.addBodyParameter("type", "queryImage");
-		params.addBodyParameter(filePath.replace("/", ""), new File(filePath));
+		params.addBodyParameter(tempPath.replace("/", ""), new File(tempPath));
 		uploadMethod(params, uploadHost);
 	}
 
@@ -417,7 +479,8 @@ public class QueryPublishActivity extends BaseActivity {
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
 				// 重新更新用户内容
-				Log.i("上传图片", responseInfo.toString());
+				queryImageUrl = responseInfo.result;
+				pushToNet();
 			}
 
 			@Override
@@ -448,5 +511,53 @@ public class QueryPublishActivity extends BaseActivity {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 
+	 * 类名称：PublishQueryTask
+	 * 类描述：发布疑问道网络异步任务
+	 * 创建人： 张帅
+	 * 创建时间：2014-4-16 下午3:03:36
+	 *
+	 */
+	class PublishQueryTask extends AsyncTask<String, Void, Void> {
+		ProgressDialog dialog = new ProgressDialog(QueryPublishActivity.this);
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			dialog.setMessage("请稍候，正在发布疑问...");
+			dialog.setCancelable(false);
+			dialog.show();
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			String url = "QueryServlet";
+			String jsonString = params[0];
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("type", "addquery");
+			map.put("query", jsonString);
+			try {
+				HttpUtil.postRequest(url, map);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			dialog.cancel();
+			Toast.makeText(QueryPublishActivity.this, "发布成功！", 1).show();
+			QueryPublishActivity.this.finish();
+		}
+
 	}
 }

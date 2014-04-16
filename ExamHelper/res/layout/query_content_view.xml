@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    android:layout_marginBottom="20dp"
     android:background="@drawable/round_corner_rectangle_bg"
     android:orientation="vertical"
     android:padding="3dp" >
@@ -56,16 +57,18 @@
     <TextView
         android:id="@+id/content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp" />
 
     <ImageView
         android:id="@+id/contentImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
         android:adjustViewBounds="true"
-        android:maxHeight="250dp"
+        android:maxHeight="400dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/person_center_background02" />
+        android:visibility="gone" />
 
 </LinearLayout>

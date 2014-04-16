@@ -4,20 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.bishe.examhelper.customerwidget.JazzyViewPager
-        android:id="@+id/index_ad_images_container"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:background="@color/white" >
-    </com.bishe.examhelper.customerwidget.JazzyViewPager>
-
-    <LinearLayout
-        android:id="@+id/index_product_images_indicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal" />
-
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/queryList"
         android:layout_width="fill_parent"
