@@ -161,7 +161,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case R.id.action_query:
-			startActivity(new Intent(QuerySquareActivity.this, PublishQueryActivity.class));
+			startActivity(new Intent(QuerySquareActivity.this, QueryPublishActivity.class));
 			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			return true;
 

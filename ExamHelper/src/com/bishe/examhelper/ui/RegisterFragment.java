@@ -273,7 +273,7 @@ public class RegisterFragment extends BaseV4Fragment {
 				JUser net = FastJsonTool.getObject(jsonString, JUser.class);
 				User local = userService.NetUserToUser(net);
 				local.setCurrent(true);
-				String location = locationPreferences.getString(DefaultKeys.PREF_LOCATION, "北京市");
+				String location = locationPreferences.getString(DefaultKeys.PREF_DETAIL_LOCATION, "北京市");
 				local.setArea(location);
 				userService.saveUser(local);
 

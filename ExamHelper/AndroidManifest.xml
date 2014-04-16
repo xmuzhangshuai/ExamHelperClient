@@ -179,7 +179,7 @@
 
         <!-- 发布疑问PublishQueryActivity -->
         <activity
-            android:name="com.bishe.examhelper.ui.PublishQueryActivity"
+            android:name="com.bishe.examhelper.ui.QueryPublishActivity"
             android:parentActivityName="com.bishe.examhelper.ui.QuerySquareActivity"
             android:uiOptions="splitActionBarWhenNarrow" >
             <meta-data

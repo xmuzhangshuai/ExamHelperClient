@@ -114,7 +114,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 				locationEditor.putString(DefaultKeys.PREF_DETAIL_LOCATION, detailLoc);
 				locationEditor.commit();
 				if (user != null) {
-					user.setArea(loc);
+					user.setArea(detailLoc);
 					userService.updateUser(user);
 					new Thread() {
 						public void run() {

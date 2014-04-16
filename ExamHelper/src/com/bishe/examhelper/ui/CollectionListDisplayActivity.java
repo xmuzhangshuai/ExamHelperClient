@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.adapters.QuestionDisplayAdapter;
@@ -40,6 +40,7 @@ public class CollectionListDisplayActivity extends BaseActivity {
 	List<Object> questionList;// 题目列表
 	List<Collection> collectionList;// 收藏题目列表
 	QuestionDisplayAdapter questionDisplayAdapter;
+	ImageView noCollection;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class CollectionListDisplayActivity extends BaseActivity {
 	protected void findViewById() {
 		// TODO Auto-generated method stub
 		mListView = (ListView) findViewById(R.id.collection_list);
+		noCollection = (ImageView) findViewById(R.id.no_collection);
 	}
 
 	@Override
@@ -78,12 +80,6 @@ public class CollectionListDisplayActivity extends BaseActivity {
 
 			}
 		});
-	}
-
-	@Override
-	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		Toast.makeText(CollectionListDisplayActivity.this, "请选择题目", 1).show();
 	}
 
 	/**
@@ -156,8 +152,14 @@ public class CollectionListDisplayActivity extends BaseActivity {
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			questionDisplayAdapter = new QuestionDisplayAdapter(CollectionListDisplayActivity.this, questionList);
-			mListView.setAdapter(questionDisplayAdapter);
+			if (questionList.size() > 0) {
+				questionDisplayAdapter = new QuestionDisplayAdapter(CollectionListDisplayActivity.this, questionList);
+				mListView.setAdapter(questionDisplayAdapter);
+			} else {
+				mListView.setVisibility(View.GONE);
+				noCollection.setVisibility(View.VISIBLE);
+			}
+
 		}
 
 	}

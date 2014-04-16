@@ -344,7 +344,7 @@ public class LoginFragment extends BaseV4Fragment {
 					User user = userService.NetUserToUser(jUser);
 					user.setCurrent(true);
 					String location = locationPreferences.getString(
-							DefaultKeys.PREF_LOCATION, "北京市");
+							DefaultKeys.PREF_DETAIL_LOCATION, "北京市");
 					user.setArea(location);
 					userService.saveUser(user);
 					userService.updateUserToNet();

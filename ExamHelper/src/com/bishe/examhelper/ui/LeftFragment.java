@@ -502,7 +502,6 @@ public class LeftFragment extends BaseV4Fragment {
 
 			@Override
 			public void onFailure(HttpException error, String msg) {
-				System.out.println(error.getExceptionCode() + ":" + msg);
 				Toast.makeText(getActivity(), "头像上传失败！" + msg, 1).show();
 			}
 		});
