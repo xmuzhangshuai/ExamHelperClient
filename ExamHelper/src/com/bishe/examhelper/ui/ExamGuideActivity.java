@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,16 +20,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseFragmentActivity;
 import com.bishe.examhelper.config.DefaultKeys;
-import com.bishe.examhelper.test.ExamGuide;
-import com.bishe.examhelper.test.ExamGuideType;
+import com.bishe.examhelper.config.DefaultValues;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.NetworkUtils;
+import com.jsonobjects.JExamGuide;
+import com.jsonobjects.JExamGuideType;
 
 /**   
 *    
@@ -102,6 +101,7 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		getActionBar().setTitle("考试指南");
+		getActionBar().setIcon(R.drawable.function_exam_guide);
 
 	}
 
@@ -124,33 +124,17 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 	@SuppressLint("ValidFragment")
 	public class ExamGuideFragment extends ListFragment {
 		private View rootView;
-		List<ExamGuideType> examGuideTypes;// 考试指南目录
+		List<JExamGuideType> examGuideTypes;// 考试指南目录
 		private List<String> dataList;// 考试指南目录题目
-		NetData netData = new NetData();// 异步任务
-
-		@Override
-		public void onCreate(Bundle savedInstanceState) {
-			// TODO Auto-generated method stub
-			super.onCreate(savedInstanceState);
-			// 执行异步任务，从网络获取数据
-			netData.execute();
-		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
 			rootView = inflater.inflate(R.layout.fragment_mock_exam_guide, container, false);
+
+			// 执行异步任务，从网络获取数据
+			new NetData().execute();
 			return rootView;
-		}
-
-		@Override
-		public void onDestroy() {
-			// TODO Auto-generated method stub
-			super.onDestroy();
-			if (!netData.isCancelled()) {
-				netData.cancel(true);
-			}
-
 		}
 
 		@Override
@@ -161,7 +145,7 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 
 			// 将点击的条目传给ExamGuideListFragment
 			Bundle bundle = new Bundle();
-			bundle.putLong(DefaultKeys.BUNDLE_EXAMGUIDE_TYPE, examGuideTypes.get(position).getId());
+			bundle.putInt(DefaultKeys.BUNDLE_EXAMGUIDE_TYPE, examGuideTypes.get(position).getId());
 			examGuideListFragment.setArguments(bundle);
 
 			// 设置切换效果
@@ -180,50 +164,45 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 		* 创建人：张帅  
 		*
 		 */
-		private class NetData extends AsyncTask<Void, Void, List<ExamGuideType>> {
-			Dialog dialog;
+		private class NetData extends AsyncTask<Void, Void, List<JExamGuideType>> {
 
 			@Override
-			protected void onPreExecute() {
+			protected List<JExamGuideType> doInBackground(Void... params) {
 				// TODO Auto-generated method stub
-				super.onPreExecute();
-				dialog = showProgressDialog();
-			}
-
-			@Override
-			protected List<ExamGuideType> doInBackground(Void... params) {
-				// TODO Auto-generated method stub
-				examGuideTypes = new ArrayList<ExamGuideType>();
+				examGuideTypes = new ArrayList<JExamGuideType>();
 				// 如果网络可用
 				if (NetworkUtils.isNetworkAvailable(getActivity())) {
 					try {
-						String jsonString = HttpUtil.getRequest("ExamGuideServlet");
-						examGuideTypes = FastJsonTool.getObjectList(jsonString, ExamGuideType.class);
+						String url = "ExamGuideServlet";
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("type", "getExamGuideTypeList");
+						map.put("subjectId", String.valueOf(DefaultValues.SUBJECT_ID));
+						String jsonString = HttpUtil.postRequest(url, map);
+						examGuideTypes = FastJsonTool.getObjectList(jsonString, JExamGuideType.class);
 						return examGuideTypes;
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+				} else {
+					NetworkUtils.networkStateTips(ExamGuideActivity.this);
 				}
 				return null;
 			}
 
 			@Override
-			protected void onPostExecute(List<ExamGuideType> result) {
+			protected void onPostExecute(List<JExamGuideType> result) {
 				// TODO Auto-generated method stub
 				/**
 				 * 如果网络返回结果不为空，则显示成列表
 				 */
 				if (result != null) {
 					dataList = new ArrayList<String>();
-					for (ExamGuideType examGuideType : result) {
-						dataList.add(examGuideType.getType());
+					for (JExamGuideType examGuideType : result) {
+						dataList.add(examGuideType.getTypeName());
 					}
 					setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.exam_guide_list_item,
 							R.id.list_item_title, dataList));
-
-					dialog.cancel();
-				} else {
 				}
 			}
 		}
@@ -245,9 +224,9 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 	 */
 	@SuppressLint("ValidFragment")
 	public class ExamGuideListFragment extends ListFragment {
-		private Long examGuideTypeId;// 考试指南目录ID
+		private int examGuideTypeId;// 考试指南目录ID
 		private View rootView;
-		private List<ExamGuide> examGuideList;// 考试指南子目录列表
+		private List<JExamGuide> jExamGuideList;// 考试指南子目录列表
 		private List<String> titleList;// 题目列表
 		NetData netData = new NetData();// 异步任务
 
@@ -255,8 +234,8 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
 			super.onCreate(savedInstanceState);
-			examGuideTypeId = getArguments().getLong(DefaultKeys.BUNDLE_EXAMGUIDE_TYPE, 1);
-			new NetData().execute();
+			examGuideTypeId = getArguments().getInt(DefaultKeys.BUNDLE_EXAMGUIDE_TYPE, 1);
+			netData.execute();
 		}
 
 		@Override
@@ -283,7 +262,11 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 		@Override
 		public void onListItemClick(ListView l, View v, int position, long id) {
 			// TODO Auto-generated method stub
-			Toast.makeText(getActivity(), examGuideList.get(position).getContent().substring(0, 20), 1).show();
+			Intent intent = new Intent(ExamGuideActivity.this, ExamGuideWebActivity.class);
+			intent.putExtra("examGuideUrl", jExamGuideList.get(position).getUrl());
+			intent.putExtra("title", jExamGuideList.get(position).getTitle());
+			startActivity(intent);
+			overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 		}
 
 		/**
@@ -294,20 +277,21 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 		* 创建人：张帅  
 		*
 		 */
-		private class NetData extends AsyncTask<Void, Void, List<ExamGuide>> {
+		private class NetData extends AsyncTask<Void, Void, List<JExamGuide>> {
 
 			@Override
-			protected List<ExamGuide> doInBackground(Void... params) {
+			protected List<JExamGuide> doInBackground(Void... params) {
 				// TODO Auto-generated method stub
-				examGuideList = new ArrayList<ExamGuide>();
+				jExamGuideList = new ArrayList<JExamGuide>();
 				// 如果网络可用
 				if (NetworkUtils.isNetworkAvailable(getActivity())) {
 					try {
 						Map<String, String> map = new HashMap<String, String>();
-						map.put("ExamGuideTypeId", examGuideTypeId.toString());
+						map.put("type", "getExamGuideList");
+						map.put("examTypeId", String.valueOf(examGuideTypeId));
 						String jsonString = HttpUtil.postRequest("ExamGuideServlet", map);
-						examGuideList = FastJsonTool.getObjectList(jsonString, ExamGuide.class);
-						return examGuideList;
+						jExamGuideList = FastJsonTool.getObjectList(jsonString, JExamGuide.class);
+						return jExamGuideList;
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -317,15 +301,15 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 			}
 
 			@Override
-			protected void onPostExecute(List<ExamGuide> result) {
+			protected void onPostExecute(List<JExamGuide> result) {
 				// TODO Auto-generated method stub
 				/**
 				 * 如果网络返回结果不为空，则显示成列表
 				 */
 				if (result != null) {
 					titleList = new ArrayList<String>();
-					for (ExamGuide examGuide : result) {
-						titleList.add(examGuide.getTitle());
+					for (JExamGuide jExamGuide : result) {
+						titleList.add(jExamGuide.getTitle());
 					}
 					setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.exam_guide_list_item,
 							R.id.list_item_title, titleList));

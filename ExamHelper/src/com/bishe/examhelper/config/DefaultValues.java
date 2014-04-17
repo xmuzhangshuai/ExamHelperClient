@@ -17,6 +17,9 @@ public class DefaultValues {
 	// 微信开发平台注册应用的AppID
 	public static final String WEIXIN_APP_ID = "wx967daebe835fbeac";
 
+	//科目ID
+	public static final int SUBJECT_ID = 2;
+
 	// 微信图文分享必须设置一个url
 	public static final String WEIXIN_CONTENT_URL = "http://www.umeng.com/social";
 

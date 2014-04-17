@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/my_answer_list_background"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:padding="4dp" >
 
     <TextView
         android:id="@+id/myAnswerContent"
@@ -11,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/myAnswerTime"
         android:textSize="14sp" />
 

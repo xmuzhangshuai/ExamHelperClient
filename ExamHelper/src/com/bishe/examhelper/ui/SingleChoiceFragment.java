@@ -105,11 +105,6 @@ public class SingleChoiceFragment extends BaseQuestionFragment implements View.O
 		mysingleChoice = (SingleChoice) getArguments().getSerializable(DefaultKeys.BUNDLE_SINGLE_CHOICE);
 		questionNumber = (int) getArguments().getInt(DefaultKeys.BUNDLE_SINGLE_CHOICE_POSITION, 1);
 
-		// 如果是展示模式，接收用户答案
-		if (model.equals(DefaultValues.MODEL_DISPLAY)) {
-			myAnswer = (String) getArguments().getString(DefaultKeys.KEY_USER_ANSWER, "A");
-			myCheckedId = getIdByString(myAnswer);
-		}
 	}
 
 	@Override
@@ -118,6 +113,12 @@ public class SingleChoiceFragment extends BaseQuestionFragment implements View.O
 		super.onCreateView(inflater, container, savedInstanceState);
 		rootView = getActivity().getLayoutInflater().inflate(R.layout.single_choice, null, false);
 		findViewById();
+
+		// 如果是展示模式，接收用户答案
+		if (model.equals(DefaultValues.MODEL_DISPLAY)) {
+			myAnswer = (String) getArguments().getString(DefaultKeys.KEY_USER_ANSWER, "A");
+			myCheckedId = getIdByString(myAnswer);
+		}
 
 		// 初始化题目内容
 		initQuestionView();
@@ -474,8 +475,8 @@ public class SingleChoiceFragment extends BaseQuestionFragment implements View.O
 		case 'C':
 			return this.optionC.getId();
 		case 'D':
+			return this.optionD.getId();
 		}
-		return this.optionD.getId();
 	}
 
 }

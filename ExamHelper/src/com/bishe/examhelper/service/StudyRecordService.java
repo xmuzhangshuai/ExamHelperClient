@@ -60,7 +60,9 @@ public class StudyRecordService {
 	 * @return
 	 */
 	public List<StudyRecord> loadAllStudyRecords() {
-		return studyRecordDao.loadAll();
+		return studyRecordDao.queryBuilder()
+				.where(Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID()))
+				.orderDesc(Properties.Record_time).list();
 	}
 
 	/**

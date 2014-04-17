@@ -174,7 +174,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		((ImageButton) findViewById(R.id.ivTitleBtnLeft)).setOnClickListener(this);
 		((ImageButton) findViewById(R.id.ivTitleBtnRigh)).setOnClickListener(this);
 		mTitleName = (TextView) findViewById(R.id.ivTitleName);
-		mTitleName.setText(getResources().getString(R.string.app_name));
+		mTitleName.setText("¿¼ÑÐÕþÖÎ");
 
 	}
 

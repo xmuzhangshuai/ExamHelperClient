@@ -208,6 +208,10 @@
                 android:value="com.bishe.examhelper.ui.QuerySquareActivity" />
         </activity>
 
+        <!-- 考试指南Web页面ExamGuideWebActivity -->
+        <activity android:name="com.bishe.examhelper.ui.ExamGuideWebActivity" >
+        </activity>
+
         <!-- 展示图片mageShower -->
         <activity
             android:name="com.bishe.examhelper.ui.ImageShower"

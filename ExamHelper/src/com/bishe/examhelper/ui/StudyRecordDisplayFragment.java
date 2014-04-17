@@ -222,6 +222,8 @@ public class StudyRecordDisplayFragment extends BaseV4Fragment {
 
 			// 传入一个singleChoice对象
 			localBundle.putSerializable(DefaultKeys.BUNDLE_SINGLE_CHOICE, singleChoice);
+			localBundle.putString(DefaultKeys.KEY_QUESTION_MODEL, DefaultValues.MODEL_DISPLAY);
+			localBundle.putString(DefaultKeys.KEY_USER_ANSWER, studyRecordList.get(position).getMy_answer());
 			localBundle.putInt(DefaultKeys.BUNDLE_SINGLE_CHOICE_POSITION, position + 1);
 			mySingleChoiceFragment.setArguments(localBundle);
 
@@ -239,6 +241,8 @@ public class StudyRecordDisplayFragment extends BaseV4Fragment {
 
 			// 传入一个multiChoice对象
 			localBundle.putSerializable(DefaultKeys.BUNDLE_MULTI_CHOICE, multiChoice);
+			localBundle.putString(DefaultKeys.KEY_QUESTION_MODEL, DefaultValues.MODEL_DISPLAY);
+			localBundle.putString(DefaultKeys.KEY_USER_ANSWER, studyRecordList.get(position).getMy_answer());
 			localBundle.putInt(DefaultKeys.BUNDLE_SINGLE_CHOICE_POSITION, position + 1);
 			multiChoiceFragment.setArguments(localBundle);
 
@@ -336,7 +340,7 @@ public class StudyRecordDisplayFragment extends BaseV4Fragment {
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			questionDisplayAdapter = new QuestionDisplayAdapter(getActivity(), questionList);
+			questionDisplayAdapter = new QuestionDisplayAdapter(getActivity(), questionList, studyRecordList);
 			mListView.setAdapter(questionDisplayAdapter);
 		}
 

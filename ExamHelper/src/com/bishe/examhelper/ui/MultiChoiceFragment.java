@@ -103,10 +103,6 @@ public class MultiChoiceFragment extends BaseQuestionFragment implements android
 		myMultiChoice = (MultiChoice) getArguments().getSerializable(DefaultKeys.BUNDLE_MULTI_CHOICE);
 		questionNumber = (int) getArguments().getInt(DefaultKeys.BUNDLE_MULTI_CHOICE_POSITION, 1);
 
-		// 如果是展示模式，接收用户答案
-		if (model.equals(DefaultValues.MODEL_DISPLAY)) {
-			myAnswer = (String) getArguments().getString(DefaultKeys.KEY_USER_ANSWER, "A");
-		}
 	}
 
 	@Override
@@ -115,6 +111,11 @@ public class MultiChoiceFragment extends BaseQuestionFragment implements android
 		super.onCreateView(inflater, container, savedInstanceState);
 		rootView = getActivity().getLayoutInflater().inflate(R.layout.multi_choice, null, false);
 		findViewById();
+
+		// 如果是展示模式，接收用户答案
+		if (model.equals(DefaultValues.MODEL_DISPLAY)) {
+			myAnswer = (String) getArguments().getString(DefaultKeys.KEY_USER_ANSWER, "A");
+		}
 		initQuestionView();
 
 		// 如果是练习模式,或者是展示模式，则显示按钮区
