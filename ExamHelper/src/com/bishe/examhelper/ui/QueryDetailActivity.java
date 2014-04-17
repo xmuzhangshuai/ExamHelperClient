@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
+import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.utils.DateTimeTools;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
@@ -56,7 +57,6 @@ public class QueryDetailActivity extends BaseActivity {
 	List<Map<String, Object>> queryAnswerList;
 	QueryAnswerListAdapter mAdapter;
 	private int queryID;
-	private int userID;
 	private String userImage;
 	private String userName;
 	private String userLocation;
@@ -93,7 +93,6 @@ public class QueryDetailActivity extends BaseActivity {
 		queryContent = getIntent().getStringExtra("queryContent");
 		queryTime = getIntent().getStringExtra("queryTime");
 		queryImage = getIntent().getStringExtra("queryImage");
-		userID = Integer.parseInt(getIntent().getStringExtra("userID"));
 	}
 
 	@Override
@@ -245,7 +244,8 @@ public class QueryDetailActivity extends BaseActivity {
 			String url = "QueryServlet";
 			Map<String, String> map = new HashMap<String, String>();
 			JAnswerQuery jAnswerQuery = new JAnswerQuery(null, myAnswerEditText.getText().toString(),
-					DateTimeTools.getCurrentDate(), userID, queryID);
+					DateTimeTools.getCurrentDate(), UserService.getInstance(QueryDetailActivity.this)
+							.getCurrentUserID(), queryID);
 			map.put("type", "addAnswer");
 			map.put("answerQuery", FastJsonTool.createJsonString(jAnswerQuery));
 			try {
@@ -262,12 +262,12 @@ public class QueryDetailActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			if (result.equals("ok")) {
+				myAnswerEditText.setText("");
 				Toast.makeText(QueryDetailActivity.this, "回答成功", 1).show();
 				new GetDadaTask().execute();
 			} else {
 				Toast.makeText(QueryDetailActivity.this, "网络出现异常", 1).show();
 			}
-
 		}
 	}
 

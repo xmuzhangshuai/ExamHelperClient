@@ -10,7 +10,7 @@
         android:background="@color/white"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        android:paddingBottom="50dp"
+        android:paddingBottom="60dp"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
         android:paddingTop="3dp"

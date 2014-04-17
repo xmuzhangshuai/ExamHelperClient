@@ -96,7 +96,7 @@ public class CenterFragment extends Fragment {
 					intent = new Intent(getActivity(), StatisticActivity.class);
 					break;
 				case 11:// 如果点击了我的答疑
-					intent = new Intent(getActivity(), DefaultActivity.class);
+					intent = new Intent(getActivity(), MyQueryActivity.class);
 					break;
 				case 12:// 如果点击了答疑广场
 					intent = new Intent(getActivity(), QuerySquareActivity.class);

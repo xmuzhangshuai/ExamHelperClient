@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/my_answer_list_background"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/myAnswerContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/myAnswerTime"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/myAnswerTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textColor="#F4A460"
+        android:textSize="12sp" />
+
+</RelativeLayout>

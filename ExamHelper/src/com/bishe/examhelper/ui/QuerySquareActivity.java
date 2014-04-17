@@ -8,8 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +48,7 @@ import com.bishe.examhelper.utils.DateTimeTools;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.ImageTools;
+import com.bishe.examhelper.utils.NetworkUtils;
 import com.bishe.examhelper.utils.OutlineContainer;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -91,6 +96,17 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	private LinkedList<Map<String, Object>> netData;
 	private int pageNow = 0;//控制页数
 	private View myAdView;
+
+	// 提醒用户网络状况有异常
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			if (!NetworkUtils.isNetworkAvailable(QuerySquareActivity.this)) {
+				NetworkUtils.networkStateTips(QuerySquareActivity.this);
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +159,21 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
+		// 注册广播
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		QuerySquareActivity.this.registerReceiver(broadcastReceiver, intentFilter);
 		queryListView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		// 卸载广播
+		if (broadcastReceiver != null) {
+			QuerySquareActivity.this.unregisterReceiver(broadcastReceiver);
+		}
 	}
 
 	@Override
@@ -209,12 +238,9 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-				if (pageNow >= 0) {
+				if (pageNow >= 0)
 					++pageNow;
-					new GetDataTask().execute(pageNow);
-				} else {
-					refreshView.onRefreshComplete();
-				}
+				new GetDataTask().execute(pageNow);
 			}
 		});
 
@@ -383,6 +409,9 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 			if (result != null) {
 				//如果是首次获取数据
 				if (page == 0) {
+					if (result.size() < 10) {
+						pageNow = -1;
+					}
 					netData = new LinkedList<Map<String, Object>>();
 					netData.addAll(result);
 				}
@@ -518,16 +547,6 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 			});
 
 			holder.answerNum.setText(String.valueOf(netData.get(position).get("queryAnswerNum")) + "条回答");
-
-			//			holder.answerNum.setOnClickListener(new OnClickListener() {
-			//				@Override
-			//				public void onClick(View v) {
-			//					// TODO Auto-generated method stub
-			//					Intent intent = new Intent(QuerySquareActivity.this, QueryDetailActivity.class);
-			//					startActivity(intent);
-			//					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-			//				}
-			//			});
 
 			return view;
 		}

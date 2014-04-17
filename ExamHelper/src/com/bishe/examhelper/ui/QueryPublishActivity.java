@@ -26,7 +26,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -89,6 +88,7 @@ public class QueryPublishActivity extends BaseActivity {
 	private long questionID;
 	private String queryImageUrl;
 	private long questionTypeID;
+	ProgressDialog dialog;
 
 	// 提醒用户网络状况有异常
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -111,6 +111,7 @@ public class QueryPublishActivity extends BaseActivity {
 		mQuestion = (Question) getIntent().getSerializableExtra("question");
 
 		user = UserService.getInstance(QueryPublishActivity.this).getCurrentUser();
+		dialog = new ProgressDialog(QueryPublishActivity.this);
 
 		findViewById();
 		initView();
@@ -350,6 +351,9 @@ public class QueryPublishActivity extends BaseActivity {
 	 * 发布疑问
 	 */
 	private void publish() {
+		dialog.setMessage("请稍候，正在发布疑问...");
+		dialog.setCancelable(false);
+		dialog.show();
 		UserService userService = UserService.getInstance(QueryPublishActivity.this);
 		if (userService.getCurrentUser() == null) {
 			Toast.makeText(QueryPublishActivity.this, "请先登录", 1).show();
@@ -522,15 +526,12 @@ public class QueryPublishActivity extends BaseActivity {
 	 *
 	 */
 	class PublishQueryTask extends AsyncTask<String, Void, Void> {
-		ProgressDialog dialog = new ProgressDialog(QueryPublishActivity.this);
 
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-			dialog.setMessage("请稍候，正在发布疑问...");
-			dialog.setCancelable(false);
-			dialog.show();
+
 		}
 
 		@Override
@@ -554,7 +555,9 @@ public class QueryPublishActivity extends BaseActivity {
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			dialog.cancel();
+			if (dialog != null) {
+				dialog.cancel();
+			}
 			Toast.makeText(QueryPublishActivity.this, "发布成功！", 1).show();
 			QueryPublishActivity.this.finish();
 		}

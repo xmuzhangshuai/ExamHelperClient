@@ -135,9 +135,18 @@
                 android:value="com.bishe.examhelper.ui.MainActivity" />
         </activity>
 
-        <!-- 统计分析StatisticActivity -->
+        <!-- 答疑广场QuerySquareActivity -->
         <activity
             android:name="com.bishe.examhelper.ui.QuerySquareActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
+        <!-- 我的答疑MyQueryActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.MyQueryActivity"
             android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
