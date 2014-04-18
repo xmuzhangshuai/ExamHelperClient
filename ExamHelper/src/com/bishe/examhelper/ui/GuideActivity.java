@@ -17,7 +17,6 @@ import com.bishe.examhelper.config.Constants;
 import com.bishe.examhelper.service.CopyDataBase;
 import com.bishe.examhelper.service.DivideIntoGroup;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.PushAgent;
 
 /**   
  *    
@@ -40,8 +39,6 @@ public class GuideActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		PushAgent mPushAgent = PushAgent.getInstance(GuideActivity.this);
-		mPushAgent.enable();
 
 		super.onCreate(savedInstanceState);
 

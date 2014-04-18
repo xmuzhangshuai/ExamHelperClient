@@ -881,9 +881,6 @@ int id display_stem 0x7f070074
 int id divider 0x7f070184
 int id dlCon 0x7f07018f
 int id dragImageView 0x7f070081
-int id editText1 0x7f0700d3
-int id editText2 0x7f0700d4
-int id editText3 0x7f0700d5
 int id editText_mynote 0x7f070020
 int id edit_btn 0x7f070022
 int id email 0x7f070085
@@ -963,6 +960,7 @@ int id myAnswerView 0x7f0700c0
 int id my_answer 0x7f0700a6
 int id my_score 0x7f070041
 int id myquery_pager 0x7f070049
+int id newPass 0x7f0700d4
 int id next_question 0x7f0700b1
 int id nickname 0x7f070031
 int id no_answer 0x7f070063
@@ -970,6 +968,7 @@ int id no_collection 0x7f070027
 int id note_content 0x7f07007a
 int id note_listView 0x7f07008d
 int id note_time 0x7f0700c1
+int id oldPass 0x7f0700d3
 int id optionA 0x7f0700b8
 int id optionB 0x7f0700b9
 int id optionC 0x7f0700ba
@@ -1027,6 +1026,7 @@ int id rotatedown 0x7f070016
 int id rotateup 0x7f070015
 int id scrollview 0x7f07000b
 int id search_text 0x7f07010b
+int id secPass 0x7f0700d5
 int id section 0x7f070106
 int id security 0x7f0701c9
 int id selected_view 0x7f07001c

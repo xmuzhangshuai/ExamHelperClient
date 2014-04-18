@@ -1245,9 +1245,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int divider=0x7f070184;
         public static final int dlCon=0x7f07018f;
         public static final int dragImageView=0x7f070081;
-        public static final int editText1=0x7f0700d3;
-        public static final int editText2=0x7f0700d4;
-        public static final int editText3=0x7f0700d5;
         public static final int editText_mynote=0x7f070020;
         public static final int edit_btn=0x7f070022;
         public static final int email=0x7f070085;
@@ -1327,6 +1324,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int my_answer=0x7f0700a6;
         public static final int my_score=0x7f070041;
         public static final int myquery_pager=0x7f070049;
+        public static final int newPass=0x7f0700d4;
         public static final int next_question=0x7f0700b1;
         public static final int nickname=0x7f070031;
         public static final int no_answer=0x7f070063;
@@ -1334,6 +1332,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int note_content=0x7f07007a;
         public static final int note_listView=0x7f07008d;
         public static final int note_time=0x7f0700c1;
+        public static final int oldPass=0x7f0700d3;
         public static final int optionA=0x7f0700b8;
         public static final int optionB=0x7f0700b9;
         public static final int optionC=0x7f0700ba;
@@ -1391,6 +1390,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int rotateup=0x7f070015;
         public static final int scrollview=0x7f07000b;
         public static final int search_text=0x7f07010b;
+        public static final int secPass=0x7f0700d5;
         public static final int section=0x7f070106;
         public static final int security=0x7f0701c9;
         public static final int selected_view=0x7f07001c;

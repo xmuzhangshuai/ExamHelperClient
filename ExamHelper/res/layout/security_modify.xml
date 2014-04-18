@@ -5,33 +5,36 @@
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/oldPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginTop="5dp"
+        android:ems="10"
         android:hint="请输入旧密码"
-        android:inputType="textPassword" >
+        android:inputType="textPassword"
+        android:maxLength="12" >
 
         <requestFocus />
     </EditText>
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/newPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:ems="10"
-         android:layout_marginTop="5dp"
-         android:hint="输入新密码"
-        android:inputType="textPassword" />
+        android:hint="输入新密码"
+        android:inputType="textPassword"
+        android:maxLength="12" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/secPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:ems="10"
-         android:layout_marginTop="5dp"
-         android:hint="第二次输入新密码"
-        android:inputType="textPassword" />
+        android:hint="第二次输入新密码"
+        android:inputType="textPassword"
+        android:maxLength="12" />
 
 </LinearLayout>
