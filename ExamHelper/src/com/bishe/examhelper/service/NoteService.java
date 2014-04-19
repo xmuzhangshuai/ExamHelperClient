@@ -434,6 +434,43 @@ public class NoteService {
 	}
 
 	/**
+	 * 获取该用户的笔记列表
+	 */
+	public void getNoteListFromNetByUser() {
+		UserService userService = UserService.getInstance(appContext);
+		if (userService.getCurrentUserID() > 1) {
+			List<JNote> jNotes = new ArrayList<JNote>();
+			String url = "NoteServlet";
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("type", "getNoteListByUser");
+			map.put("userId", String.valueOf(userService.getCurrentUserID()));
+			try {
+				String jsonString = HttpUtil.postRequest(url, map);
+				jNotes = FastJsonTool.getObjectList(jsonString, JNote.class);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			List<Note> notes = loadAllNotesByTime();
+			if (notes != null) {
+				for (Note note : notes) {
+					deleteNote(note);
+				}
+			}
+
+			if (jNotes != null) {
+				for (JNote jNote : jNotes) {
+					Note note = new Note(jNote.getId(), jNote.getQuestion_id(), jNote.getNote_time(),
+							jNote.getNote_content(), jNote.getUser_id(), jNote.getQuestionType_id());
+					this.noteDao.insert(note);
+				}
+			}
+		}
+
+	}
+
+	/**
 	 * 往服务器传入笔记列表
 	 * @param notes
 	 */

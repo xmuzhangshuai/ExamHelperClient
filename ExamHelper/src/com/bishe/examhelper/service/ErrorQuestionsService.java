@@ -1,5 +1,6 @@
 package com.bishe.examhelper.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +17,11 @@ import com.bishe.examhelper.dao.QuestionTypeDao;
 import com.bishe.examhelper.entities.ErrorQuestions;
 import com.bishe.examhelper.entities.MaterialAnalysis;
 import com.bishe.examhelper.entities.MultiChoice;
-import com.bishe.examhelper.entities.QuestionType;
 import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.utils.DateTimeTools;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
-import com.tencent.plus.n;
+import com.jsonobjects.JErrorQuestions;
 
 public class ErrorQuestionsService {
 	private static final String TAG = ErrorQuestionsService.class.getSimpleName();
@@ -76,7 +76,8 @@ public class ErrorQuestionsService {
 	 */
 	public List<ErrorQuestions> loadCurrentQuestions() {
 		return errorQuestionsDao.queryBuilder()
-				.where(Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).list();
+				.where(Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID()))
+				.orderDesc(Properties.Error_time).list();
 	}
 
 	/**
@@ -188,9 +189,9 @@ public class ErrorQuestionsService {
 				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.SINGLE_CHOICE))
 				.unique().getId();
 
-		com.jsonobjects.JErrorQuestions netErrorQuestions = new com.jsonobjects.JErrorQuestions(null,
-				singleChoice.getId(), DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext)
-						.getCurrentUserID(), questionTypeId, singleChoice.getSection_id());
+		JErrorQuestions netErrorQuestions = new JErrorQuestions(null, singleChoice.getId(),
+				DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext).getCurrentUserID(),
+				questionTypeId, singleChoice.getSection_id());
 
 		String jsonString = FastJsonTool.createJsonString(netErrorQuestions);
 		String URL = "ErrorQuestionServlet";
@@ -215,9 +216,9 @@ public class ErrorQuestionsService {
 				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name.eq(DefaultValues.MULTI_CHOICE))
 				.unique().getId();
 
-		com.jsonobjects.JErrorQuestions netErrorQuestions = new com.jsonobjects.JErrorQuestions(null,
-				multiChoice.getId(), DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext)
-						.getCurrentUserID(), questionTypeId, multiChoice.getSection_id());
+		JErrorQuestions netErrorQuestions = new JErrorQuestions(null, multiChoice.getId(),
+				DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext).getCurrentUserID(),
+				questionTypeId, multiChoice.getSection_id());
 
 		String jsonString = FastJsonTool.createJsonString(netErrorQuestions);
 		String URL = "ErrorQuestionServlet";
@@ -243,9 +244,9 @@ public class ErrorQuestionsService {
 				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
 						.eq(DefaultValues.MATERIAL_ANALYSIS)).unique().getId();
 
-		com.jsonobjects.JErrorQuestions netErrorQuestions = new com.jsonobjects.JErrorQuestions(null,
-				materialAnalysis.getId(), DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext)
-						.getCurrentUserID(), questionTypeId, materialAnalysis.getSection_id());
+		JErrorQuestions netErrorQuestions = new JErrorQuestions(null, materialAnalysis.getId(),
+				DateTimeTools.getCurrentDate(), 1, UserService.getInstance(appContext).getCurrentUserID(),
+				questionTypeId, materialAnalysis.getSection_id());
 
 		String jsonString = FastJsonTool.createJsonString(netErrorQuestions);
 		String URL = "ErrorQuestionServlet";
@@ -258,6 +259,47 @@ public class ErrorQuestionsService {
 			e.printStackTrace();
 			Log.e("网络", "材料分析错题插入到网络服务器数据库");
 		}
+	}
+
+	/**
+	 * 获取该用户的错题列表
+	 */
+	public void getNoteListFromNetByUser() {
+		UserService userService = UserService.getInstance(appContext);
+		if (userService.getCurrentUserID() > 1) {
+			List<JErrorQuestions> jErrorQuestions = new ArrayList<JErrorQuestions>();
+			String url = "ErrorQuestionServlet";
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("type", "getErrorListByUser");
+			map.put("userId", String.valueOf(userService.getCurrentUserID()));
+
+			try {
+				String jsonString = HttpUtil.postRequest(url, map);
+				System.out.println(jsonString);
+				jErrorQuestions = FastJsonTool.getObjectList(jsonString, JErrorQuestions.class);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			List<ErrorQuestions> errorQuestionList = loadCurrentQuestions();
+			if (errorQuestionList != null) {
+				for (ErrorQuestions errorQuestion : errorQuestionList) {
+					deleteErrorQuestions(errorQuestion);
+				}
+			}
+
+			if (jErrorQuestions != null) {
+				for (JErrorQuestions jErrorQuestion : jErrorQuestions) {
+					ErrorQuestions errorQuestion = new ErrorQuestions(jErrorQuestion.getId(),
+							jErrorQuestion.getQuestion_id(), jErrorQuestion.getError_time(),
+							jErrorQuestion.getError_num(), jErrorQuestion.getUser_id(),
+							jErrorQuestion.getQuestionType_id(), jErrorQuestion.getSection_id());
+					this.errorQuestionsDao.insert(errorQuestion);
+				}
+			}
+		}
+
 	}
 
 }

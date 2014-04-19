@@ -418,6 +418,44 @@ public class CollectionService {
 	}
 
 	/**
+	 * 获取该用户的收藏列表
+	 */
+	public void getNoteListFromNetByUser() {
+		UserService userService = UserService.getInstance(appContext);
+		if (userService.getCurrentUserID() > 1) {
+			List<JCollection> jCollections = new ArrayList<JCollection>();
+			String url = "CollectionServlet";
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("type", "getCollectionListByUser");
+			map.put("userId", String.valueOf(userService.getCurrentUserID()));
+			try {
+				String jsonString = HttpUtil.postRequest(url, map);
+				jCollections = FastJsonTool.getObjectList(jsonString, JCollection.class);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			List<Collection> collections = loadCurrentCollections();
+			if (collections != null) {
+				for (Collection collection : collections) {
+					deleteCollection(collection);
+				}
+			}
+
+			if (jCollections != null) {
+				for (JCollection jCollection : jCollections) {
+					Collection collection = new Collection(jCollection.getId(), jCollection.getQuestion_id(),
+							jCollection.getCollect_time(), jCollection.getUser_id(), jCollection.getQuestionType_id(),
+							jCollection.getSection_id());
+					this.mCollectionDao.insert(collection);
+				}
+			}
+		}
+
+	}
+
+	/**
 	 * 在查找或者插入实体后，删除实体
 	 */
 	public boolean deleteCollection() {

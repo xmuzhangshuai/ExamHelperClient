@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class MyNoteListFragment extends BaseV4Fragment {
 	/*********Views*******/
 	private View rootView;
 	private ListView myNoteListView;
+	private ImageView noNote;
 
 	/********±‰¡ø*******/
 	private List<Note> noteList;
@@ -56,6 +58,7 @@ public class MyNoteListFragment extends BaseV4Fragment {
 	protected void findViewById() {
 		// TODO Auto-generated method stub
 		myNoteListView = (ListView) rootView.findViewById(R.id.note_listView);
+		noNote = (ImageView) rootView.findViewById(R.id.no_note);
 	}
 
 	@Override
@@ -174,8 +177,16 @@ public class MyNoteListFragment extends BaseV4Fragment {
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			NoteListAdapter mAdapter = new NoteListAdapter();
-			myNoteListView.setAdapter(mAdapter);
+			if (noteList.size() > 0) {
+				NoteListAdapter mAdapter = new NoteListAdapter();
+				myNoteListView.setAdapter(mAdapter);
+				myNoteListView.setVisibility(View.VISIBLE);
+				noNote.setVisibility(View.GONE);
+			} else {
+				myNoteListView.setVisibility(View.GONE);
+				noNote.setVisibility(View.VISIBLE);
+			}
+
 		}
 
 	}
