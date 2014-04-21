@@ -201,7 +201,7 @@ public class StudyRecordDisplayFragment extends BaseV4Fragment {
 			@Override
 			public void run() {
 				StudyRecordService studyRecordService = StudyRecordService.getInstance(getActivity());
-				studyRecordService.studyRecordDao.deleteAll();
+				studyRecordService.deleteRecordsOfCurrentUser();
 			}
 		}).start();
 	}

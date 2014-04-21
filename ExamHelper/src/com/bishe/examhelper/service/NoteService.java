@@ -461,7 +461,7 @@ public class NoteService {
 
 			if (jNotes != null) {
 				for (JNote jNote : jNotes) {
-					Note note = new Note(jNote.getId(), jNote.getQuestion_id(), jNote.getNote_time(),
+					Note note = new Note(null, jNote.getQuestion_id(), jNote.getNote_time(),
 							jNote.getNote_content(), jNote.getUser_id(), jNote.getQuestionType_id());
 					this.noteDao.insert(note);
 				}

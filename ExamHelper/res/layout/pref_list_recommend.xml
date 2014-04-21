@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_list_item_bot"
+    android:baselineAligned="false"
+    android:background="@drawable/selector_list_item_mid"
     android:gravity="center_vertical"
     android:minHeight="?android:listPreferredItemHeight"
     android:paddingRight="?android:scrollbarSize" >

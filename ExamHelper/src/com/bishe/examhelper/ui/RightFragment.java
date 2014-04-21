@@ -1,6 +1,7 @@
 package com.bishe.examhelper.ui;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.config.DefaultSetting;
+import com.bishe.examhelper.service.UserService;
 import com.umeng.fb.FeedbackAgent;
 
 /**   
@@ -39,6 +41,31 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 
 	SharedPreferences sharedPref;
 	FeedbackAgent agent;
+	OnSignOutPressedListener mListener;
+
+	/**
+	 * 
+	 * 类名称：OnSignOutPressedListener
+	 * 类描述：回调接口，通知Activity更新LeftFragment
+	 * 创建人： 张帅
+	 * 创建时间：2014-4-19 下午4:56:02
+	 *
+	 */
+	public interface OnSignOutPressedListener {
+		public void onSignOutPressed();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		try {
+			mListener = (OnSignOutPressedListener) activity;
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new ClassCastException(activity.toString() + " must implement OnSignOutPressedListener");
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +91,9 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 
 		/*******给精彩推荐绑定事件**********/
 		findPreference(DefaultKeys.KEY_PREF_COMMENT).setOnPreferenceClickListener(this);
+
+		/*******给注销登陆绑定事件**********/
+		findPreference(DefaultKeys.KEY_SING_OUT).setOnPreferenceClickListener(this);
 
 		/*******给科目切换绑定事件**********/
 		findPreference(DefaultKeys.KEY_PREF_COURSE_SWITCH).setOnPreferenceClickListener(this);
@@ -92,6 +122,9 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 
 		/*******给精彩推荐绑定事件**********/
 		findPreference(DefaultKeys.KEY_PREF_COMMENT).setOnPreferenceClickListener(this);
+
+		/*******给注销登陆绑定事件**********/
+		findPreference(DefaultKeys.KEY_SING_OUT).setOnPreferenceClickListener(this);
 
 		/*******给科目切换绑定事件**********/
 		findPreference(DefaultKeys.KEY_PREF_COURSE_SWITCH).setOnPreferenceClickListener(this);
@@ -172,6 +205,29 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 		/************如果点击了科目切换************/
 		else if (preference.getKey().equals(DefaultKeys.KEY_PREF_COURSE_SWITCH)) {
 			Toast.makeText(getActivity(), "点击了科目切换", 1).show();
+		}
+
+		/************如果点击了注销登陆************/
+		else if (preference.getKey().equals(DefaultKeys.KEY_SING_OUT)) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setIcon(R.drawable.icon_warning).setTitle("温馨提示").setMessage("是否注销？")
+					.setPositiveButton("是", new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							UserService userService = UserService.getInstance(getActivity());
+							// 注销
+							userService.singOut();
+							mListener.onSignOutPressed();
+						}
+					}).setNegativeButton("否", new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+						}
+					}).show();
 		}
 
 		return true;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -165,6 +166,14 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 		*
 		 */
 		private class NetData extends AsyncTask<Void, Void, List<JExamGuideType>> {
+			Dialog dialog;
+
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				dialog = showProgressDialog();
+			}
 
 			@Override
 			protected List<JExamGuideType> doInBackground(Void... params) {
@@ -204,6 +213,7 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 					setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.exam_guide_list_item,
 							R.id.list_item_title, dataList));
 				}
+				dialog.show();
 			}
 		}
 	}

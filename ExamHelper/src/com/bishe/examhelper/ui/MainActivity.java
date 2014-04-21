@@ -25,6 +25,7 @@ import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.slidingmenu.BaseSlidingFragmentActivity;
 import com.bishe.examhelper.slidingmenu.SlidingMenu;
 import com.bishe.examhelper.ui.PersonalModifyDialogFragment.OnUserInfoChangedListener;
+import com.bishe.examhelper.ui.RightFragment.OnSignOutPressedListener;
 import com.umeng.analytics.MobclickAgent;
 
 /**   
@@ -41,7 +42,7 @@ import com.umeng.analytics.MobclickAgent;
  * @version    
  *    
  */
-public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener, OnUserInfoChangedListener {
+public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener, OnUserInfoChangedListener,OnSignOutPressedListener {
 
 	protected SlidingMenu mSlidingMenu;
 	private TextView mTitleName;
@@ -250,6 +251,15 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		LeftFragment leftFragment = (LeftFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_left_fragment);
 		leftFragment.onResume();
+	}
+
+	/**
+	 * 当按了注销按钮之后
+	 */
+	@Override
+	public void onSignOutPressed() {
+		// TODO Auto-generated method stub
+		getSupportFragmentManager().findFragmentById(R.id.main_left_fragment).onResume();
 	}
 
 }

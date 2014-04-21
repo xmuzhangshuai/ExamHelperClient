@@ -275,7 +275,6 @@ public class ErrorQuestionsService {
 
 			try {
 				String jsonString = HttpUtil.postRequest(url, map);
-				System.out.println(jsonString);
 				jErrorQuestions = FastJsonTool.getObjectList(jsonString, JErrorQuestions.class);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -291,9 +290,8 @@ public class ErrorQuestionsService {
 
 			if (jErrorQuestions != null) {
 				for (JErrorQuestions jErrorQuestion : jErrorQuestions) {
-					ErrorQuestions errorQuestion = new ErrorQuestions(jErrorQuestion.getId(),
-							jErrorQuestion.getQuestion_id(), jErrorQuestion.getError_time(),
-							jErrorQuestion.getError_num(), jErrorQuestion.getUser_id(),
+					ErrorQuestions errorQuestion = new ErrorQuestions(null, jErrorQuestion.getQuestion_id(),
+							jErrorQuestion.getError_time(), jErrorQuestion.getError_num(), jErrorQuestion.getUser_id(),
 							jErrorQuestion.getQuestionType_id(), jErrorQuestion.getSection_id());
 					this.errorQuestionsDao.insert(errorQuestion);
 				}

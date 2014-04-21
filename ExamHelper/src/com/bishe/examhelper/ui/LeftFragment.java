@@ -58,7 +58,6 @@ public class LeftFragment extends BaseV4Fragment {
 	private ImageButton switchButton;// 切换主题按钮
 	private ImageView headImage;// 头像
 	private Bitmap headBitmap;// 头像
-	private Button signOutButton;// 注销按钮
 	private Button changeImageButton;// 更改头像按钮
 	private boolean isChanged = false;// 是否更改头像
 
@@ -149,6 +148,7 @@ public class LeftFragment extends BaseV4Fragment {
 
 			login.setVisibility(View.GONE);
 			userView.setVisibility(View.VISIBLE);
+			changeImageButton.setVisibility(View.VISIBLE);
 
 			// 昵称
 			nickNameTextView.setText(user.getNickname());
@@ -175,6 +175,7 @@ public class LeftFragment extends BaseV4Fragment {
 		} else {
 			login.setVisibility(View.VISIBLE);
 			userView.setVisibility(View.GONE);
+			changeImageButton.setVisibility(View.GONE);
 			realNameTextView.setText("姓名：");// 真实姓名
 			genderTextView.setText("性别：");// 性别
 			phoneTextView.setText("绑定手机：");// 手机号码
@@ -217,7 +218,6 @@ public class LeftFragment extends BaseV4Fragment {
 		genderTextView = (TextView) rootView.findViewById(R.id.user_gender);// 性别
 		phoneTextView = (TextView) rootView.findViewById(R.id.user_phone);// 手机号码
 		integral = (TextView) rootView.findViewById(R.id.user_integral);// 积分
-		signOutButton = (Button) rootView.findViewById(R.id.sign_out);// 注销
 		changeImageButton = (Button) rootView.findViewById(R.id.change_headimage);// 更改头像
 
 	}
@@ -256,36 +256,6 @@ public class LeftFragment extends BaseV4Fragment {
 							"com.bieshe.examhelper.bigHeadImageFragmentDialog");
 				}
 
-			}
-		});
-
-		/**
-		 * 注销用户
-		 */
-		signOutButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setIcon(R.drawable.icon_warning).setTitle("温馨提示").setMessage("是否注销？")
-						.setPositiveButton("是", new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-								UserService userService = UserService.getInstance(getActivity());
-								// 注销
-								userService.singOut();
-								LeftFragment.this.onResume();
-							}
-						}).setNegativeButton("否", new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-							}
-						}).show();
 			}
 		});
 

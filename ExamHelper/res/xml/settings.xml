@@ -94,6 +94,11 @@
             android:layout="@layout/pref_list_recommend"
             android:title="精彩推荐"
             android:widgetLayout="@layout/pref_widget_more" />
+        <Preference
+            android:key="pref_sign_out"
+            android:layout="@layout/pref_list_item_bot"
+            android:title="注销登陆"
+            android:widgetLayout="@layout/pref_widget_more" />
     </PreferenceCategory>
 
 </PreferenceScreen>

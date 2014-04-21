@@ -445,7 +445,7 @@ public class CollectionService {
 
 			if (jCollections != null) {
 				for (JCollection jCollection : jCollections) {
-					Collection collection = new Collection(jCollection.getId(), jCollection.getQuestion_id(),
+					Collection collection = new Collection(null, jCollection.getQuestion_id(),
 							jCollection.getCollect_time(), jCollection.getUser_id(), jCollection.getQuestionType_id(),
 							jCollection.getSection_id());
 					this.mCollectionDao.insert(collection);

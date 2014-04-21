@@ -19,7 +19,7 @@ import org.apache.http.util.EntityUtils;
 public class HttpUtil {
 	// 创建HttpClient对象
 	public static HttpClient httpClient = new DefaultHttpClient();
-	public static final String BASE_URL = "http://192.168.1.100:8080/ExamHelper/";
+	public static final String BASE_URL = "http://ruiwenpeixun.com/";
 
 	/**
 	 *

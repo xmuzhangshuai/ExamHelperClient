@@ -353,7 +353,7 @@ public class LoginFragment extends BaseV4Fragment {
 		 */
 		public void syncData() {
 			final Context context = getActivity();
-
+			Toast.makeText(context, "正在同步个人数据...", 1).show();
 			new Thread() {
 				public void run() {
 					NoteService.getInstance(context).getNoteListFromNetByUser();

@@ -55,6 +55,7 @@ public class DefaultKeys {
 	public static final String KEY_PREF_CHECK_UPDATE = "pref_check_update";// 检查更新
 	public static final String KEY_PREF_ABOUT_SOFTWARE = "pref_about_software";// 关于软件
 	public static final String KEY_PREF_COMMENT = "pref_comment";//精彩推荐
+	public static final String KEY_SING_OUT = "pref_sign_out";//注销登录
 
 	/********** 答题模式*************/
 	public static final String KEY_QUESTION_MODEL = "key_question_model";// 模拟考试模式

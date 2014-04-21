@@ -66,6 +66,16 @@ public class StudyRecordService {
 	}
 
 	/**
+	 * 删除当前用户的学习记录
+	 */
+	public void deleteRecordsOfCurrentUser() {
+		List<StudyRecord> studyRecords = loadAllStudyRecords();
+		for (StudyRecord studyRecord : studyRecords) {
+			studyRecordDao.delete(studyRecord);
+		}
+	}
+
+	/**
 	 *按照时间先后返回列表
 	 * @return
 	 */

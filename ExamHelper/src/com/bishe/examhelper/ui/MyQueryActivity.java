@@ -108,7 +108,7 @@ public class MyQueryActivity extends BaseFragmentActivity implements TabListener
 		// TODO Auto-generated method stub
 		// 设置actionBar模式
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		actionBar.setIcon(R.drawable.icon_my_query);
+		actionBar.setIcon(R.drawable.recent_chat_showleft_normal);
 		actionBar.setTitle("我的答疑");
 
 		// viewPager绑定事件
