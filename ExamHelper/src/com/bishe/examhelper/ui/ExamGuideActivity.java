@@ -129,12 +129,18 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 		private List<String> dataList;// 考试指南目录题目
 
 		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+			// 执行异步任务，从网络获取数据
+			new NetData().execute();
+		}
+
+		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
 			rootView = inflater.inflate(R.layout.fragment_mock_exam_guide, container, false);
 
-			// 执行异步任务，从网络获取数据
-			new NetData().execute();
 			return rootView;
 		}
 
@@ -213,7 +219,7 @@ public class ExamGuideActivity extends BaseFragmentActivity {
 					setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.exam_guide_list_item,
 							R.id.list_item_title, dataList));
 				}
-				dialog.show();
+				dialog.cancel();
 			}
 		}
 	}
