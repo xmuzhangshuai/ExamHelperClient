@@ -47,30 +47,6 @@
             android:layout_marginLeft="10.0dip"
             android:scaleType="matrix"
             android:src="@drawable/page" />
-
-        <ImageView
-            android:id="@+id/page4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:scaleType="matrix"
-            android:src="@drawable/page" />
-
-        <ImageView
-            android:id="@+id/page5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:scaleType="matrix"
-            android:src="@drawable/page" />
-
-        <ImageView
-            android:id="@+id/page6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:scaleType="matrix"
-            android:src="@drawable/page" />
     </LinearLayout>
 
 </FrameLayout>

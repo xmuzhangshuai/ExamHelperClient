@@ -28,9 +28,6 @@ public class GuidePagerActivity extends BaseActivity {
 	private ImageView mPage1;
 	private ImageView mPage2;
 	private ImageView mPage3;
-	private ImageView mPage4;
-	private ImageView mPage5;
-	private ImageView mPage6;
 	private Button startButton;
 
 	@Override
@@ -70,9 +67,6 @@ public class GuidePagerActivity extends BaseActivity {
 		mPage1 = (ImageView) findViewById(R.id.page1);
 		mPage2 = (ImageView) findViewById(R.id.page2);
 		mPage3 = (ImageView) findViewById(R.id.page3);
-		mPage4 = (ImageView) findViewById(R.id.page4);
-		mPage5 = (ImageView) findViewById(R.id.page5);
-		mPage6 = (ImageView) findViewById(R.id.page6);
 	}
 
 	@Override
@@ -86,9 +80,6 @@ public class GuidePagerActivity extends BaseActivity {
 		View view2 = mLi.inflate(R.layout.guide_paper_two, null);
 		View view3 = mLi.inflate(R.layout.guide_paper_three, null);
 		View view4 = mLi.inflate(R.layout.guide_paper_four, null);
-		View view5 = mLi.inflate(R.layout.guide_paper_five, null);
-		View view6 = mLi.inflate(R.layout.guide_paper_six, null);
-		View view7 = mLi.inflate(R.layout.guide_paper_seven, null);
 		/*
 		 * 这里将每一页显示的view存放到ArrayList集合中 可以在ViewPager适配器中顺序调用展示
 		 */
@@ -97,10 +88,6 @@ public class GuidePagerActivity extends BaseActivity {
 		views.add(view2);
 		views.add(view3);
 		views.add(view4);
-		views.add(view5);
-		views.add(view6);
-		views.add(view7);
-
 		/*
 		 * 每个页面的Title数据存放到ArrayList集合中 可以在ViewPager适配器中调用展示
 		 */
@@ -109,14 +96,11 @@ public class GuidePagerActivity extends BaseActivity {
 		titles.add("tab2");
 		titles.add("tab3");
 		titles.add("tab4");
-		titles.add("tab5");
-		titles.add("tab6");
-		titles.add("tab7");
 
 		// 填充ViewPager的数据适配器
 		GuidePagerAdapter mPagerAdapter = new GuidePagerAdapter(views, titles);
 		mViewPager.setAdapter(mPagerAdapter);
-		startButton = (Button) view7.findViewById(R.id.guide_start_btn);
+		startButton = (Button) view4.findViewById(R.id.guide_start_btn);
 		startButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -151,22 +135,7 @@ public class GuidePagerActivity extends BaseActivity {
 				break;
 			case 3:
 				mPage3.setImageDrawable(getResources().getDrawable(R.drawable.page_now));
-				mPage4.setImageDrawable(getResources().getDrawable(R.drawable.page));
 				mPage2.setImageDrawable(getResources().getDrawable(R.drawable.page));
-				break;
-			case 4:
-				mPage4.setImageDrawable(getResources().getDrawable(R.drawable.page_now));
-				mPage3.setImageDrawable(getResources().getDrawable(R.drawable.page));
-				mPage5.setImageDrawable(getResources().getDrawable(R.drawable.page));
-				break;
-			case 5:
-				mPage5.setImageDrawable(getResources().getDrawable(R.drawable.page_now));
-				mPage4.setImageDrawable(getResources().getDrawable(R.drawable.page));
-				mPage6.setImageDrawable(getResources().getDrawable(R.drawable.page));
-				break;
-			case 6:
-				mPage6.setImageDrawable(getResources().getDrawable(R.drawable.page_now));
-				mPage5.setImageDrawable(getResources().getDrawable(R.drawable.page));
 				break;
 			}
 		}
