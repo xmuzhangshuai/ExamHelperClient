@@ -17,6 +17,7 @@ import com.bishe.examhelper.config.Constants;
 import com.bishe.examhelper.service.CopyDataBase;
 import com.bishe.examhelper.service.DivideIntoGroup;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 /**   
  *    
@@ -44,6 +45,8 @@ public class GuideActivity extends BaseActivity {
 
 		// 发送策略定义了用户由统计分析SDK产生的数据发送回友盟服务器的频率。
 		MobclickAgent.updateOnlineConfig(this);
+		PushAgent mPushAgent = PushAgent.getInstance(this);
+		mPushAgent.enable();
 
 		// 获取启动的次数
 		countPreferences = getSharedPreferences("start_count", 0);

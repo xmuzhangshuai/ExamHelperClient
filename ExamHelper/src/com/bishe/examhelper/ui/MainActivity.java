@@ -27,6 +27,7 @@ import com.bishe.examhelper.slidingmenu.SlidingMenu;
 import com.bishe.examhelper.ui.PersonalModifyDialogFragment.OnUserInfoChangedListener;
 import com.bishe.examhelper.ui.RightFragment.OnSignOutPressedListener;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
 
 /**   
@@ -59,6 +60,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		UmengUpdateAgent.update(this);
+		PushAgent.getInstance(this).onAppStart();
 
 		initSlidingMenu();
 		setContentView(R.layout.activity_main);
