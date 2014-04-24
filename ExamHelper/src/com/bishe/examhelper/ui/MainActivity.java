@@ -27,6 +27,7 @@ import com.bishe.examhelper.slidingmenu.SlidingMenu;
 import com.bishe.examhelper.ui.PersonalModifyDialogFragment.OnUserInfoChangedListener;
 import com.bishe.examhelper.ui.RightFragment.OnSignOutPressedListener;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 /**   
  *    
@@ -42,7 +43,8 @@ import com.umeng.analytics.MobclickAgent;
  * @version    
  *    
  */
-public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener, OnUserInfoChangedListener,OnSignOutPressedListener {
+public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener, OnUserInfoChangedListener,
+		OnSignOutPressedListener {
 
 	protected SlidingMenu mSlidingMenu;
 	private TextView mTitleName;
@@ -56,6 +58,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		UmengUpdateAgent.update(this);
 
 		initSlidingMenu();
 		setContentView(R.layout.activity_main);

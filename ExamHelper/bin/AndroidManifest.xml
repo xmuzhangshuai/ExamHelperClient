@@ -252,6 +252,12 @@
         <!-- 用户反馈模块 -->
         <activity android:name="com.umeng.fb.ConversationActivity" />
         <activity android:name="com.umeng.fb.ContactActivity" />
+        
+         <!-- 自动更新模块 -->
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
 
         <!-- 声明SDK用到的下载服务 -->
         <service

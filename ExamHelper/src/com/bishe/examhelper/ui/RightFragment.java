@@ -22,6 +22,7 @@ import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.config.DefaultSetting;
 import com.bishe.examhelper.service.UserService;
 import com.umeng.fb.FeedbackAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 /**   
  *    
@@ -188,7 +189,7 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 
 		/************如果点击了检查更新************/
 		else if (preference.getKey().equals(DefaultKeys.KEY_PREF_CHECK_UPDATE)) {
-			Toast.makeText(getActivity(), "点击了检查更新", 1).show();
+			UmengUpdateAgent.forceUpdate(getActivity());
 		}
 
 		/************如果点击了意见反馈************/
