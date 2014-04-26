@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -26,6 +27,10 @@ import com.bishe.examhelper.slidingmenu.BaseSlidingFragmentActivity;
 import com.bishe.examhelper.slidingmenu.SlidingMenu;
 import com.bishe.examhelper.ui.PersonalModifyDialogFragment.OnUserInfoChangedListener;
 import com.bishe.examhelper.ui.RightFragment.OnSignOutPressedListener;
+import com.bishe.examhelper.utils.AlertDialogs;
+import com.bishe.examhelper.utils.FastJsonTool;
+import com.bishe.examhelper.utils.HttpUtil;
+import com.jsonobjects.Systemnotice;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -66,6 +71,9 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		setContentView(R.layout.activity_main);
 		initCenterView();
 		initRightView();
+
+		//查看系统公告
+		new SystemNoticeTask().execute();
 
 		mLocationClient = new LocationClient(getApplicationContext()); // 声明LocationClient类
 		mLocationClient.registerLocationListener(myListener); // 注册监听函数
@@ -267,4 +275,70 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		getSupportFragmentManager().findFragmentById(R.id.main_left_fragment).onResume();
 	}
 
+	/**
+	 * 系统公告对话框
+	 */
+	public void leftButtonListener() {
+
+	}
+
+	/**
+	 * 系统公告对话框
+	 */
+	public void rightButtonListener() {
+
+	}
+
+	/**
+	 * 
+	 * 类名称：SystemNoticeTask
+	 * 类描述：从网络获取系统公告
+	 * 创建人： 张帅
+	 * 创建时间：2014-4-26 下午5:40:13
+	 *
+	 */
+	class SystemNoticeTask extends AsyncTask<Void, Void, Void> {
+		String URL = "SystemNoticeServlet";
+		Systemnotice systemnotice = null;
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			try {
+				//从网络端获取
+				String jsonString = HttpUtil.getRequest(URL);
+				if (jsonString != null) {
+					systemnotice = FastJsonTool.getObject(jsonString, Systemnotice.class);
+				}
+				//检查是否显示过
+				SharedPreferences sharedPreferences = getSharedPreferences("systemNotice", Context.MODE_PRIVATE);
+				int existID = sharedPreferences.getInt("noticeID", 0);
+
+				//如果没有显示过
+				if (systemnotice != null) {
+					if (existID != systemnotice.getId()) {
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.putInt("noticeID", systemnotice.getId());
+						editor.commit();
+					} else {
+						systemnotice = null;
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			//如果没有显示过
+			if (systemnotice != null && systemnotice.getValid()) {
+				AlertDialogs.alertDialog(MainActivity.this, systemnotice.getNoticeContent(), "取消", "查看详情", "no", "yes");
+			}
+		}
+	}
 }

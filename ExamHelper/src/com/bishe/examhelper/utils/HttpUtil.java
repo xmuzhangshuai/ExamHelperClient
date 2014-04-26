@@ -18,7 +18,7 @@ import org.apache.http.util.EntityUtils;
 
 public class HttpUtil {
 	// 创建HttpClient对象
-	public static HttpClient httpClient = new DefaultHttpClient();
+	public static HttpClient httpClient;;
 	public static final String BASE_URL = "http://192.168.1.100:8080/ExamHelper/";
 
 	/**
@@ -28,11 +28,12 @@ public class HttpUtil {
 	 * @throws Exception
 	 */
 	public static String getRequest(final String url) throws Exception {
+		httpClient = new DefaultHttpClient();
 		FutureTask<String> task = new FutureTask<String>(new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				// 创建HttpGet对象。
-				HttpGet get = new HttpGet(BASE_URL+url);
+				HttpGet get = new HttpGet(BASE_URL + url);
 				// 发送GET请求
 				HttpResponse httpResponse = httpClient.execute(get);
 				// 如果服务器成功地返回响应
@@ -55,11 +56,12 @@ public class HttpUtil {
 	 * @throws Exception
 	 */
 	public static String postRequest(final String url, final Map<String, String> rawParams) throws Exception {
+		httpClient = new DefaultHttpClient();
 		FutureTask<String> task = new FutureTask<String>(new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				// 创建HttpPost对象。
-				HttpPost post = new HttpPost(BASE_URL+url);
+				HttpPost post = new HttpPost(BASE_URL + url);
 				// 如果传递参数个数比较多的话可以对传递的参数进行封装
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
 				for (String key : rawParams.keySet()) {
