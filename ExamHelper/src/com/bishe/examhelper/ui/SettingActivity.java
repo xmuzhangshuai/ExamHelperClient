@@ -5,8 +5,9 @@ import android.os.Bundle;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseActivity;
+import com.bishe.examhelper.ui.RightFragment.OnSignOutPressedListener;
 
-public class SettingActivity extends BaseActivity {
+public class SettingActivity extends BaseActivity implements OnSignOutPressedListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,12 @@ public class SettingActivity extends BaseActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		getActionBar().setTitle("…Ë÷√");
+	}
+
+	@Override
+	public void onSignOutPressed() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

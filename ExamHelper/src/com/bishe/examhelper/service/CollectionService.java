@@ -187,12 +187,19 @@ public class CollectionService {
 				.where(com.bishe.examhelper.dao.QuestionTypeDao.Properties.Type_name
 						.eq(DefaultValues.MATERIAL_ANALYSIS)).unique().getId();
 
+		Collection collection = null;
 		// 查找对应题型、题目的收藏
-		Collection collection = mCollectionDao
-				.queryBuilder()
-				.where(Properties.Question_id.eq(materialAnalysis.getId()),
-						Properties.QuestionType_id.eq(questionTypeId),
-						Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
+		try {
+			collection = mCollectionDao
+					.queryBuilder()
+					.where(Properties.Question_id.eq(materialAnalysis.getId()),
+							Properties.QuestionType_id.eq(questionTypeId),
+							Properties.User_id.eq(UserService.getInstance(appContext).getCurrentUserID())).unique();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
 		if (collection != null) {
 			flag = true;
 			mCollection = collection;
