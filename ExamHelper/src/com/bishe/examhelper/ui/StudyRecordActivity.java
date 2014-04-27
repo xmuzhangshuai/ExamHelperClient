@@ -57,6 +57,7 @@ public class StudyRecordActivity extends BaseFragmentActivity {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
+		getActionBar().setIcon(R.drawable.function_study_record);
 		StudyRecordDisplayFragment studyRecordDisplayFragment = new StudyRecordDisplayFragment();
 		fragmentTransaction.replace(R.id.display_fragment_container, studyRecordDisplayFragment);
 		fragmentTransaction.commit();

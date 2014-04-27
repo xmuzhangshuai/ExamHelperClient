@@ -23,8 +23,6 @@ public class ExamGuideWebActivity extends BaseActivity {
 		findViewById();
 		initView();
 
-		System.out.println(url);
-
 		webView.loadUrl(url);
 	}
 

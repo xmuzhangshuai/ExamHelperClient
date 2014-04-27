@@ -58,6 +58,7 @@ public class MyNoteActivity extends BaseFragmentActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		getActionBar().setTitle("ÎÒµÄ±Ê¼Ç");
+		getActionBar().setIcon(R.drawable.function_mynote);
 	}
 
 }

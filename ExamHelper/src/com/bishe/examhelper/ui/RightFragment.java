@@ -21,6 +21,7 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.config.DefaultSetting;
 import com.bishe.examhelper.service.UserService;
+import com.bishe.examhelper.utils.HttpUtil;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -184,7 +185,11 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 
 		/************如果点击了关于软件************/
 		else if (preference.getKey().equals(DefaultKeys.KEY_PREF_ABOUT_SOFTWARE)) {
-			Toast.makeText(getActivity(), "点击了关于软件", 1).show();
+			Intent intent = new Intent(getActivity(),ExamGuideWebActivity.class);
+			intent.putExtra("examGuideUrl", HttpUtil.BASE_URL+"softwareIntroduce.html");
+			intent.putExtra("title", "考试助手软件介绍");
+			startActivity(intent);
+			getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 		}
 
 		/************如果点击了检查更新************/

@@ -92,6 +92,7 @@ public class MockExamGuideActivity extends BaseActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		getActionBar().setTitle("Ä£Äâ¿¼ÊÔ");
+		getActionBar().setIcon(R.drawable.function_simulate_examroom);
 
 		includeMaterial = includeBox.isChecked();
 		includeBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {

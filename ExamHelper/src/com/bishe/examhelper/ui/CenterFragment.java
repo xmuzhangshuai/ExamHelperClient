@@ -84,7 +84,7 @@ public class CenterFragment extends Fragment {
 					intent = new Intent(getActivity(), StudyRecordActivity.class);
 					break;
 				case 7:// 如果点击了试题排行
-					intent = new Intent(getActivity(), DefaultActivity.class);
+					intent = new Intent(getActivity(), ExamRankingActivity.class);
 					break;
 				case 8:// 如果点击了考试指南
 					intent = new Intent(getActivity(), ExamGuideActivity.class);

@@ -75,6 +75,7 @@ public class MyErrorActivity extends BaseFragmentActivity implements ActionBar.T
 		// 设置actionBar模式
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setTitle("错题重放");
+		getActionBar().setIcon(R.drawable.function_error_again);
 
 		// viewPager绑定事件
 		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {

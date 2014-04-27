@@ -50,6 +50,7 @@ public class StatisticActivity extends BaseActivity {
 		setContentView(R.layout.activity_statistic);
 		findViewById();
 		getActionBar().setTitle("Í³¼Æ·ÖÎö");
+		getActionBar().setIcon(R.drawable.function_statistic_analysis);
 		new InitChartData().execute();
 	}
 

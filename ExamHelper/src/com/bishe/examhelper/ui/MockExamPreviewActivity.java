@@ -66,6 +66,7 @@ public class MockExamPreviewActivity extends BaseActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		getActionBar().setTitle("¥Ã‚‘§¿¿");
+		getActionBar().setIcon(R.drawable.function_simulate_examroom);
 
 		MyGridViewAdapter mAdapter = new MyGridViewAdapter();
 		gridView.setColumnWidth((DensityUtil.getScreenWidthforPX(MockExamPreviewActivity.this) - 100) / 5);

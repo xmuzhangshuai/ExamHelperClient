@@ -73,14 +73,23 @@
         <!-- 试卷ExamActivity -->
         <activity android:name="com.bishe.examhelper.ui.ExamActivity" />
 
-        <!-- 测试TestActivity -->
-        <activity android:name="com.bishe.examhelper.test.TestActivity" />
-
         <!-- 错题重放MyErrorActivity -->
-        <activity android:name="com.bishe.examhelper.ui.MyErrorActivity" />
+        <activity
+            android:name="com.bishe.examhelper.ui.MyErrorActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
 
         <!-- 我的收藏MyCollectionActivity -->
-        <activity android:name="com.bishe.examhelper.ui.MyCollectionActivity" />
+        <activity
+            android:name="com.bishe.examhelper.ui.MyCollectionActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
 
         <!-- 题目展示QuestionsDisplayActivity -->
         <activity
@@ -88,7 +97,13 @@
             android:uiOptions="splitActionBarWhenNarrow" />
 
         <!-- 随机练习RandomExerciseActivity -->
-        <activity android:name="com.bishe.examhelper.ui.RandomExerciseActivity" />
+        <activity
+            android:name="com.bishe.examhelper.ui.RandomExerciseActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
 
         <!-- 设置SettingActivity -->
         <activity android:name="com.bishe.examhelper.ui.SettingActivity" />
@@ -99,7 +114,12 @@
         <!-- 模拟考试开始页面MockExamGuideActivity -->
         <activity
             android:name="com.bishe.examhelper.ui.MockExamGuideActivity"
-            android:uiOptions="splitActionBarWhenNarrow" />
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
 
         <!-- 模拟考试题目预览页面MockExamPreviewActivity -->
         <activity android:name="com.bishe.examhelper.ui.MockExamPreviewActivity" />
@@ -132,6 +152,15 @@
         <!-- 统计分析StatisticActivity -->
         <activity
             android:name="com.bishe.examhelper.ui.StatisticActivity"
+            android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bishe.examhelper.ui.MainActivity" />
+        </activity>
+
+        <!-- 试题排行ExamRankingActivity -->
+        <activity
+            android:name="com.bishe.examhelper.ui.ExamRankingActivity"
             android:parentActivityName="com.bishe.examhelper.ui.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -290,7 +319,6 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        
         <receiver android:name="com.umeng.message.UmengBroadcastReceiver" >
             <intent-filter>
                 <action android:name="org.agoo.android.intent.action.RECEIVE" />

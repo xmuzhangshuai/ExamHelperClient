@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="6dp" >
+
+    <TextView
+        android:id="@+id/list_item_leftimg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="2dp"
+        android:drawableLeft="@drawable/list_item_leftimg2"
+        android:gravity="center_vertical"
+        android:textColor="@color/listItem_black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/list_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:layout_toLeftOf="@+id/list_item_rightimg"
+        android:layout_toRightOf="@+id/list_item_leftimg"
+        android:textColor="@color/listItem_black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/rightAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/list_item_title"
+        android:layout_below="@+id/list_item_title"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/rightcolor"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/list_item_title"
+        android:layout_below="@+id/rightAnswer"
+        android:textColor="#EE9A00"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/list_item_rightimg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/arrow_ico" />
+
+</RelativeLayout>

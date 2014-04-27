@@ -69,6 +69,7 @@ public class RandomExerciseActivity extends BaseFragmentActivity {
 	protected void initView() {
 		// TODO Auto-generated method stub
 		getActionBar().setTitle("随机练习");
+		getActionBar().setIcon(R.drawable.function_random_practice);
 
 		// 初始随机显示两个题目
 		questionList.add(getRandomQuestion());

@@ -183,6 +183,7 @@ public class MockExamActivity extends BaseFragmentActivity implements OnClickLis
 	protected void initView() {
 		// TODO Auto-generated method stub
 		getActionBar().setTitle("Ä£Äâ¿¼ÊÔ");
+		getActionBar().setIcon(R.drawable.function_simulate_examroom);
 		lastQuestion.setOnClickListener(this);
 		nextQuestion.setOnClickListener(this);
 		handIn.setOnClickListener(this);
