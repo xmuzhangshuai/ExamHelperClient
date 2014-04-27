@@ -214,8 +214,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 		getActionBar().setTitle("答疑广场");
 		getActionBar().setIcon(R.drawable.ic_title_home);
 
-		// ======= 初始化ViewPager ========
-		initAdImageViewPager();
+	
 
 		//设置上拉下拉刷新事件
 		queryListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
@@ -250,10 +249,7 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 	 * 初始化图片路径
 	 */
 	private void initAdImageURL() {
-		for (int i = 1; i < 9; i++) {
-			mImageUrl = HttpUtil.BASE_URL + "AdImages/image0" + i + ".png";
-			mImageUrls.add(mImageUrl);
-		}
+		new AdImageTask().execute();
 	}
 
 	/**
@@ -615,4 +611,44 @@ public class QuerySquareActivity extends AbsListViewBaseActivity {
 
 	}
 
+	/**
+	 * 
+	 * 类名称：AdImageTask
+	 * 类描述：从网络获取广告图片路径
+	 * 创建人： 张帅
+	 * 创建时间：2014-4-27 下午6:19:11
+	 *
+	 */
+	class AdImageTask extends AsyncTask<Void, Void, Void> {
+		String URL = "SquareAdServlet";
+		List<String> netimages = new ArrayList<String>();
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			try {
+				String jsonString = HttpUtil.getRequest(URL);
+				netimages = FastJsonTool.getObjectList(jsonString, String.class);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if (netimages != null) {
+				for (int i = 1; i < netimages.size(); i++) {
+					mImageUrl = HttpUtil.BASE_URL + netimages.get(i);
+					mImageUrls.add(mImageUrl);
+				}
+			}
+			// ======= 初始化ViewPager ========
+			initAdImageViewPager();
+		}
+
+	}
 }
