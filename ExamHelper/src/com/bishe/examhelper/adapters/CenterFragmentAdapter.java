@@ -1,7 +1,5 @@
 package com.bishe.examhelper.adapters;
 
-import com.bishe.examhelper.R;
-import com.bishe.examhelper.config.Constants;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bishe.examhelper.R;
+import com.bishe.examhelper.utils.DensityUtil;
 
 /**
  * 
@@ -34,16 +35,14 @@ public class CenterFragmentAdapter extends BaseAdapter {
 
 	/******** 主页面功能块背景颜色***********/
 	private int[] blocksColor = new int[] { R.color.lightview1, R.color.lightview2, R.color.lightview3,
-			R.color.lightview4, R.color.lightview5, R.color.lightview6, R.color.lightview7, R.color.lightview8,
-			R.color.lightview9, R.color.lightview10, R.color.lightview11, R.color.lightview12, R.color.lightview13,
-			R.color.lightview14 };
+			R.color.lightview4, R.color.lightview5, R.color.lightview6, R.color.lightview1, R.color.lightview2,
+			R.color.lightview3, R.color.lightview4, R.color.lightview5, R.color.lightview6 };
 	/******** 主页面功能块图片*********/
-	private int[] blocksImage = new int[] {  R.drawable.function_per_practice,
-			R.drawable.function_random_practice, R.drawable.function_simulate_examroom,
-			R.drawable.function_error_again, R.drawable.function_mycollect, R.drawable.function_mynote,
-			R.drawable.function_study_record, R.drawable.function_hot_exams, R.drawable.function_exam_guide,
-			R.drawable.function_test_lib_search, R.drawable.function_statistic_analysis,
-			R.drawable.function_myquestion, R.drawable.function_question_square, };
+	private int[] blocksImage = new int[] { R.drawable.function_per_practice, R.drawable.function_random_practice,
+			R.drawable.function_simulate_examroom, R.drawable.function_error_again, R.drawable.function_mycollect,
+			R.drawable.function_mynote, R.drawable.function_study_record, R.drawable.function_hot_exams,
+			R.drawable.function_exam_guide, R.drawable.function_statistic_analysis, R.drawable.function_myquestion,
+			R.drawable.function_question_square, };
 
 	public CenterFragmentAdapter(Context context) {
 		this.context = context;
@@ -51,7 +50,7 @@ public class CenterFragmentAdapter extends BaseAdapter {
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		/********* 获取屏幕分辨率宽度 **************/
-		mScreenWidth = Constants.SCREEN_WIDTH;
+		mScreenWidth = DensityUtil.getScreenWidthforPX(context);
 	}
 
 	@Override

@@ -9,37 +9,17 @@
 
     <!-- 以下是主页面个功能块颜色，lightview*为常态颜色，darkview*为按下时颜色 -->
     <color name="darkview1">#FF33B5E5</color>
-    <color name="lightview1">#e233B5E5</color>
+    <color name="lightview1">#c233B5E5</color>
     <color name="darkview2">#FFAA66CC</color>
-    <color name="lightview2">#e2AA66CC</color>
+    <color name="lightview2">#c2AA66CC</color>
     <color name="darkview3">#FF99CC00</color>
-    <color name="lightview3">#e299CC00</color>
+    <color name="lightview3">#c299CC00</color>
     <color name="darkview4">#FFFFBB33</color>
-    <color name="lightview4">#e2FFBB33</color>
+    <color name="lightview4">#c2FFBB33</color>
     <color name="darkview5">#FFFF4444</color>
-    <color name="lightview5">#e2FF4444</color>
+    <color name="lightview5">#c2FF4444</color>
     <color name="darkview6">#FF0099CC</color>
-    <color name="lightview6">#e20099CC</color>
-    <color name="darkview7">#FF33B5E5</color>
-    <color name="lightview7">#e233B5E5</color>
-    <color name="darkview8">#FFAA66CC</color>
-    <color name="lightview8">#e2AA66CC</color>
-    <color name="darkview9">#FF99CC00</color>
-    <color name="lightview9">#e299CC00</color>
-    <color name="darkview10">#FFFFBB33</color>
-    <color name="lightview10">#e2FFBB33</color>
-    <color name="darkview11">#FFFF4444</color>
-    <color name="lightview11">#e2FF4444</color>
-    <color name="darkview12">#FF0099CC</color>
-    <color name="lightview12">#e20099CC</color>
-    <color name="darkview13">#FF33B5E5</color>
-    <color name="lightview13">#e233B5E5</color>
-    <color name="darkview14">#FFAA66CC</color>
-    <color name="lightview14">#e2AA66CC</color>
-    <color name="darkview15">#FF99CC00</color>
-    <color name="lightview15">#e299CC00</color>
-    <color name="darkview16">#FFFFBB33</color>
-    <color name="lightview16">#e2FFBB33</color>
+    <color name="lightview6">#c20099CC</color>
     <color name="text_shadow_color">#66000000</color>
 
     <!-- 以下是个人中心页面个功能块颜色 -->

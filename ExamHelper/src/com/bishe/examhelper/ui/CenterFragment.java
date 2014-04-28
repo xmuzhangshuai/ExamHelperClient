@@ -89,16 +89,13 @@ public class CenterFragment extends Fragment {
 				case 8:// 如果点击了考试指南
 					intent = new Intent(getActivity(), ExamGuideActivity.class);
 					break;
-				case 9:// 如果点击了题库搜索
-					intent = new Intent(getActivity(), DefaultActivity.class);
-					break;
-				case 10:// 如果点击了统计分析
+				case 9:// 如果点击了统计分析
 					intent = new Intent(getActivity(), StatisticActivity.class);
 					break;
-				case 11:// 如果点击了我的答疑
+				case 10:// 如果点击了我的答疑
 					intent = new Intent(getActivity(), MyQueryActivity.class);
 					break;
-				case 12:// 如果点击了答疑广场
+				case 11:// 如果点击了答疑广场
 					intent = new Intent(getActivity(), QuerySquareActivity.class);
 					break;
 				default:
