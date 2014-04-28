@@ -90,6 +90,43 @@ public class QuestionService {
 	}
 
 	/**
+	 * 根据题型ID和问题ID得到题目
+	 * @param questionId
+	 * @param questionTypeId
+	 * @return
+	 */
+	public Object getQuestionObject(Long questionId, Long questionTypeId) {
+		QuestionTypeService questionTypeService = QuestionTypeService.getInstance(appContext);
+		QuestionType questionType = questionTypeService.loadQuestionType(questionTypeId);
+		if (questionType != null) {
+			if (questionType.getType_name().equals(DefaultValues.SINGLE_CHOICE)) {
+				SingleChoiceService singleChoiceService = SingleChoiceService.getInstance(appContext);
+				SingleChoice singleChoice = singleChoiceService.loadSingleChoice(questionId);
+				if (singleChoice != null) {
+					return singleChoice;
+				}
+			}
+
+			if (questionType.getType_name().equals(DefaultValues.MULTI_CHOICE)) {
+				MultiChoiceService multiChoiceService = MultiChoiceService.getInstance(appContext);
+				MultiChoice multiChoice = multiChoiceService.loadMultiChoice(questionId);
+				if (multiChoice != null) {
+					return multiChoice;
+				}
+			}
+
+			if (questionType.getType_name().equals(DefaultValues.MATERIAL_ANALYSIS)) {
+				MaterialAnalysisService materialAnalysisService = MaterialAnalysisService.getInstance(appContext);
+				MaterialAnalysis materialAnalysis = materialAnalysisService.loadMaterialAnalysis(questionId);
+				if (materialAnalysis != null) {
+					return materialAnalysis;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * 根据题型ID和问题ID得到正确答案
 	 * @param questionId
 	 * @param questionTypeId

@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="6dp" >
+    android:paddingBottom="6dp"
+    android:paddingTop="5dp" >
 
     <TextView
         android:id="@+id/list_item_leftimg"
@@ -37,11 +38,20 @@
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/num"
+        android:id="@+id/section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/list_item_title"
         android:layout_below="@+id/rightAnswer"
+        android:textColor="#EE9A00"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/list_item_title"
+        android:layout_below="@+id/section"
         android:textColor="#EE9A00"
         android:textSize="12sp" />
 

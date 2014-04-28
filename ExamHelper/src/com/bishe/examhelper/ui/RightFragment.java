@@ -15,7 +15,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
-import android.widget.Toast;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.config.DefaultKeys;
@@ -41,7 +40,7 @@ import com.umeng.update.UmengUpdateAgent;
 public class RightFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener,
 		OnPreferenceClickListener {
 
-	SharedPreferences sharedPref;
+//	SharedPreferences sharedPref;
 	FeedbackAgent agent;
 	OnSignOutPressedListener mListener;
 
@@ -205,12 +204,10 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 
 		/************如果点击了题库管理************/
 		else if (preference.getKey().equals(DefaultKeys.KEY_PREF_LIBRARY_MANAGE)) {
-			Toast.makeText(getActivity(), "点击了题库管理", 1).show();
 		}
 
 		/************如果点击了科目切换************/
 		else if (preference.getKey().equals(DefaultKeys.KEY_PREF_COURSE_SWITCH)) {
-			Toast.makeText(getActivity(), "点击了科目切换", 1).show();
 		}
 
 		/************如果点击了注销登陆************/
@@ -244,7 +241,6 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 		SharedPreferences settings = getPreferenceScreen().getSharedPreferences();
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean(DefaultKeys.KEY_PREF_IF_LIGHT_ON, DefaultSetting.DEFAULT_PREF_IF_LIGHT_ON);
-		editor.putBoolean(DefaultKeys.KEY_PREF_NIGHT_MODEL, DefaultSetting.DEFAULT_PREF_NIGHT_MODEL);
 		editor.putBoolean(DefaultKeys.KEY_PREF_CHECK_NOW, DefaultSetting.DEFAULT_PREF_CHECK_NOW);
 		editor.putBoolean(DefaultKeys.KEY_PREF_VIBRATE_AFTER, DefaultSetting.DEFAULT_PREF_VIBRATE_AFTER);
 		editor.putString(DefaultKeys.KEY_PREF_SWITCH_FONTSIZE, DefaultSetting.DEFAULT_PREF_SWITCH_FONTSIZE);

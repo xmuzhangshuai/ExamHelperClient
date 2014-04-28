@@ -30,14 +30,6 @@
             android:widgetLayout="@layout/pref_widget_checkbox" />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="pref_night_model"
-            android:layout="@layout/pref_list_item_mid"
-            android:summaryOff="当前状态：白天"
-            android:summaryOn="当前状态：夜间"
-            android:title="夜间模式"
-            android:widgetLayout="@layout/pref_widget_checkbox" />
-        <CheckBoxPreference
-            android:defaultValue="false"
             android:key="pref_check_now"
             android:layout="@layout/pref_list_item_mid"
             android:summaryOff="当前状态：否"

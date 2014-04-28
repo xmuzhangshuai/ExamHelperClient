@@ -46,7 +46,6 @@ public class DefaultKeys {
 	public static final String KEY_PREF_COURSE_SWITCH = "pref_course_switch";// 科目切换
 	public static final String KEY_PREF_LIBRARY_MANAGE = "pref_library_mangage";// 题库管理
 	public static final String KEY_PREF_IF_LIGHT_ON = "pref_if_light_on";// 屏幕常亮
-	public static final String KEY_PREF_NIGHT_MODEL = "pref_night_model";// 夜间模式
 	public static final String KEY_PREF_CHECK_NOW = "pref_check_now";// 是否立即检查答案
 	public static final String KEY_PREF_VIBRATE_AFTER = "pref_vibrate_after";// 答错题后震动
 	public static final String KEY_PREF_SWITCH_FONTSIZE = "pref_switch_fontsize";// 选择字体

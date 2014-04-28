@@ -2,8 +2,12 @@ package com.bishe.examhelper.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -268,6 +272,15 @@ public class MultiChoiceFragment extends BaseQuestionFragment implements android
 	protected void judgeAnswer() {
 		// 如果回答不正确，则插入错误记录
 		if (!rightAnswer.trim().equals(myAnswer.trim())) {
+			// 如果是练习模式，则根据设置选择是否震动
+			if (model.equals(DefaultValues.MODEL_EXERCISE)) {
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+				boolean vibrator = sharedPreferences.getBoolean(DefaultKeys.KEY_PREF_VIBRATE_AFTER, false);
+				if (vibrator) {
+					Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+					v.vibrate(100);
+				}
+			}
 			/************插入错误记录*************/
 			final ErrorQuestionsService errorQuestionsService = ErrorQuestionsService.getInstance(getActivity());
 			errorQuestionsService.addErrorQuestions(myMultiChoice);

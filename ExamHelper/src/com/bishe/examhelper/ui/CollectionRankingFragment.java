@@ -5,19 +5,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
+import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.service.QuestionService;
+import com.bishe.examhelper.service.SectionService;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -93,6 +98,20 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 				if (pageNow >= 0)
 					++pageNow;
 				new GetNetDataTask().execute(pageNow);
+			}
+		});
+
+		queryListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(getActivity(), QuestionsDisplayActivity.class);
+				intent.putExtra(DefaultKeys.BY_SECTION_FRAGMENT_TYPE, "displsyQuestion");// 设置类型
+				intent.putExtra("questionId", netData.get(position - 1).getQuestionId());
+				intent.putExtra("questionTypeId", netData.get(position - 1).getQuestiontypeId());
+				intent.putExtra("questionNumber", position);
+				startActivity(intent);
+				getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 			}
 		});
 	}
@@ -171,6 +190,7 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 			public TextView collectNumTextView;
 			public TextView numberTextView;
 			public TextView rightAnswerTextView;
+			public TextView sectionTextView;
 		}
 
 		@Override
@@ -203,6 +223,7 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 				holder.collectNumTextView = (TextView) view.findViewById(R.id.num);
 				holder.numberTextView = (TextView) view.findViewById(R.id.list_item_leftimg);
 				holder.rightAnswerTextView = (TextView) view.findViewById(R.id.rightAnswer);
+				holder.sectionTextView = (TextView) view.findViewById(R.id.section);
 				view.setTag(holder); // 给View添加一个格外的数据 
 			} else {
 				holder = (ViewHolder) view.getTag(); // 把数据取出来  
@@ -216,6 +237,11 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 			holder.rightAnswerTextView.setText("正确答案：  "
 					+ questionService.getRightAnswer(netData.get(position).getQuestionId().longValue(),
 							netData.get(position).getQuestiontypeId().longValue()));
+			SectionService sectionService = SectionService.getInstance(getActivity());
+			holder.sectionTextView
+					.setText("所属章节：  "
+							+ sectionService.loadCollection(netData.get(position).getSectionId().longValue())
+									.getSection_name());
 			return view;
 		}
 	}
