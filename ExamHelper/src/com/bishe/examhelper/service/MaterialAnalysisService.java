@@ -1,5 +1,6 @@
 package com.bishe.examhelper.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,6 +10,7 @@ import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.dao.DaoSession;
 import com.bishe.examhelper.dao.MaterialAnalysisDao;
 import com.bishe.examhelper.entities.MaterialAnalysis;
+import com.bishe.examhelper.entities.MultiChoice;
 
 public class MaterialAnalysisService {
 	
@@ -47,6 +49,20 @@ public class MaterialAnalysisService {
 		return materialAnalysisDao.load(id);
 	}
 
+	/**
+	 * 返回实体Id列表
+	 * @return
+	 */
+	public List<Integer> loadAllMaterialAnalysisId() {
+		List<Integer> idList = new ArrayList<Integer>();
+		if (loadAllMaterialAnalysis() != null) {
+			for (MaterialAnalysis materialAnalysis : loadAllMaterialAnalysis()) {
+				idList.add(materialAnalysis.getId().intValue());
+			}
+		}
+		return idList;
+	}
+	
 	/**
 	 * 返回实体列表
 	 * @return

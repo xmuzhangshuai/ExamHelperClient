@@ -1,5 +1,6 @@
 package com.bishe.examhelper.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -55,17 +56,31 @@ public class SingleChoiceService {
 	public List<SingleChoice> loadAllSingleChoice() {
 		return singleChoiceDao.loadAll();
 	}
+
+	/**
+	 * 返回实体Id列表
+	 * @return
+	 */
+	public List<Integer> loadAllSingleChoiceId() {
+		List<Integer> idList = new ArrayList<Integer>();
+		if (loadAllSingleChoice() != null) {
+			for (SingleChoice singleChoice : loadAllSingleChoice()) {
+				idList.add(singleChoice.getId().intValue());
+			}
+		}
+		return idList;
+	}
 	
-	
+
 	/**
 	 * 返回随机单选题
 	 * @return
 	 */
-	public SingleChoice getRandomSingleChoice(){
+	public SingleChoice getRandomSingleChoice() {
 		SingleChoice singleChoice;
 		Random random = new Random();
-		int id = random.nextInt((int)singleChoiceDao.count())+1;
-		singleChoice = singleChoiceDao.load((long)id);
+		int id = random.nextInt((int) singleChoiceDao.count()) + 1;
+		singleChoice = singleChoiceDao.load((long) id);
 		return singleChoice;
 	}
 

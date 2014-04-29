@@ -24,6 +24,20 @@ import android.telephony.TelephonyManager;
 public class NetworkUtils {
 
 	/**
+	 * 检查网络使用状况并提示
+	 * @param context
+	 */
+	public static boolean checkNetAndTip(Context context) {
+		boolean flag = isNetworkAvailable(context);
+		if (flag) {
+			return true;
+		} else {
+			networkStateTips(context);
+			return false;
+		}
+	}
+
+	/**
 	 * 网络是否可用
 	 * 
 	 * @param activity

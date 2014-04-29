@@ -35,6 +35,7 @@ public class DefaultValues {
 	public static final String SINGLE_CHOICE = "单项选择题";
 	public static final String MULTI_CHOICE = "多项选择题";
 	public static final String MATERIAL_ANALYSIS = "材料分析题";
+	public static final String TRUE_OF_FALSE = "判断题";
 
 	// 分类练习
 	public static final String[] SORTS = new String[] { "习题集", "历年真题", "模拟试题" };

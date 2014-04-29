@@ -13,8 +13,8 @@
         <Preference
             android:key="pref_library_mangage"
             android:layout="@layout/pref_list_item_bot"
-            android:summary="点击进行题库管理"
-            android:title="题库管理"
+            android:summary="更新到最新题库"
+            android:title="更新题库"
             android:widgetLayout="@layout/pref_widget_more" />
     </PreferenceCategory>
     <PreferenceCategory

@@ -1,5 +1,6 @@
 package com.bishe.examhelper.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,6 +10,7 @@ import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.dao.DaoSession;
 import com.bishe.examhelper.dao.MultiChoiceDao;
 import com.bishe.examhelper.entities.MultiChoice;
+import com.bishe.examhelper.entities.SingleChoice;
 
 public class MultiChoiceService {
 	private static final String TAG = MultiChoiceService.class.getSimpleName();
@@ -53,6 +55,20 @@ public class MultiChoiceService {
 	 */
 	public List<MultiChoice> loadAllMultiChoice() {
 		return multiChoiceDao.loadAll();
+	}
+	
+	/**
+	 * 返回实体Id列表
+	 * @return
+	 */
+	public List<Integer> loadAllMultiChoiceId() {
+		List<Integer> idList = new ArrayList<Integer>();
+		if (loadAllMultiChoice() != null) {
+			for (MultiChoice multiChoice : loadAllMultiChoice()) {
+				idList.add(multiChoice.getId().intValue());
+			}
+		}
+		return idList;
 	}
 	
 	/**

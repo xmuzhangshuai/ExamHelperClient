@@ -1,5 +1,6 @@
 package com.bishe.examhelper.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -52,6 +53,21 @@ public class QuestionTypeService {
 	 */
 	public List<QuestionType> loadAllQuestionTypes() {
 		return questionTypeDao.loadAll();
+	}
+
+	/**
+	 * 返回实体ID列表
+	 * @return
+	 */
+	public List<Integer> loadAllQuestionTypeId() {
+		List<QuestionType> list = loadAllQuestionTypes();
+		List<Integer> idList = new ArrayList<Integer>();
+		if (list != null) {
+			for (QuestionType questionType : list) {
+				idList.add(questionType.getId().intValue());
+			}
+		}
+		return idList;
 	}
 
 	/**
