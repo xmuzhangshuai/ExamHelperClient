@@ -29,9 +29,9 @@ public class CollectionService {
 	private static CollectionService instance;
 	private static Context appContext;
 	private DaoSession mDaoSession;
-	private CollectionDao mCollectionDao;
+	public CollectionDao mCollectionDao;
 	private Collection mCollection;
-	private QuestionTypeDao mQuestionTypeDao;
+	public QuestionTypeDao mQuestionTypeDao;
 
 	public CollectionService() {
 		// TODO Auto-generated constructor stub

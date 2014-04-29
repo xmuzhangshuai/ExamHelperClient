@@ -9,20 +9,22 @@ import android.content.Context;
 import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.dao.DaoSession;
 import com.bishe.examhelper.dao.MaterialAnalysisDao;
+import com.bishe.examhelper.dao.QuestionsOfMaterialDao;
 import com.bishe.examhelper.entities.MaterialAnalysis;
-import com.bishe.examhelper.entities.MultiChoice;
 
 public class MaterialAnalysisService {
-	
+
 	private static final String TAG = MaterialAnalysisService.class.getSimpleName();
 	private static MaterialAnalysisService instance;
 	private static Context appContext;
 	private DaoSession mDaoSession;
 	public MaterialAnalysisDao materialAnalysisDao;
+	public QuestionsOfMaterialDao questionsOfMaterialDao;
 
 	public MaterialAnalysisService() {
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * 得到实例
 	 * @param context
@@ -36,6 +38,7 @@ public class MaterialAnalysisService {
 			}
 			instance.mDaoSession = BaseApplication.getDaoSession(context);
 			instance.materialAnalysisDao = instance.mDaoSession.getMaterialAnalysisDao();
+			instance.questionsOfMaterialDao = instance.mDaoSession.getQuestionsOfMaterialDao();
 		}
 		return instance;
 	}
@@ -62,7 +65,7 @@ public class MaterialAnalysisService {
 		}
 		return idList;
 	}
-	
+
 	/**
 	 * 返回实体列表
 	 * @return
@@ -70,16 +73,16 @@ public class MaterialAnalysisService {
 	public List<MaterialAnalysis> loadAllMaterialAnalysis() {
 		return materialAnalysisDao.loadAll();
 	}
-	
+
 	/**
 	 * 返回随机材料题
 	 * @return
 	 */
-	public MaterialAnalysis getRandomMaterialAnalysis(){
+	public MaterialAnalysis getRandomMaterialAnalysis() {
 		MaterialAnalysis materialAnalysis;
 		Random random = new Random();
-		int id = random.nextInt((int)materialAnalysisDao.count())+1;
-		materialAnalysis = materialAnalysisDao.load((long)id);
+		int id = random.nextInt((int) materialAnalysisDao.count()) + 1;
+		materialAnalysis = materialAnalysisDao.load((long) id);
 		return materialAnalysis;
 	}
 }

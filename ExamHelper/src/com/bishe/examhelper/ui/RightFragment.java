@@ -31,17 +31,29 @@ import com.bishe.examhelper.config.DefaultValues;
 import com.bishe.examhelper.entities.MaterialAnalysis;
 import com.bishe.examhelper.entities.MultiChoice;
 import com.bishe.examhelper.entities.QuestionType;
+import com.bishe.examhelper.entities.QuestionsOfMaterial;
+import com.bishe.examhelper.entities.Section;
 import com.bishe.examhelper.entities.SingleChoice;
+import com.bishe.examhelper.service.CollectionService;
+import com.bishe.examhelper.service.DivideIntoGroup;
+import com.bishe.examhelper.service.ErrorQuestionsService;
 import com.bishe.examhelper.service.MaterialAnalysisService;
 import com.bishe.examhelper.service.MultiChoiceService;
+import com.bishe.examhelper.service.NoteService;
 import com.bishe.examhelper.service.QuestionTypeService;
 import com.bishe.examhelper.service.SectionService;
 import com.bishe.examhelper.service.SingleChoiceService;
+import com.bishe.examhelper.service.StudyRecordService;
 import com.bishe.examhelper.service.SubjectService;
 import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.NetworkUtils;
+import com.jsonobjects.JMaterialAnalysis;
+import com.jsonobjects.JMultiChoice;
+import com.jsonobjects.JQuestionsOfMaterial;
+import com.jsonobjects.JSection;
+import com.jsonobjects.JSingleChoice;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -382,6 +394,7 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 			String jsonString = FastJsonTool.createJsonString(data);
 			Map<String, String> jsonMap = new HashMap<String, String>();
 			jsonMap.put("data", jsonString);
+			jsonMap.put("type", "check");
 			String result = "";
 			try {
 				result = HttpUtil.postRequest(URL, jsonMap);
@@ -399,11 +412,170 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			dialog.dismiss();
-			if (result.equals("haveUpdate")) {
-				Toast.makeText(getActivity(), "有更新", 1).show();
-			} else {
-				Toast.makeText(getActivity(), "您的题库已是最新版本", 1).show();
+			if (result != null) {
+				if (result.length() > 0) {
+					new UpdateTask().execute(result);
+				} else {
+					Toast.makeText(getActivity(), "您的题库已是最新版本", 1).show();
+				}
 			}
+
+		}
+	}
+
+	/**
+	 * 
+	 * 类名称：UpdateTask
+	 * 类描述：更新题库
+	 * 创建人： 张帅
+	 * 创建时间：2014-4-29 下午6:45:08
+	 *
+	 */
+	class UpdateTask extends AsyncTask<String, Integer, Void> {
+		ProgressDialog dialog = new ProgressDialog(getActivity());
+		SectionService sectionService = SectionService.getInstance(getActivity());
+		SubjectService subjectService = SubjectService.getInstance(getActivity());
+		QuestionTypeService questionTypeService = QuestionTypeService.getInstance(getActivity());
+		SingleChoiceService singleChoiceService = SingleChoiceService.getInstance(getActivity());
+		MultiChoiceService multiChoiceService = MultiChoiceService.getInstance(getActivity());
+		MaterialAnalysisService materialAnalysisService = MaterialAnalysisService.getInstance(getActivity());
+		int subjectId = 0;
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			dialog.setTitle("提示");
+			dialog.setMessage("正在更新题库,请稍后...");
+			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			dialog.setCancelable(false);
+			dialog.show();
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			//删除所有章节重新下载
+			sectionService.deleteAllSections();
+			List<JSection> jSectionList = FastJsonTool.getObjectList(params[0], JSection.class);
+			for (JSection jSection : jSectionList) {
+				Section section = new Section(jSection.getId(), jSection.getSection_name(), jSection.getSubject_id());
+				sectionService.addSection(section);
+			}
+
+			//从网络端检查更新
+			String URL = "UpdateLibraryServlet";
+			subjectId = subjectService.getCurrentSubjectId();
+
+			/**************单选题**********************/
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("subjectId", String.valueOf(subjectId));
+			map.put("type", "get");
+			map.put("questionType", "singleChoice");
+			try {
+				String result = HttpUtil.postRequest(URL, map);
+				singleChoiceService.singleChoiceDao.deleteAll();
+				List<JSingleChoice> jSingleChoiceList = FastJsonTool.getObjectList(result, JSingleChoice.class);
+				for (JSingleChoice jSingleChoice : jSingleChoiceList) {
+					SingleChoice singleChoice = new SingleChoice(jSingleChoice.getId(),
+							jSingleChoice.getQuestion_stem(), jSingleChoice.getOptionA(), jSingleChoice.getOptionB(),
+							jSingleChoice.getOptionC(), jSingleChoice.getOptionD(), jSingleChoice.getOptionE(),
+							jSingleChoice.getAnswer(), jSingleChoice.getAnalysis(), jSingleChoice.getRemark(),
+							jSingleChoice.getFlag(), jSingleChoice.getSection_id());
+					singleChoiceService.singleChoiceDao.insert(singleChoice);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			/**************多选题**********************/
+			map = new HashMap<String, String>();
+			map.put("subjectId", String.valueOf(subjectId));
+			map.put("type", "get");
+			map.put("questionType", "multiChoice");
+			try {
+				String result = HttpUtil.postRequest(URL, map);
+				multiChoiceService.multiChoiceDao.deleteAll();
+				List<JMultiChoice> jMultiChoiceList = FastJsonTool.getObjectList(result, JMultiChoice.class);
+				for (JMultiChoice jMultiChoice : jMultiChoiceList) {
+					MultiChoice multiChoice = new MultiChoice(jMultiChoice.getId(), jMultiChoice.getQuestion_stem(),
+							jMultiChoice.getOptionA(), jMultiChoice.getOptionB(), jMultiChoice.getOptionC(),
+							jMultiChoice.getOptionD(), jMultiChoice.getOptionE(), jMultiChoice.getOptionF(),
+							jMultiChoice.getAnswerA(), jMultiChoice.getAnswerB(), jMultiChoice.getAnswerC(),
+							jMultiChoice.getAnswerD(), jMultiChoice.getAnswerE(), jMultiChoice.getAnswerF(),
+							jMultiChoice.getAnalysis(), jMultiChoice.getRemark(), jMultiChoice.getFlag(),
+							jMultiChoice.getSection_id());
+					multiChoiceService.multiChoiceDao.insert(multiChoice);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			/**************材料题**********************/
+			map = new HashMap<String, String>();
+			map.put("subjectId", String.valueOf(subjectId));
+			map.put("type", "get");
+			map.put("questionType", "materialAnalisis");
+			try {
+				String result = HttpUtil.postRequest(URL, map);
+				materialAnalysisService.materialAnalysisDao.deleteAll();
+				List<JMaterialAnalysis> jMaterialAnalysiList = FastJsonTool.getObjectList(result,
+						JMaterialAnalysis.class);
+				for (JMaterialAnalysis jMaterialAnalysis : jMaterialAnalysiList) {
+					MaterialAnalysis materialAnalysis = new MaterialAnalysis(jMaterialAnalysis.getId(),
+							jMaterialAnalysis.getMaterial(), jMaterialAnalysis.getMaterial(),
+							jMaterialAnalysis.getRemark(), jMaterialAnalysis.getFlag(),
+							jMaterialAnalysis.getSection_id());
+					materialAnalysisService.materialAnalysisDao.insert(materialAnalysis);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			/**************材料题小题*****************/
+			map = new HashMap<String, String>();
+			map.put("subjectId", String.valueOf(subjectId));
+			map.put("type", "get");
+			map.put("questionType", "questionOfMateria");
+			try {
+				String result = HttpUtil.postRequest(URL, map);
+				materialAnalysisService.questionsOfMaterialDao.deleteAll();
+				List<JQuestionsOfMaterial> jQuestionsOfMaterialList = FastJsonTool.getObjectList(result,
+						JQuestionsOfMaterial.class);
+				for (JQuestionsOfMaterial jQuestionsOfMaterial : jQuestionsOfMaterialList) {
+					QuestionsOfMaterial questionsOfMaterial = new QuestionsOfMaterial(jQuestionsOfMaterial.getId(),
+							jQuestionsOfMaterial.getQusetion_number(), jQuestionsOfMaterial.getQuestion_stem(),
+							jQuestionsOfMaterial.getAnswer(), jQuestionsOfMaterial.getAnalysis(),
+							jQuestionsOfMaterial.getScore(), jQuestionsOfMaterial.getMaterial_id());
+					materialAnalysisService.questionsOfMaterialDao.insert(questionsOfMaterial);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			// TODO Auto-generated method stub
+			super.onProgressUpdate(values);
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			new DivideIntoGroup(getActivity()).divideIntoGroup();// 对数据分组
+			StudyRecordService.getInstance(getActivity()).studyRecordDao.deleteAll();
+			CollectionService.getInstance(getActivity()).mCollectionDao.deleteAll();
+			NoteService.getInstance(getActivity()).noteDao.deleteAll();
+			ErrorQuestionsService.getInstance(getActivity()).errorQuestionsDao.deleteAll();
+			dialog.cancel();
 		}
 	}
 }

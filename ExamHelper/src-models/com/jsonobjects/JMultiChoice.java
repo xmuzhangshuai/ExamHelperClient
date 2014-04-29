@@ -3,7 +3,7 @@ package com.jsonobjects;
 /**
  * Entity mapped to table MULTI_CHOICE.
  */
-public class MultiChoice extends JQuestion {
+public class JMultiChoice extends JQuestion {
 
 	private Long id;
 	/** Not-null value. */
@@ -28,14 +28,14 @@ public class MultiChoice extends JQuestion {
 	// KEEP FIELDS - put your custom fields here
 	// KEEP FIELDS END
 
-	public MultiChoice() {
+	public JMultiChoice() {
 	}
 
-	public MultiChoice(Long id) {
+	public JMultiChoice(Long id) {
 		this.id = id;
 	}
 
-	public MultiChoice(Long id, String question_stem, String optionA, String optionB, String optionC, String optionD,
+	public JMultiChoice(Long id, String question_stem, String optionA, String optionB, String optionC, String optionD,
 			String optionE, String optionF, Boolean answerA, Boolean answerB, Boolean answerC, Boolean answerD,
 			Boolean answerE, Boolean answerF, String analysis, String remark, Boolean flag, long section_id) {
 		this.id = id;

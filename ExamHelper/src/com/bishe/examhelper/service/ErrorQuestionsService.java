@@ -28,8 +28,8 @@ public class ErrorQuestionsService {
 	private static ErrorQuestionsService instance;
 	private static Context appContext;
 	private DaoSession mDaoSession;
-	private ErrorQuestionsDao errorQuestionsDao;
-	private QuestionTypeDao mQuestionTypeDao;
+	public ErrorQuestionsDao errorQuestionsDao;
+	public QuestionTypeDao mQuestionTypeDao;
 
 	public ErrorQuestionsService() {
 		// TODO Auto-generated constructor stub

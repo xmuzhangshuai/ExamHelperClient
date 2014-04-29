@@ -38,7 +38,7 @@ public class DefaultValues {
 	public static final String TRUE_OF_FALSE = "判断题";
 
 	// 分类练习
-	public static final String[] SORTS = new String[] { "习题集", "历年真题", "模拟试题" };
+	public static final String[] SORTS = new String[] { "习题集", "历年真题" };
 	public static final String SORT_TITILE_NAME = "分类练习";
 
 	// 按章节展示

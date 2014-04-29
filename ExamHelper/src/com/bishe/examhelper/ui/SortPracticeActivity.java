@@ -93,9 +93,6 @@ public class SortPracticeActivity extends BaseActivity {
 					startActivity(intent);
 					overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);// 设置切换效果
 					break;
-				case 2:// 如果点击了考前冲刺
-
-					break;
 				default:
 					break;
 				}

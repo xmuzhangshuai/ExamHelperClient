@@ -61,6 +61,20 @@ public class SectionService {
 	}
 
 	/**
+	 * 删除所有章节
+	 */
+	public void deleteAllSections() {
+		sectionDao.deleteAll();
+	}
+
+	/**
+	 * 添加章节
+	 */
+	public void addSection(Section section) {
+		sectionDao.insert(section);
+	}
+
+	/**
 	 * 根据Subject名称返回章节列表
 	 * @param id
 	 * @return

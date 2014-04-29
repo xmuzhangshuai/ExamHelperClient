@@ -4,7 +4,7 @@ package com.jsonobjects;
 /**
  * Entity mapped to table TRUE_OR_FALSE.
  */
-public class TrueOrFalse extends JQuestion {
+public class JTrueOrFalse extends JQuestion {
 
 	private Long id;
 	/** Not-null value. */
@@ -15,14 +15,14 @@ public class TrueOrFalse extends JQuestion {
 	private Boolean flag;
 	private long section_id;
 
-	public TrueOrFalse() {
+	public JTrueOrFalse() {
 	}
 
-	public TrueOrFalse(Long id) {
+	public JTrueOrFalse(Long id) {
 		this.id = id;
 	}
 
-	public TrueOrFalse(Long id, String question_stem, Boolean answer, String analysis, String remark, Boolean flag,
+	public JTrueOrFalse(Long id, String question_stem, Boolean answer, String analysis, String remark, Boolean flag,
 			long section_id) {
 		this.id = id;
 		this.question_stem = question_stem;
