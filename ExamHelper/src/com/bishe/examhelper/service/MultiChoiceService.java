@@ -56,7 +56,7 @@ public class MultiChoiceService {
 	public List<MultiChoice> loadAllMultiChoice() {
 		return multiChoiceDao.loadAll();
 	}
-	
+
 	/**
 	 * 返回实体Id列表
 	 * @return
@@ -70,18 +70,19 @@ public class MultiChoiceService {
 		}
 		return idList;
 	}
-	
+
 	/**
 	 * 返回随机多选题
 	 * @return
 	 */
-	public MultiChoice getRandomMultiChoice(){
-		MultiChoice multiChoice;
+	public MultiChoice getRandomMultiChoice() {
+		MultiChoice multiChoice = null;
 		Random random = new Random();
-		int id = random.nextInt((int)multiChoiceDao.count())+1;
-		multiChoice = multiChoiceDao.load((long)id);
+		if (multiChoiceDao.count() > 0) {
+			int id = random.nextInt((int) multiChoiceDao.count()) + 1;
+			multiChoice = multiChoiceDao.load((long) id);
+		}
 		return multiChoice;
 	}
-
 
 }

@@ -75,32 +75,35 @@ public class RandomExerciseActivity extends BaseFragmentActivity {
 		questionList.add(getRandomQuestion());
 		questionList.add(getRandomQuestion());
 
-		// 新建Adapter
-		final RandomExerciseAdapter randomExerciseAdapter = new RandomExerciseAdapter(getSupportFragmentManager(),
-				questionList);
-		mViewPager.setAdapter(randomExerciseAdapter);
+		if (questionList != null && questionList.get(0) != null && questionList.get(1) != null) {
+			// 新建Adapter
+			final RandomExerciseAdapter randomExerciseAdapter = new RandomExerciseAdapter(getSupportFragmentManager(),
+					questionList);
+			mViewPager.setAdapter(randomExerciseAdapter);
 
-		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+			mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 
-			@Override
-			public void onPageSelected(int state) {
-				// TODO Auto-generated method stub
-				/*****当滑动到当前题目时，重新从数据库取题放在下一题*****/
-				questionList.add(getRandomQuestion());
-				/******更新Adapter*********/
-				randomExerciseAdapter.notifyDataSetChanged();
-			}
+				@Override
+				public void onPageSelected(int state) {
+					// TODO Auto-generated method stub
+					/*****当滑动到当前题目时，重新从数据库取题放在下一题*****/
+					questionList.add(getRandomQuestion());
+					/******更新Adapter*********/
+					randomExerciseAdapter.notifyDataSetChanged();
+				}
 
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				// TODO Auto-generated method stub
-			}
+				@Override
+				public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+					// TODO Auto-generated method stub
+				}
 
-			@Override
-			public void onPageScrollStateChanged(int position) {
-				// TODO Auto-generated method stub
-			}
-		});
+				@Override
+				public void onPageScrollStateChanged(int position) {
+					// TODO Auto-generated method stub
+				}
+			});
+		}
+
 	}
 
 	/**
@@ -120,15 +123,21 @@ public class RandomExerciseActivity extends BaseFragmentActivity {
 		switch (type) {
 		case 0:// 单选题
 			question = singleChoiceService.getRandomSingleChoice();
-			question.setQuestion_type(DefaultValues.SINGLE_CHOICE);
+			if (question != null) {
+				question.setQuestion_type(DefaultValues.SINGLE_CHOICE);
+			}
 			break;
 		case 1:// 多选题
 			question = multiChoiceService.getRandomMultiChoice();
-			question.setQuestion_type(DefaultValues.MULTI_CHOICE);
+			if (question != null) {
+				question.setQuestion_type(DefaultValues.MULTI_CHOICE);
+			}
 			break;
 		case 2:// 材料题
 			question = materialAnalysisService.getRandomMaterialAnalysis();
-			question.setQuestion_type(DefaultValues.MATERIAL_ANALYSIS);
+			if (question != null) {
+				question.setQuestion_type(DefaultValues.MATERIAL_ANALYSIS);
+			}
 			break;
 		default:
 			break;

@@ -241,8 +241,10 @@
         </activity>
 
         <!-- 考试指南Web页面ExamGuideWebActivity -->
-        <activity android:name="com.bishe.examhelper.ui.ExamGuideWebActivity" >
-        </activity>
+        <activity android:name="com.bishe.examhelper.ui.ExamGuideWebActivity" />
+
+        <!-- 切换科目ChangeSubjectActivity -->
+        <activity android:name="com.bishe.examhelper.ui.ChangeSubjectActivity" />
 
         <!-- 展示图片mageShower -->
         <activity

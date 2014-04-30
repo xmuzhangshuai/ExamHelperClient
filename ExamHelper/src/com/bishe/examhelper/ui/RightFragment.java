@@ -28,6 +28,9 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.config.DefaultSetting;
 import com.bishe.examhelper.config.DefaultValues;
+import com.bishe.examhelper.entities.ExamQuestion;
+import com.bishe.examhelper.entities.ExamSection;
+import com.bishe.examhelper.entities.Examination;
 import com.bishe.examhelper.entities.MaterialAnalysis;
 import com.bishe.examhelper.entities.MultiChoice;
 import com.bishe.examhelper.entities.QuestionType;
@@ -37,6 +40,7 @@ import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.service.CollectionService;
 import com.bishe.examhelper.service.DivideIntoGroup;
 import com.bishe.examhelper.service.ErrorQuestionsService;
+import com.bishe.examhelper.service.ExaminationService;
 import com.bishe.examhelper.service.MaterialAnalysisService;
 import com.bishe.examhelper.service.MultiChoiceService;
 import com.bishe.examhelper.service.NoteService;
@@ -49,6 +53,9 @@ import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.bishe.examhelper.utils.NetworkUtils;
+import com.jsonobjects.JExamQuestion;
+import com.jsonobjects.JExamSection;
+import com.jsonobjects.JExamination;
 import com.jsonobjects.JMaterialAnalysis;
 import com.jsonobjects.JMultiChoice;
 import com.jsonobjects.JQuestionsOfMaterial;
@@ -242,6 +249,9 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 
 		/************如果点击了科目切换************/
 		else if (preference.getKey().equals(DefaultKeys.KEY_PREF_COURSE_SWITCH)) {
+			Intent intent = new Intent(getActivity(), ChangeSubjectActivity.class);
+			startActivity(intent);
+			getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 		}
 
 		/************如果点击了注销登陆************/
@@ -439,6 +449,7 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 		SingleChoiceService singleChoiceService = SingleChoiceService.getInstance(getActivity());
 		MultiChoiceService multiChoiceService = MultiChoiceService.getInstance(getActivity());
 		MaterialAnalysisService materialAnalysisService = MaterialAnalysisService.getInstance(getActivity());
+		ExaminationService examinationService = ExaminationService.getInstance(getActivity());
 		int subjectId = 0;
 
 		@Override
@@ -458,15 +469,19 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 			//删除所有章节重新下载
 			sectionService.deleteAllSections();
 			List<JSection> jSectionList = FastJsonTool.getObjectList(params[0], JSection.class);
-			for (JSection jSection : jSectionList) {
-				Section section = new Section(jSection.getId(), jSection.getSection_name(), jSection.getSubject_id());
-				sectionService.addSection(section);
+			if (jSectionList != null) {
+				for (JSection jSection : jSectionList) {
+					Section section = new Section(jSection.getId(), jSection.getSection_name(),
+							jSection.getSubject_id());
+					sectionService.addSection(section);
+				}
 			}
 
 			//从网络端检查更新
 			String URL = "UpdateLibraryServlet";
 			subjectId = subjectService.getCurrentSubjectId();
 
+			publishProgress((int) ((0 / (float) 7) * 100));
 			/**************单选题**********************/
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("subjectId", String.valueOf(subjectId));
@@ -476,18 +491,21 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 				String result = HttpUtil.postRequest(URL, map);
 				singleChoiceService.singleChoiceDao.deleteAll();
 				List<JSingleChoice> jSingleChoiceList = FastJsonTool.getObjectList(result, JSingleChoice.class);
-				for (JSingleChoice jSingleChoice : jSingleChoiceList) {
-					SingleChoice singleChoice = new SingleChoice(jSingleChoice.getId(),
-							jSingleChoice.getQuestion_stem(), jSingleChoice.getOptionA(), jSingleChoice.getOptionB(),
-							jSingleChoice.getOptionC(), jSingleChoice.getOptionD(), jSingleChoice.getOptionE(),
-							jSingleChoice.getAnswer(), jSingleChoice.getAnalysis(), jSingleChoice.getRemark(),
-							jSingleChoice.getFlag(), jSingleChoice.getSection_id());
-					singleChoiceService.singleChoiceDao.insert(singleChoice);
+				if (jSingleChoiceList != null) {
+					for (JSingleChoice jSingleChoice : jSingleChoiceList) {
+						SingleChoice singleChoice = new SingleChoice(jSingleChoice.getId(),
+								jSingleChoice.getQuestion_stem(), jSingleChoice.getOptionA(),
+								jSingleChoice.getOptionB(), jSingleChoice.getOptionC(), jSingleChoice.getOptionD(),
+								jSingleChoice.getOptionE(), jSingleChoice.getAnswer(), jSingleChoice.getAnalysis(),
+								jSingleChoice.getRemark(), jSingleChoice.getFlag(), jSingleChoice.getSection_id());
+						singleChoiceService.singleChoiceDao.insert(singleChoice);
+					}
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			publishProgress((int) ((1 / (float) 7) * 100));
 
 			/**************多选题**********************/
 			map = new HashMap<String, String>();
@@ -498,20 +516,23 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 				String result = HttpUtil.postRequest(URL, map);
 				multiChoiceService.multiChoiceDao.deleteAll();
 				List<JMultiChoice> jMultiChoiceList = FastJsonTool.getObjectList(result, JMultiChoice.class);
-				for (JMultiChoice jMultiChoice : jMultiChoiceList) {
-					MultiChoice multiChoice = new MultiChoice(jMultiChoice.getId(), jMultiChoice.getQuestion_stem(),
-							jMultiChoice.getOptionA(), jMultiChoice.getOptionB(), jMultiChoice.getOptionC(),
-							jMultiChoice.getOptionD(), jMultiChoice.getOptionE(), jMultiChoice.getOptionF(),
-							jMultiChoice.getAnswerA(), jMultiChoice.getAnswerB(), jMultiChoice.getAnswerC(),
-							jMultiChoice.getAnswerD(), jMultiChoice.getAnswerE(), jMultiChoice.getAnswerF(),
-							jMultiChoice.getAnalysis(), jMultiChoice.getRemark(), jMultiChoice.getFlag(),
-							jMultiChoice.getSection_id());
-					multiChoiceService.multiChoiceDao.insert(multiChoice);
+				if (jMultiChoiceList != null) {
+					for (JMultiChoice jMultiChoice : jMultiChoiceList) {
+						MultiChoice multiChoice = new MultiChoice(jMultiChoice.getId(),
+								jMultiChoice.getQuestion_stem(), jMultiChoice.getOptionA(), jMultiChoice.getOptionB(),
+								jMultiChoice.getOptionC(), jMultiChoice.getOptionD(), jMultiChoice.getOptionE(),
+								jMultiChoice.getOptionF(), jMultiChoice.getAnswerA(), jMultiChoice.getAnswerB(),
+								jMultiChoice.getAnswerC(), jMultiChoice.getAnswerD(), jMultiChoice.getAnswerE(),
+								jMultiChoice.getAnswerF(), jMultiChoice.getAnalysis(), jMultiChoice.getRemark(),
+								jMultiChoice.getFlag(), jMultiChoice.getSection_id());
+						multiChoiceService.multiChoiceDao.insert(multiChoice);
+					}
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			publishProgress((int) ((2 / (float) 7) * 100));
 
 			/**************材料题**********************/
 			map = new HashMap<String, String>();
@@ -523,17 +544,20 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 				materialAnalysisService.materialAnalysisDao.deleteAll();
 				List<JMaterialAnalysis> jMaterialAnalysiList = FastJsonTool.getObjectList(result,
 						JMaterialAnalysis.class);
-				for (JMaterialAnalysis jMaterialAnalysis : jMaterialAnalysiList) {
-					MaterialAnalysis materialAnalysis = new MaterialAnalysis(jMaterialAnalysis.getId(),
-							jMaterialAnalysis.getMaterial(), jMaterialAnalysis.getMaterial(),
-							jMaterialAnalysis.getRemark(), jMaterialAnalysis.getFlag(),
-							jMaterialAnalysis.getSection_id());
-					materialAnalysisService.materialAnalysisDao.insert(materialAnalysis);
+				if (jMaterialAnalysiList != null) {
+					for (JMaterialAnalysis jMaterialAnalysis : jMaterialAnalysiList) {
+						MaterialAnalysis materialAnalysis = new MaterialAnalysis(jMaterialAnalysis.getId(),
+								jMaterialAnalysis.getMaterial(), jMaterialAnalysis.getMaterial(),
+								jMaterialAnalysis.getRemark(), jMaterialAnalysis.getFlag(),
+								jMaterialAnalysis.getSection_id());
+						materialAnalysisService.materialAnalysisDao.insert(materialAnalysis);
+					}
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			publishProgress((int) ((3 / (float) 7) * 100));
 
 			/**************材料题小题*****************/
 			map = new HashMap<String, String>();
@@ -545,25 +569,98 @@ public class RightFragment extends PreferenceFragment implements OnSharedPrefere
 				materialAnalysisService.questionsOfMaterialDao.deleteAll();
 				List<JQuestionsOfMaterial> jQuestionsOfMaterialList = FastJsonTool.getObjectList(result,
 						JQuestionsOfMaterial.class);
-				for (JQuestionsOfMaterial jQuestionsOfMaterial : jQuestionsOfMaterialList) {
-					QuestionsOfMaterial questionsOfMaterial = new QuestionsOfMaterial(jQuestionsOfMaterial.getId(),
-							jQuestionsOfMaterial.getQusetion_number(), jQuestionsOfMaterial.getQuestion_stem(),
-							jQuestionsOfMaterial.getAnswer(), jQuestionsOfMaterial.getAnalysis(),
-							jQuestionsOfMaterial.getScore(), jQuestionsOfMaterial.getMaterial_id());
-					materialAnalysisService.questionsOfMaterialDao.insert(questionsOfMaterial);
+				if (jQuestionsOfMaterialList != null) {
+					for (JQuestionsOfMaterial jQuestionsOfMaterial : jQuestionsOfMaterialList) {
+						QuestionsOfMaterial questionsOfMaterial = new QuestionsOfMaterial(jQuestionsOfMaterial.getId(),
+								jQuestionsOfMaterial.getQusetion_number(), jQuestionsOfMaterial.getQuestion_stem(),
+								jQuestionsOfMaterial.getAnswer(), jQuestionsOfMaterial.getAnalysis(),
+								jQuestionsOfMaterial.getScore(), jQuestionsOfMaterial.getMaterial_id());
+						materialAnalysisService.questionsOfMaterialDao.insert(questionsOfMaterial);
+					}
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			publishProgress((int) ((4 / (float) 7) * 100));
 
+			/**************试卷*****************/
+			map = new HashMap<String, String>();
+			map.put("subjectId", String.valueOf(subjectId));
+			map.put("type", "get");
+			map.put("questionType", "examination");
+			try {
+				String result = HttpUtil.postRequest(URL, map);
+				examinationService.mExaminationDao.deleteAll();
+				List<JExamination> jExaminationList = FastJsonTool.getObjectList(result, JExamination.class);
+				if (jExaminationList != null) {
+					for (JExamination jExamination : jExaminationList) {
+						Examination examination = new Examination(jExamination.getId(), jExamination.getExam_type(),
+								jExamination.getExam_name(), jExamination.getExam_request(),
+								jExamination.getExam_time(), jExamination.getSubject_id());
+						examinationService.mExaminationDao.insert(examination);
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			publishProgress((int) ((5 / (float) 7) * 100));
+
+			/**************试卷大题*****************/
+			map = new HashMap<String, String>();
+			map.put("subjectId", String.valueOf(subjectId));
+			map.put("type", "get");
+			map.put("questionType", "examSection");
+			try {
+				String result = HttpUtil.postRequest(URL, map);
+				examinationService.mExamSectionDao.deleteAll();
+				List<JExamSection> jExamSectionList = FastJsonTool.getObjectList(result, JExamSection.class);
+				if (jExamSectionList != null) {
+					for (JExamSection jExamSection : jExamSectionList) {
+						ExamSection examSection = new ExamSection(jExamSection.getId(), jExamSection.getRequest(),
+								jExamSection.getQuestion_num(), jExamSection.getQuestion_score(),
+								jExamSection.getQuestionType_id(), jExamSection.getExam_id());
+						examinationService.mExamSectionDao.insert(examSection);
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			publishProgress((int) ((6 / (float) 7) * 100));
+
+			/**************试卷题目*****************/
+			map = new HashMap<String, String>();
+			map.put("subjectId", String.valueOf(subjectId));
+			map.put("type", "get");
+			map.put("questionType", "examQuestion");
+			try {
+				String result = HttpUtil.postRequest(URL, map);
+				examinationService.mExamQuestionDao.deleteAll();
+				List<JExamQuestion> jExamQuestionList = FastJsonTool.getObjectList(result, JExamQuestion.class);
+				if (jExamQuestionList != null) {
+					for (JExamQuestion jExamQuestion : jExamQuestionList) {
+						ExamQuestion examQuestion = new ExamQuestion(jExamQuestion.getId(),
+								jExamQuestion.getQuestion_number(), jExamQuestion.getQuestion_id(),
+								jExamQuestion.getExanSection_id());
+						examinationService.mExamQuestionDao.insert(examQuestion);
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			publishProgress((int) ((7 / (float) 7) * 100));
 			return null;
+
 		}
 
 		@Override
 		protected void onProgressUpdate(Integer... values) {
 			// TODO Auto-generated method stub
 			super.onProgressUpdate(values);
+			dialog.setProgress(values[0]);
 		}
 
 		@Override

@@ -3,6 +3,8 @@ package com.bishe.examhelper.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
 import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.config.DefaultValues;
 import com.bishe.examhelper.dao.DaoSession;
@@ -17,8 +19,6 @@ import com.bishe.examhelper.entities.Section;
 import com.bishe.examhelper.entities.SingleChoice;
 import com.bishe.examhelper.entities.StudyRecord;
 import com.bishe.examhelper.entities.Subject;
-
-import android.content.Context;
 
 public class SectionService {
 
@@ -58,6 +58,14 @@ public class SectionService {
 	 */
 	public Section loadCollection(Long id) {
 		return sectionDao.load(id);
+	}
+
+	/**
+	 * ∑µªÿ¡–±Ì
+	 * @return
+	 */
+	public List<Section> getSectionList() {
+		return sectionDao.loadAll();
 	}
 
 	/**

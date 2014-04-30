@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -21,7 +20,9 @@ import com.baidu.location.LocationClientOption;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.config.Constants;
 import com.bishe.examhelper.config.DefaultKeys;
+import com.bishe.examhelper.entities.Subject;
 import com.bishe.examhelper.entities.User;
+import com.bishe.examhelper.service.SubjectService;
 import com.bishe.examhelper.service.UserService;
 import com.bishe.examhelper.slidingmenu.BaseSlidingFragmentActivity;
 import com.bishe.examhelper.slidingmenu.SlidingMenu;
@@ -104,6 +105,12 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		// TODO Auto-generated method stub
 		super.onResume();
 		MobclickAgent.onResume(this);
+		Subject subject = SubjectService.getInstance(MainActivity.this).getCurrentSubject();
+		String title = "考试助手";
+		if (subject != null) {
+			title = subject.getSubject_name();
+		}
+		mTitleName.setText(title);
 	}
 
 	@Override
@@ -188,7 +195,12 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		((ImageButton) findViewById(R.id.ivTitleBtnLeft)).setOnClickListener(this);
 		((ImageButton) findViewById(R.id.ivTitleBtnRigh)).setOnClickListener(this);
 		mTitleName = (TextView) findViewById(R.id.ivTitleName);
-		mTitleName.setText("考研政治");
+		Subject subject = SubjectService.getInstance(MainActivity.this).getCurrentSubject();
+		String title = "考试助手";
+		if (subject != null) {
+			title = subject.getSubject_name();
+		}
+		mTitleName.setText(title);
 
 	}
 
@@ -249,9 +261,9 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 					"com.bishe.examhelper.securityModifyDialogFragment");
 			myFragmentTransaction2.commit();
 			break;
-		case R.id.integral:
-			Toast.makeText(source.getContext(), "点击了积分", 1).show();
-			break;
+		//		case R.id.integral:
+		//
+		//			break;
 		default:
 			break;
 		}

@@ -67,11 +67,11 @@ public class LeftFragment extends BaseV4Fragment {
 	private RelativeLayout relativeLayout;// 背景图片
 	private TextView personalTextView;// 个人
 	private TextView securityTextView;// 安全
-	private TextView integralTextView;// 积分
+//	private TextView integralTextView;// 积分
 	private TextView realNameTextView;// 真实姓名
 	private TextView genderTextView;// 性别
 	private TextView phoneTextView;// 手机号码
-	private TextView integral;// 积分
+//	private TextView integral;// 积分
 	private Button login;// 登陆按钮
 	private TextView nickNameTextView;// 昵称
 	private TextView mailTextView;// 邮箱
@@ -99,7 +99,7 @@ public class LeftFragment extends BaseV4Fragment {
 		relativeLayout.setBackgroundResource(themeID);
 		personalTextView.setBackgroundResource(themeColorID);
 		securityTextView.setBackgroundResource(themeColorID);
-		integralTextView.setBackgroundResource(themeColorID);
+//		integralTextView.setBackgroundResource(themeColorID);
 		/*** 从sharedPreference中取出主题并设置，默认为1号主�? ***/
 
 		initView();
@@ -171,7 +171,7 @@ public class LeftFragment extends BaseV4Fragment {
 			}
 
 			phoneTextView.setText("绑定手机：" + user.getPhone());// 手机号码
-			integral.setText("我的积分：" + user.getIntegral());// 积分
+//			integral.setText("我的积分：" + user.getIntegral());// 积分
 		} else {
 			login.setVisibility(View.VISIBLE);
 			userView.setVisibility(View.GONE);
@@ -179,7 +179,7 @@ public class LeftFragment extends BaseV4Fragment {
 			realNameTextView.setText("姓名：");// 真实姓名
 			genderTextView.setText("性别：");// 性别
 			phoneTextView.setText("绑定手机：");// 手机号码
-			integral.setText("我的积分：");// 积分
+//			integral.setText("我的积分：");// 积分
 		}
 	}
 
@@ -209,7 +209,7 @@ public class LeftFragment extends BaseV4Fragment {
 		relativeLayout = (RelativeLayout) rootView.findViewById(R.id.person_cente_relativeLayout);// 背景图片
 		personalTextView = (TextView) rootView.findViewById(R.id.user_center_itemname1);// 个人背景颜色
 		securityTextView = (TextView) rootView.findViewById(R.id.user_center_itemname2);// 安全背景颜色
-		integralTextView = (TextView) rootView.findViewById(R.id.user_center_itemname3);// 积分背景颜色
+//		integralTextView = (TextView) rootView.findViewById(R.id.user_center_itemname3);// 积分背景颜色
 		login = (Button) rootView.findViewById(R.id.login_btn);
 		nickNameTextView = (TextView) rootView.findViewById(R.id.pCenter_name);// 昵称
 		mailTextView = (TextView) rootView.findViewById(R.id.pCenter_account);// 邮箱
@@ -217,7 +217,7 @@ public class LeftFragment extends BaseV4Fragment {
 		realNameTextView = (TextView) rootView.findViewById(R.id.user_real_name);// 真实姓名
 		genderTextView = (TextView) rootView.findViewById(R.id.user_gender);// 性别
 		phoneTextView = (TextView) rootView.findViewById(R.id.user_phone);// 手机号码
-		integral = (TextView) rootView.findViewById(R.id.user_integral);// 积分
+//		integral = (TextView) rootView.findViewById(R.id.user_integral);// 积分
 		changeImageButton = (Button) rootView.findViewById(R.id.change_headimage);// 更改头像
 
 	}

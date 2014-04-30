@@ -79,10 +79,12 @@ public class MaterialAnalysisService {
 	 * @return
 	 */
 	public MaterialAnalysis getRandomMaterialAnalysis() {
-		MaterialAnalysis materialAnalysis;
+		MaterialAnalysis materialAnalysis = null;
 		Random random = new Random();
-		int id = random.nextInt((int) materialAnalysisDao.count()) + 1;
-		materialAnalysis = materialAnalysisDao.load((long) id);
+		if (materialAnalysisDao.count() > 0) {
+			int id = random.nextInt((int) materialAnalysisDao.count()) + 1;
+			materialAnalysis = materialAnalysisDao.load((long) id);
+		}
 		return materialAnalysis;
 	}
 }

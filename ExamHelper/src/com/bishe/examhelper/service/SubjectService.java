@@ -12,7 +12,7 @@ public class SubjectService {
 	private static SubjectService instance;
 	private static Context appContext;
 	private DaoSession mDaoSession;
-	private SubjectDao subjectDao;
+	public SubjectDao subjectDao;
 
 	public SubjectService() {
 		// TODO Auto-generated constructor stub
@@ -40,7 +40,7 @@ public class SubjectService {
 	 * @return
 	 */
 	public Subject getCurrentSubject() {
-		return subjectDao.loadByRowId(1);
+		return subjectDao.load(new Long(getCurrentSubjectId()));
 	}
 
 	/**

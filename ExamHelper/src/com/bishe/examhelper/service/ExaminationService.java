@@ -5,6 +5,8 @@ import java.util.List;
 import android.content.Context;
 import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.dao.DaoSession;
+import com.bishe.examhelper.dao.ExamQuestionDao;
+import com.bishe.examhelper.dao.ExamSectionDao;
 import com.bishe.examhelper.dao.ExaminationDao;
 import com.bishe.examhelper.entities.Examination;
 
@@ -13,7 +15,9 @@ public class ExaminationService {
 	private static ExaminationService instance;
 	private static Context appContext;
 	private DaoSession mDaoSession;
-	private ExaminationDao mExaminationDao;
+	public ExaminationDao mExaminationDao;
+	public ExamQuestionDao mExamQuestionDao;
+	public ExamSectionDao mExamSectionDao;
 
 	public ExaminationService() {
 		// TODO Auto-generated constructor stub
@@ -32,6 +36,8 @@ public class ExaminationService {
 			}
 			instance.mDaoSession = BaseApplication.getDaoSession(context);
 			instance.mExaminationDao = instance.mDaoSession.getExaminationDao();
+			instance.mExamQuestionDao = instance.mDaoSession.getExamQuestionDao();
+			instance.mExamSectionDao = instance.mDaoSession.getExamSectionDao();
 		}
 		return instance;
 	}

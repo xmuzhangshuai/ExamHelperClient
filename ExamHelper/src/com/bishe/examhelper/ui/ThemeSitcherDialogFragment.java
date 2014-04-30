@@ -82,10 +82,10 @@ public class ThemeSitcherDialogFragment extends DialogFragment {
 							R.id.person_cente_relativeLayout);
 					TextView textView1 = (TextView) getActivity().findViewById(R.id.user_center_itemname1);// 设置个人背景颜色
 					TextView textView2 = (TextView) getActivity().findViewById(R.id.user_center_itemname2);// 设置安全背景颜色
-					TextView textView3 = (TextView) getActivity().findViewById(R.id.user_center_itemname3);// 设置积分背景颜色
+//					TextView textView3 = (TextView) getActivity().findViewById(R.id.user_center_itemname3);// 设置积分背景颜色
 					textView1.setBackgroundResource(themeColors[currentTheme]);
 					textView2.setBackgroundResource(themeColors[currentTheme]);
-					textView3.setBackgroundResource(themeColors[currentTheme]);
+//					textView3.setBackgroundResource(themeColors[currentTheme]);
 
 					relativeLayout.setBackgroundResource(themeImages[currentTheme]);
 					editor.putInt(getString(R.string.user_center_theme_key), themeImages[currentTheme]);// 将主题图片保存到Sharedpreference

@@ -1,9 +1,5 @@
 package com.bishe.examhelper.ui;
 
-import com.bishe.examhelper.R;
-import com.bishe.examhelper.adapters.CenterFragmentAdapter;
-import com.bishe.examhelper.config.Constants;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,8 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+
+import com.bishe.examhelper.R;
+import com.bishe.examhelper.adapters.CenterFragmentAdapter;
+import com.bishe.examhelper.utils.DensityUtil;
 
 /**   
  *    
@@ -49,7 +49,7 @@ public class CenterFragment extends Fragment {
 
 		/********* 通过adapter给GridView填充内容 **************/
 		gridView = (GridView) view.findViewById(R.id.center_gridviewID);
-		gridView.setColumnWidth((Constants.SCREEN_WIDTH - 100) / 2);
+		gridView.setColumnWidth((DensityUtil.getScreenWidthforPX(getActivity()) - 100) / 2);
 		centerFragmentAdapter = new CenterFragmentAdapter(getActivity());
 		gridView.setAdapter(centerFragmentAdapter);
 		/********* 通过adapter给GridView填充内容 **************/

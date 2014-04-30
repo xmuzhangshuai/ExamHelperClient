@@ -118,58 +118,6 @@
 
     <!-- 积分信息区 -->
 
-    <LinearLayout
-        android:id="@+id/integral"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/Ucenter_Item_height"
-        android:layout_marginTop="@dimen/Ucenter_Item_margin"
-        android:background="@drawable/selector_user_info"
-        android:onClick="clickUser"
-        android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/user_center_itemname3"
-            android:layout_width="@dimen/Ucenter_Item_ItemName_dim"
-            android:layout_height="@dimen/Ucenter_Item_ItemName_dim"
-            android:background="#C000C5CD"
-            android:gravity="center"
-            android:text="积分"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/Ucenter_Item_ItemName_TextSize" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/user_center_itemENGname3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Integral"
-                android:textColor="@color/Ucenter_Item_ENGName_Textcolor"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/user_integral"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="我的积分："
-                android:textColor="#000"
-                android:textSize="@dimen/Ucenter_Item_content_TextSize" />
-
-            <TextView
-                android:id="@+id/user_center_item32"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="获取积分"
-                android:textColor="#80000000"
-                android:textSize="@dimen/Ucenter_Item_content_TextSize" />
-        </LinearLayout>
-    </LinearLayout>
 
 </LinearLayout>

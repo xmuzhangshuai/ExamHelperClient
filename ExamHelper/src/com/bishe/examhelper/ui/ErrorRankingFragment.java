@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
 import com.bishe.examhelper.config.DefaultKeys;
+import com.bishe.examhelper.entities.Section;
 import com.bishe.examhelper.service.QuestionService;
 import com.bishe.examhelper.service.SectionService;
 import com.bishe.examhelper.utils.FastJsonTool;
@@ -238,10 +239,10 @@ public class ErrorRankingFragment extends BaseV4Fragment {
 					+ questionService.getRightAnswer(netData.get(position).getQuestionId().longValue(),
 							netData.get(position).getQuestiontypeId().longValue()));
 			SectionService sectionService = SectionService.getInstance(getActivity());
-			holder.sectionTextView
-					.setText("所属章节：  "
-							+ sectionService.loadCollection(netData.get(position).getSectionId().longValue())
-									.getSection_name());
+			Section section = sectionService.loadCollection(netData.get(position).getSectionId().longValue());
+			if (section != null) {
+				holder.sectionTextView.setText("所属章节：  " + section.getSection_name());
+			}
 			return view;
 		}
 	}

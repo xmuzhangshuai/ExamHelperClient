@@ -70,17 +70,18 @@ public class SingleChoiceService {
 		}
 		return idList;
 	}
-	
 
 	/**
 	 * 返回随机单选题
 	 * @return
 	 */
 	public SingleChoice getRandomSingleChoice() {
-		SingleChoice singleChoice;
+		SingleChoice singleChoice = null;
 		Random random = new Random();
-		int id = random.nextInt((int) singleChoiceDao.count()) + 1;
-		singleChoice = singleChoiceDao.load((long) id);
+		if (singleChoiceDao.count() > 0) {
+			int id = random.nextInt((int) singleChoiceDao.count()) + 1;
+			singleChoice = singleChoiceDao.load((long) id);
+		}
 		return singleChoice;
 	}
 
