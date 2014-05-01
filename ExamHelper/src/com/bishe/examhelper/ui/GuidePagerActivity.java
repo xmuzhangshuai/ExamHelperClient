@@ -105,7 +105,7 @@ public class GuidePagerActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(GuidePagerActivity.this, MainActivity.class);
+				Intent intent = new Intent(GuidePagerActivity.this, ChangeSubjectActivity.class);
 				startActivity(intent);
 				overridePendingTransition(R.anim.splash_fade_in, R.anim.splash_fade_out);
 				finish();

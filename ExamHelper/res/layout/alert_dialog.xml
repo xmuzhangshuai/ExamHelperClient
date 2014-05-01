@@ -33,16 +33,6 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/bt1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/alert_left_selector"
-            android:textColor="#ffffff"
-            android:textSize="12sp" />
-
-        <Button
             android:id="@+id/bt2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

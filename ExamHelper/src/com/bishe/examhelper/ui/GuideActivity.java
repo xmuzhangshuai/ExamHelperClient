@@ -16,6 +16,7 @@ import com.bishe.examhelper.base.BaseActivity;
 import com.bishe.examhelper.config.Constants;
 import com.bishe.examhelper.service.CopyDataBase;
 import com.bishe.examhelper.service.DivideIntoGroup;
+import com.bishe.examhelper.service.SubjectService;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 
@@ -64,11 +65,15 @@ public class GuideActivity extends BaseActivity {
 			localEditor.commit();
 			finish();
 		} else {// 如果不是第一次使用,则不启动向导页面，显示欢迎页面。
-			setContentView(R.layout.welcome);
-			initDeviceInfo();// 初始化设备信息
-			mHandler = new Handler(getMainLooper());
-			findViewById();
-			initView();
+			if (SubjectService.getInstance(GuideActivity.this).getCurrentSubject() != null) {
+				setContentView(R.layout.welcome);
+				initDeviceInfo();// 初始化设备信息
+				mHandler = new Handler(getMainLooper());
+				findViewById();
+				initView();
+			} else {
+				startActivity(new Intent(GuideActivity.this, ChangeSubjectActivity.class));
+			}
 			localEditor.putInt("count", ++count);
 			localEditor.commit();
 		}

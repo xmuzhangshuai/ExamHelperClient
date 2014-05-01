@@ -349,7 +349,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			super.onPostExecute(result);
 			//如果没有显示过
 			if (systemnotice != null && systemnotice.getValid()) {
-				AlertDialogs.alertDialog(MainActivity.this, systemnotice.getNoticeContent(), "取消", "查看详情", "no", "yes");
+				AlertDialogs.alertDialog(MainActivity.this, systemnotice.getNoticeContent(), "取消", "关闭", "no", "yes");
 			}
 		}
 	}

@@ -135,7 +135,7 @@ public class ChangeSubjectActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
-		getActionBar().setTitle("切换科目");
+		getActionBar().setTitle("选择科目");
 		getActionBar().setIcon(R.drawable.function_random_practice);
 
 		searchImageView.setOnClickListener(new OnClickListener() {
@@ -171,7 +171,7 @@ public class ChangeSubjectActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				if (NetworkUtils.checkNetAndTip(ChangeSubjectActivity.this)) {
 					if (NetworkUtils.isWifi(ChangeSubjectActivity.this)) {
-						new AlertDialog.Builder(ChangeSubjectActivity.this).setTitle("温馨提示").setMessage("是否确定切换科目？")
+						new AlertDialog.Builder(ChangeSubjectActivity.this).setTitle("温馨提示").setMessage("是否确定选择该科目？")
 								.setIcon(R.drawable.icon_warning)
 								.setPositiveButton("是", new DialogInterface.OnClickListener() {
 									@Override
@@ -195,7 +195,7 @@ public class ChangeSubjectActivity extends BaseActivity {
 										// TODO Auto-generated method stub
 
 										new AlertDialog.Builder(ChangeSubjectActivity.this).setTitle("温馨提示")
-												.setMessage("是否确定切换科目？").setIcon(R.drawable.icon_warning)
+												.setMessage("是否确定选择该科目？").setIcon(R.drawable.icon_warning)
 												.setPositiveButton("是", new DialogInterface.OnClickListener() {
 													@Override
 													public void onClick(DialogInterface dialog, int which) {
@@ -521,7 +521,8 @@ public class ChangeSubjectActivity extends BaseActivity {
 			ErrorQuestionsService.getInstance(ChangeSubjectActivity.this).errorQuestionsDao.deleteAll();
 			dialog.cancel();
 			Toast.makeText(ChangeSubjectActivity.this, "切换科目成功", 1).show();
-			ChangeSubjectActivity.this.finish();
+			ChangeSubjectActivity.this.startActivity(new Intent(ChangeSubjectActivity.this,MainActivity.class));
+			ChangeSubjectActivity.this.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 		}
 	}
 

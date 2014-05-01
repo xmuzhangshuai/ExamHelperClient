@@ -48,8 +48,10 @@ public class SubjectService {
 	 * @return
 	 */
 	public int getCurrentSubjectId() {
-		if (subjectDao.loadAll().get(0) != null) {
-			return subjectDao.loadAll().get(0).getId().intValue();
+		if (subjectDao.loadAll().size() > 0) {
+			if (subjectDao.loadAll().get(0) != null) {
+				return subjectDao.loadAll().get(0).getId().intValue();
+			}
 		}
 		return 0;
 	}
