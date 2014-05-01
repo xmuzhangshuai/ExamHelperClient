@@ -1820,38 +1820,37 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int reset_sound=0x7f060002;
     }
     public static final class string {
-        public static final int UMAppUpdate=0x7f090090;
-        public static final int UMBreak_Network=0x7f090088;
-        public static final int UMDialog_InstallAPK=0x7f090094;
-        public static final int UMGprsCondition=0x7f09008e;
-        public static final int UMIgnore=0x7f090092;
-        public static final int UMNewVersion=0x7f09008a;
-        public static final int UMNotNow=0x7f090091;
-        public static final int UMTargetSize=0x7f09008d;
-        public static final int UMToast_IsUpdating=0x7f090093;
-        public static final int UMUpdateCheck=0x7f090095;
-        public static final int UMUpdateContent=0x7f09008b;
-        public static final int UMUpdateNow=0x7f09008f;
-        public static final int UMUpdateSize=0x7f09008c;
-        public static final int UMUpdateTitle=0x7f090089;
-        public static final int action_forgot_password=0x7f090028;
-        public static final int action_register=0x7f090026;
-        public static final int action_sign_in=0x7f090025;
-        public static final int action_sign_in_short=0x7f090027;
+        public static final int UMAppUpdate=0x7f09008e;
+        public static final int UMBreak_Network=0x7f090086;
+        public static final int UMDialog_InstallAPK=0x7f090092;
+        public static final int UMGprsCondition=0x7f09008c;
+        public static final int UMIgnore=0x7f090090;
+        public static final int UMNewVersion=0x7f090088;
+        public static final int UMNotNow=0x7f09008f;
+        public static final int UMTargetSize=0x7f09008b;
+        public static final int UMToast_IsUpdating=0x7f090091;
+        public static final int UMUpdateCheck=0x7f090093;
+        public static final int UMUpdateContent=0x7f090089;
+        public static final int UMUpdateNow=0x7f09008d;
+        public static final int UMUpdateSize=0x7f09008a;
+        public static final int UMUpdateTitle=0x7f090087;
+        public static final int action_forgot_password=0x7f090026;
+        public static final int action_register=0x7f090024;
+        public static final int action_sign_in=0x7f090023;
+        public static final int action_sign_in_short=0x7f090025;
         public static final int app_name=0x7f090006;
-        public static final int auto_login=0x7f090031;
+        public static final int auto_login=0x7f09002f;
         public static final int blockTextView_default=0x7f090015;
-        public static final int com_facebook_loading=0x7f090087;
+        public static final int com_facebook_loading=0x7f090085;
         /**  个人中心的preference 
  Menu 
          */
-        public static final int delete_all=0x7f09001c;
-        public static final int email=0x7f090018;
-        public static final int error_field_required=0x7f09002e;
-        public static final int error_incorrect_password=0x7f09002d;
-        public static final int error_invalid_email=0x7f09002b;
-        public static final int error_invalid_password=0x7f09002c;
-        public static final int error_phone=0x7f09002f;
+        public static final int delete_all=0x7f09001a;
+        public static final int error_field_required=0x7f09002c;
+        public static final int error_incorrect_password=0x7f09002b;
+        public static final int error_invalid_email=0x7f090029;
+        public static final int error_invalid_password=0x7f09002a;
+        public static final int error_phone=0x7f09002d;
         /**  主页面 
          */
         public static final int f_name1=0x7f090008;
@@ -1867,20 +1866,21 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int f_name7=0x7f09000e;
         public static final int f_name8=0x7f09000f;
         public static final int f_name9=0x7f090010;
-        public static final int forget_password=0x7f090030;
-        public static final int hand_in=0x7f09001e;
-        public static final int last_question=0x7f090020;
-        public static final int login_progress_register=0x7f09002a;
-        public static final int login_progress_signing_in=0x7f090029;
-        public static final int next_question=0x7f090021;
-        /**  以下是sharedPreference的名称 
+        public static final int forget_password=0x7f09002e;
+        public static final int hand_in=0x7f09001c;
+        public static final int last_question=0x7f09001e;
+        public static final int login_progress_register=0x7f090028;
+        public static final int login_progress_signing_in=0x7f090027;
+        public static final int next_question=0x7f09001f;
+        /**  更换主题dialog标题 
+ 以下是sharedPreference的名称 
          */
-        public static final int preference_user_center=0x7f090019;
-        public static final int preview=0x7f09001f;
+        public static final int preference_user_center=0x7f090017;
+        public static final int preview=0x7f09001d;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f090023;
-        public static final int prompt_password=0x7f090024;
+        public static final int prompt_email=0x7f090021;
+        public static final int prompt_password=0x7f090022;
         /**  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
          */
@@ -1890,126 +1890,123 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int pull_to_refresh_pull_label=0x7f090000;
         public static final int pull_to_refresh_refreshing_label=0x7f090002;
         public static final int pull_to_refresh_release_label=0x7f090001;
-        public static final int pull_to_refresh_tap_label=0x7f090050;
-        public static final int register_tip=0x7f090032;
-        public static final int settingnames=0x7f09001d;
+        public static final int pull_to_refresh_tap_label=0x7f09004e;
+        public static final int register_tip=0x7f090030;
+        public static final int settingnames=0x7f09001b;
         /**  主页面功能模块默认名称，在没有指定名称的情况下显示 
  个人中心 
          */
         public static final int themeSwitch=0x7f090016;
-        public static final int title_activity_login=0x7f090022;
-        public static final int umeng_common_action_cancel=0x7f090037;
-        public static final int umeng_common_action_continue=0x7f090036;
-        public static final int umeng_common_action_info_exist=0x7f090033;
-        public static final int umeng_common_action_pause=0x7f090035;
-        public static final int umeng_common_download_failed=0x7f09003d;
-        public static final int umeng_common_download_finish=0x7f09003e;
-        public static final int umeng_common_download_notification_prefix=0x7f090038;
-        public static final int umeng_common_icon=0x7f090041;
-        public static final int umeng_common_info_interrupt=0x7f090034;
-        public static final int umeng_common_network_break_alert=0x7f09003c;
-        public static final int umeng_common_patch_finish=0x7f09003f;
-        public static final int umeng_common_pause_notification_prefix=0x7f090039;
-        public static final int umeng_common_silent_download_finish=0x7f090040;
-        public static final int umeng_common_start_download_notification=0x7f09003a;
-        public static final int umeng_common_start_patch_notification=0x7f09003b;
-        public static final int umeng_example_home_btn_plus=0x7f090080;
-        public static final int umeng_fb_back=0x7f090044;
-        public static final int umeng_fb_contact_info=0x7f090047;
-        public static final int umeng_fb_contact_info_hint=0x7f090042;
-        public static final int umeng_fb_contact_title=0x7f090046;
-        public static final int umeng_fb_contact_update_at=0x7f090043;
-        public static final int umeng_fb_notification_content_formatter_multiple_msg=0x7f09004f;
-        public static final int umeng_fb_notification_content_formatter_single_msg=0x7f09004e;
-        public static final int umeng_fb_notification_ticker_text=0x7f09004d;
-        public static final int umeng_fb_powered_by=0x7f09004c;
-        public static final int umeng_fb_reply_content_default=0x7f09004a;
-        public static final int umeng_fb_reply_content_hint=0x7f090048;
-        public static final int umeng_fb_reply_date_default=0x7f09004b;
-        public static final int umeng_fb_send=0x7f090049;
-        public static final int umeng_fb_title=0x7f090045;
-        public static final int umeng_socialize_back=0x7f090054;
-        public static final int umeng_socialize_cancel_btn_str=0x7f090083;
-        public static final int umeng_socialize_comment=0x7f090052;
-        public static final int umeng_socialize_comment_detail=0x7f090053;
-        public static final int umeng_socialize_content_hint=0x7f090082;
-        public static final int umeng_socialize_friends=0x7f090056;
-        public static final int umeng_socialize_img_des=0x7f090085;
-        public static final int umeng_socialize_login=0x7f090061;
-        public static final int umeng_socialize_login_qq=0x7f090060;
-        public static final int umeng_socialize_msg_hor=0x7f09005c;
-        public static final int umeng_socialize_msg_min=0x7f09005b;
-        public static final int umeng_socialize_msg_sec=0x7f09005a;
-        public static final int umeng_socialize_near_At=0x7f090055;
-        public static final int umeng_socialize_network_break_alert=0x7f090051;
-        public static final int umeng_socialize_send=0x7f090057;
-        public static final int umeng_socialize_send_btn_str=0x7f090084;
-        public static final int umeng_socialize_share=0x7f090086;
-        public static final int umeng_socialize_share_content=0x7f09005f;
-        public static final int umeng_socialize_text_add_custom_platform=0x7f09007f;
-        public static final int umeng_socialize_text_authorize=0x7f090063;
-        public static final int umeng_socialize_text_choose_account=0x7f090062;
-        public static final int umeng_socialize_text_comment_hint=0x7f090067;
-        public static final int umeng_socialize_text_douban_key=0x7f09007c;
-        public static final int umeng_socialize_text_friend_list=0x7f090068;
-        public static final int umeng_socialize_text_loading_message=0x7f090076;
-        public static final int umeng_socialize_text_login_fail=0x7f090066;
-        public static final int umeng_socialize_text_qq_key=0x7f090079;
-        public static final int umeng_socialize_text_qq_zone_key=0x7f09007a;
-        public static final int umeng_socialize_text_renren_key=0x7f09007b;
-        public static final int umeng_socialize_text_sina_key=0x7f090078;
+        public static final int title_activity_login=0x7f090020;
+        public static final int umeng_common_action_cancel=0x7f090035;
+        public static final int umeng_common_action_continue=0x7f090034;
+        public static final int umeng_common_action_info_exist=0x7f090031;
+        public static final int umeng_common_action_pause=0x7f090033;
+        public static final int umeng_common_download_failed=0x7f09003b;
+        public static final int umeng_common_download_finish=0x7f09003c;
+        public static final int umeng_common_download_notification_prefix=0x7f090036;
+        public static final int umeng_common_icon=0x7f09003f;
+        public static final int umeng_common_info_interrupt=0x7f090032;
+        public static final int umeng_common_network_break_alert=0x7f09003a;
+        public static final int umeng_common_patch_finish=0x7f09003d;
+        public static final int umeng_common_pause_notification_prefix=0x7f090037;
+        public static final int umeng_common_silent_download_finish=0x7f09003e;
+        public static final int umeng_common_start_download_notification=0x7f090038;
+        public static final int umeng_common_start_patch_notification=0x7f090039;
+        public static final int umeng_example_home_btn_plus=0x7f09007e;
+        public static final int umeng_fb_back=0x7f090042;
+        public static final int umeng_fb_contact_info=0x7f090045;
+        public static final int umeng_fb_contact_info_hint=0x7f090040;
+        public static final int umeng_fb_contact_title=0x7f090044;
+        public static final int umeng_fb_contact_update_at=0x7f090041;
+        public static final int umeng_fb_notification_content_formatter_multiple_msg=0x7f09004d;
+        public static final int umeng_fb_notification_content_formatter_single_msg=0x7f09004c;
+        public static final int umeng_fb_notification_ticker_text=0x7f09004b;
+        public static final int umeng_fb_powered_by=0x7f09004a;
+        public static final int umeng_fb_reply_content_default=0x7f090048;
+        public static final int umeng_fb_reply_content_hint=0x7f090046;
+        public static final int umeng_fb_reply_date_default=0x7f090049;
+        public static final int umeng_fb_send=0x7f090047;
+        public static final int umeng_fb_title=0x7f090043;
+        public static final int umeng_socialize_back=0x7f090052;
+        public static final int umeng_socialize_cancel_btn_str=0x7f090081;
+        public static final int umeng_socialize_comment=0x7f090050;
+        public static final int umeng_socialize_comment_detail=0x7f090051;
+        public static final int umeng_socialize_content_hint=0x7f090080;
+        public static final int umeng_socialize_friends=0x7f090054;
+        public static final int umeng_socialize_img_des=0x7f090083;
+        public static final int umeng_socialize_login=0x7f09005f;
+        public static final int umeng_socialize_login_qq=0x7f09005e;
+        public static final int umeng_socialize_msg_hor=0x7f09005a;
+        public static final int umeng_socialize_msg_min=0x7f090059;
+        public static final int umeng_socialize_msg_sec=0x7f090058;
+        public static final int umeng_socialize_near_At=0x7f090053;
+        public static final int umeng_socialize_network_break_alert=0x7f09004f;
+        public static final int umeng_socialize_send=0x7f090055;
+        public static final int umeng_socialize_send_btn_str=0x7f090082;
+        public static final int umeng_socialize_share=0x7f090084;
+        public static final int umeng_socialize_share_content=0x7f09005d;
+        public static final int umeng_socialize_text_add_custom_platform=0x7f09007d;
+        public static final int umeng_socialize_text_authorize=0x7f090061;
+        public static final int umeng_socialize_text_choose_account=0x7f090060;
+        public static final int umeng_socialize_text_comment_hint=0x7f090065;
+        public static final int umeng_socialize_text_douban_key=0x7f09007a;
+        public static final int umeng_socialize_text_friend_list=0x7f090066;
+        public static final int umeng_socialize_text_loading_message=0x7f090074;
+        public static final int umeng_socialize_text_login_fail=0x7f090064;
+        public static final int umeng_socialize_text_qq_key=0x7f090077;
+        public static final int umeng_socialize_text_qq_zone_key=0x7f090078;
+        public static final int umeng_socialize_text_renren_key=0x7f090079;
+        public static final int umeng_socialize_text_sina_key=0x7f090076;
         /**  平台名称 
          */
-        public static final int umeng_socialize_text_tencent_key=0x7f090077;
-        public static final int umeng_socialize_text_tencent_no_connection=0x7f09006a;
-        public static final int umeng_socialize_text_tencent_no_install=0x7f09006d;
-        public static final int umeng_socialize_text_tencent_oauth_login_fail=0x7f09006b;
-        public static final int umeng_socialize_text_tencent_version_no_match=0x7f09006c;
-        public static final int umeng_socialize_text_ucenter=0x7f090065;
-        public static final int umeng_socialize_text_unauthorize=0x7f090064;
-        public static final int umeng_socialize_text_visitor=0x7f090069;
-        public static final int umeng_socialize_text_waitting=0x7f09006e;
-        public static final int umeng_socialize_text_waitting_message=0x7f090075;
-        public static final int umeng_socialize_text_waitting_qq=0x7f090073;
-        public static final int umeng_socialize_text_waitting_redirect=0x7f090074;
-        public static final int umeng_socialize_text_waitting_share=0x7f090081;
-        public static final int umeng_socialize_text_waitting_weixin=0x7f09006f;
-        public static final int umeng_socialize_text_waitting_weixin_circle=0x7f090070;
-        public static final int umeng_socialize_text_waitting_yixin=0x7f090071;
-        public static final int umeng_socialize_text_waitting_yixin_circle=0x7f090072;
-        public static final int umeng_socialize_text_weixin_circle_key=0x7f09007e;
-        public static final int umeng_socialize_text_weixin_key=0x7f09007d;
-        public static final int umeng_socialize_tip_blacklist=0x7f090058;
-        public static final int umeng_socialize_tip_loginfailed=0x7f090059;
-        public static final int umeng_socialize_ucenter_login_title_guide=0x7f09005d;
-        public static final int umeng_socialize_ucenter_login_title_platform=0x7f09005e;
-        public static final int umeng_xp_action_browse=0x7f090098;
-        public static final int umeng_xp_action_callphone=0x7f0900a5;
-        public static final int umeng_xp_action_download=0x7f090099;
-        public static final int umeng_xp_action_open=0x7f090097;
-        public static final int umeng_xp_back=0x7f09009d;
-        public static final int umeng_xp_back_to_top=0x7f09009b;
-        public static final int umeng_xp_dowloadOrNot=0x7f0900a1;
-        public static final int umeng_xp_dowload_dialog_cinfo=0x7f0900a0;
-        public static final int umeng_xp_dowload_dialog_dinfo=0x7f09009f;
-        public static final int umeng_xp_failed_loading=0x7f0900a2;
-        public static final int umeng_xp_info_banner_deprecated=0x7f0900a4;
-        public static final int umeng_xp_more=0x7f09009c;
-        public static final int umeng_xp_network_break_alert=0x7f09009a;
-        public static final int umeng_xp_no_browser_tips=0x7f0900a6;
-        public static final int umeng_xp_size=0x7f090096;
-        public static final int umeng_xp_tip_download_pre=0x7f0900a3;
-        public static final int umeng_xp_title_info=0x7f09009e;
+        public static final int umeng_socialize_text_tencent_key=0x7f090075;
+        public static final int umeng_socialize_text_tencent_no_connection=0x7f090068;
+        public static final int umeng_socialize_text_tencent_no_install=0x7f09006b;
+        public static final int umeng_socialize_text_tencent_oauth_login_fail=0x7f090069;
+        public static final int umeng_socialize_text_tencent_version_no_match=0x7f09006a;
+        public static final int umeng_socialize_text_ucenter=0x7f090063;
+        public static final int umeng_socialize_text_unauthorize=0x7f090062;
+        public static final int umeng_socialize_text_visitor=0x7f090067;
+        public static final int umeng_socialize_text_waitting=0x7f09006c;
+        public static final int umeng_socialize_text_waitting_message=0x7f090073;
+        public static final int umeng_socialize_text_waitting_qq=0x7f090071;
+        public static final int umeng_socialize_text_waitting_redirect=0x7f090072;
+        public static final int umeng_socialize_text_waitting_share=0x7f09007f;
+        public static final int umeng_socialize_text_waitting_weixin=0x7f09006d;
+        public static final int umeng_socialize_text_waitting_weixin_circle=0x7f09006e;
+        public static final int umeng_socialize_text_waitting_yixin=0x7f09006f;
+        public static final int umeng_socialize_text_waitting_yixin_circle=0x7f090070;
+        public static final int umeng_socialize_text_weixin_circle_key=0x7f09007c;
+        public static final int umeng_socialize_text_weixin_key=0x7f09007b;
+        public static final int umeng_socialize_tip_blacklist=0x7f090056;
+        public static final int umeng_socialize_tip_loginfailed=0x7f090057;
+        public static final int umeng_socialize_ucenter_login_title_guide=0x7f09005b;
+        public static final int umeng_socialize_ucenter_login_title_platform=0x7f09005c;
+        public static final int umeng_xp_action_browse=0x7f090096;
+        public static final int umeng_xp_action_callphone=0x7f0900a3;
+        public static final int umeng_xp_action_download=0x7f090097;
+        public static final int umeng_xp_action_open=0x7f090095;
+        public static final int umeng_xp_back=0x7f09009b;
+        public static final int umeng_xp_back_to_top=0x7f090099;
+        public static final int umeng_xp_dowloadOrNot=0x7f09009f;
+        public static final int umeng_xp_dowload_dialog_cinfo=0x7f09009e;
+        public static final int umeng_xp_dowload_dialog_dinfo=0x7f09009d;
+        public static final int umeng_xp_failed_loading=0x7f0900a0;
+        public static final int umeng_xp_info_banner_deprecated=0x7f0900a2;
+        public static final int umeng_xp_more=0x7f09009a;
+        public static final int umeng_xp_network_break_alert=0x7f090098;
+        public static final int umeng_xp_no_browser_tips=0x7f0900a4;
+        public static final int umeng_xp_size=0x7f090094;
+        public static final int umeng_xp_tip_download_pre=0x7f0900a1;
+        public static final int umeng_xp_title_info=0x7f09009c;
         /**  个人中心的preference 
  以下是sharedPreference键的名称 
          */
-        public static final int user_center_theme_key=0x7f09001a;
+        public static final int user_center_theme_key=0x7f090018;
         /**  个人中心的preference 
          */
-        public static final int user_center_themecolor_key=0x7f09001b;
-        /**  更换主题dialog标题 
-         */
-        public static final int username=0x7f090017;
+        public static final int user_center_themecolor_key=0x7f090019;
         public static final int version_info=0x7f090007;
     }
     public static final class style {

@@ -23,8 +23,6 @@
 
     <!-- 个人中心 -->
     <string name="themeSwitch">切换主题</string> <!-- 更换主题dialog标题 -->
-    <string name="username">张帅</string>
-    <string name="email">1207509737@qq.com</string>
 
     <!-- 以下是sharedPreference的名称 -->
     <string name="preference_user_center">com.bishe.examhelper.PREFERENCE_USER_CENTER</string> <!-- 个人中心的preference -->
