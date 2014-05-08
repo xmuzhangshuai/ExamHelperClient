@@ -79,8 +79,8 @@ public class SingleChoiceService {
 		SingleChoice singleChoice = null;
 		Random random = new Random();
 		if (singleChoiceDao.count() > 0) {
-			int id = random.nextInt((int) singleChoiceDao.count()) + 1;
-			singleChoice = singleChoiceDao.load((long) id);
+			int rowId = random.nextInt((int) singleChoiceDao.count());
+			singleChoice = singleChoiceDao.loadAll().get(rowId);
 		}
 		return singleChoice;
 	}

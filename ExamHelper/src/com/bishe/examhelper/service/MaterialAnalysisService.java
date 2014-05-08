@@ -82,8 +82,8 @@ public class MaterialAnalysisService {
 		MaterialAnalysis materialAnalysis = null;
 		Random random = new Random();
 		if (materialAnalysisDao.count() > 0) {
-			int id = random.nextInt((int) materialAnalysisDao.count()) + 1;
-			materialAnalysis = materialAnalysisDao.load((long) id);
+			int id = random.nextInt((int) materialAnalysisDao.count());
+			materialAnalysis = materialAnalysisDao.loadAll().get(id);
 		}
 		return materialAnalysis;
 	}

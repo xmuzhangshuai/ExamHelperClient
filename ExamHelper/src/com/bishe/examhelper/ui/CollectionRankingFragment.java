@@ -22,8 +22,10 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.entities.Section;
+import com.bishe.examhelper.entities.Subject;
 import com.bishe.examhelper.service.QuestionService;
 import com.bishe.examhelper.service.SectionService;
+import com.bishe.examhelper.service.SubjectService;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -38,6 +40,7 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 	private int pageNow = 0;//¿ØÖÆÒ³Êý
 	private View rootView;
 	private CollectionAdapter collectionAdapter;
+	Subject subject = SubjectService.getInstance(getActivity()).getCurrentSubject();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,9 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 
 		queryListView.setAdapter(collectionAdapter);
 
-		new GetNetDataTask().execute(0);
+		if (subject != null) {
+			new GetNetDataTask().execute(0);
+		}
 
 		return rootView;
 	}
@@ -85,7 +90,8 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				pageNow = 0;
-				new GetNetDataTask().execute(pageNow);
+				if (subject != null)
+					new GetNetDataTask().execute(pageNow);
 			}
 
 			@Override
@@ -98,7 +104,8 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 
 				if (pageNow >= 0)
 					++pageNow;
-				new GetNetDataTask().execute(pageNow);
+				if (subject != null)
+					new GetNetDataTask().execute(pageNow);
 			}
 		});
 
@@ -136,6 +143,7 @@ public class CollectionRankingFragment extends BaseV4Fragment {
 			String type = "getScollection";
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("pageNow", String.valueOf(page));
+			map.put("currentSubject", String.valueOf(subject.getId()));
 			map.put("type", type);
 			String data;
 			try {

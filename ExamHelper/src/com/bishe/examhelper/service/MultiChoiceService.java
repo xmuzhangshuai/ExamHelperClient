@@ -79,8 +79,8 @@ public class MultiChoiceService {
 		MultiChoice multiChoice = null;
 		Random random = new Random();
 		if (multiChoiceDao.count() > 0) {
-			int id = random.nextInt((int) multiChoiceDao.count()) + 1;
-			multiChoice = multiChoiceDao.load((long) id);
+			int id = random.nextInt((int) multiChoiceDao.count());
+			multiChoice = multiChoiceDao.loadAll().get(id);
 		}
 		return multiChoice;
 	}

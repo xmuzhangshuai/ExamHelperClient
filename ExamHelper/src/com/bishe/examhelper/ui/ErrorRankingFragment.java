@@ -22,8 +22,10 @@ import com.bishe.examhelper.R;
 import com.bishe.examhelper.base.BaseV4Fragment;
 import com.bishe.examhelper.config.DefaultKeys;
 import com.bishe.examhelper.entities.Section;
+import com.bishe.examhelper.entities.Subject;
 import com.bishe.examhelper.service.QuestionService;
 import com.bishe.examhelper.service.SectionService;
+import com.bishe.examhelper.service.SubjectService;
 import com.bishe.examhelper.utils.FastJsonTool;
 import com.bishe.examhelper.utils.HttpUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -38,6 +40,7 @@ public class ErrorRankingFragment extends BaseV4Fragment {
 	private int pageNow = 0;//¿ØÖÆÒ³Êý
 	private View rootView;
 	private ErrorRankingAdapter errorRankingAdapter;
+	Subject subject = SubjectService.getInstance(getActivity()).getCurrentSubject();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,8 +61,8 @@ public class ErrorRankingFragment extends BaseV4Fragment {
 		initView();
 
 		queryListView.setAdapter(errorRankingAdapter);
-
-		new GetNetDataTask().execute(0);
+		if (subject != null)
+			new GetNetDataTask().execute(0);
 
 		return rootView;
 	}
@@ -85,7 +88,8 @@ public class ErrorRankingFragment extends BaseV4Fragment {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
 				pageNow = 0;
-				new GetNetDataTask().execute(pageNow);
+				if (subject != null)
+					new GetNetDataTask().execute(pageNow);
 			}
 
 			@Override
@@ -98,7 +102,8 @@ public class ErrorRankingFragment extends BaseV4Fragment {
 
 				if (pageNow >= 0)
 					++pageNow;
-				new GetNetDataTask().execute(pageNow);
+				if (subject != null)
+					new GetNetDataTask().execute(pageNow);
 			}
 		});
 
@@ -137,6 +142,7 @@ public class ErrorRankingFragment extends BaseV4Fragment {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("pageNow", String.valueOf(page));
 			map.put("type", type);
+			map.put("currentSubject", String.valueOf(subject.getId()));
 			String data;
 			try {
 				data = HttpUtil.postRequest(url, map);

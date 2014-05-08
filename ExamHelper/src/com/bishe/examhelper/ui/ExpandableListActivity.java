@@ -15,17 +15,11 @@ import android.widget.TextView;
 import com.bishe.examhelper.R;
 import com.bishe.examhelper.adapters.ExpandableListAdapter;
 import com.bishe.examhelper.base.BaseActivity;
-import com.bishe.examhelper.base.BaseApplication;
 import com.bishe.examhelper.config.DefaultKeys;
-import com.bishe.examhelper.config.DefaultSetting;
-import com.bishe.examhelper.config.DefaultValues;
-import com.bishe.examhelper.dao.DaoSession;
-import com.bishe.examhelper.dao.SectionDao;
-import com.bishe.examhelper.dao.SubjectDao;
-import com.bishe.examhelper.dao.SubjectDao.Properties;
 import com.bishe.examhelper.entities.Groups;
 import com.bishe.examhelper.entities.Section;
 import com.bishe.examhelper.entities.Subject;
+import com.bishe.examhelper.service.SubjectService;
 
 /**   
  *    
@@ -87,13 +81,9 @@ public class ExpandableListActivity extends BaseActivity {
 	 * 初始化列表内容
 	 */
 	private void initListContent() {
-		DaoSession daoSession = BaseApplication.getDaoSession(this);
-		SubjectDao subjectDao = daoSession.getSubjectDao();
-		SectionDao sectionDao = daoSession.getSectionDao();
 
 		// 初始化考研政治的章节列表
-		Subject subject = subjectDao.queryBuilder()
-				.where(Properties.Subject_name.eq(DefaultValues.SUBJECT_POLITICAL_EXAM)).unique();
+		Subject subject = SubjectService.getInstance(ExpandableListActivity.this).getCurrentSubject();
 		if (subject != null) {
 			List<Section> sectionList = subject.getSectionList();
 			mySections = sectionList.toArray(new Section[sectionList.size()]);
@@ -101,13 +91,12 @@ public class ExpandableListActivity extends BaseActivity {
 			myGroups = new Groups[mySections.length][];
 
 			// 初始化所有章节下的组名
-			for (int i = DefaultSetting.START_SECTION_ID; i <= DefaultSetting.END_SECTION_ID; i++) {
-				Section section = sectionDao.load((long) i);
-				List<Groups> groupsList = section.getGroupList();
-				myGroups[i - DefaultSetting.START_SECTION_ID] = new Groups[groupsList.size()];
+			for (int i = 0; i < sectionList.size(); i++) {
+				List<Groups> groupsList = sectionList.get(i).getGroupList();
+				myGroups[i] = new Groups[groupsList.size()];
 
 				for (int j = 0; j < groupsList.size(); j++) {
-					myGroups[i - DefaultSetting.START_SECTION_ID][j] = groupsList.get(j);
+					myGroups[i][j] = groupsList.get(j);
 				}
 			}
 		}
